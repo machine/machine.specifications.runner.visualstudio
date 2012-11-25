@@ -1,4 +1,4 @@
-machine.vstestadapter
+Machine.VSTestAdapter
 =====================
 
-Visual Studio 2012 Test Adapter for Machine.Specifictions
+Visual Studio 2012 Test Adapter for Machine.Specifictions (MSpec)

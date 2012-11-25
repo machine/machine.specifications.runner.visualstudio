@@ -1,0 +1,151 @@
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+
+namespace Machine.VSTestAdapter
+{
+    public class MSpecVSRunnerManager : MarshalByRefObject, ICancelTarget
+    {
+        private const string runnerName = "Machine.Specifications.VSRunner";
+        private const string runnerDllName = "Machine.Specifications.VSRunner.dll";
+        private const string adapterName = "Machine.VSTestAdapter";
+        private const string runnerClassName = "Machine.Specifications.VSRunner.AppDomainExecutor";
+        private IFrameworkHandle frameworkHandle;
+        private Uri uri;
+        private string sourcePath;
+        private bool canceled;
+
+        public MSpecVSRunnerManager()
+        {
+        }
+
+        public void RunTestsInAssembly(string pathToAssembly, string pathToConfigFile, IFrameworkHandle frameworkHandle, IEnumerable<string> specsToRun, Uri executorUri)
+        {
+            AppDomain appDomain = null;
+            this.frameworkHandle = frameworkHandle;
+            this.uri = executorUri;
+            this.sourcePath = pathToAssembly;
+            try
+            {
+                appDomain = this.CreateAppDomain(pathToAssembly, pathToConfigFile, true);
+                dynamic executor = CreateAppDomainExecutor(appDomain);
+                executor.RunTestsInAssembly(pathToAssembly, specsToRun, executorUri,
+                    (Func<bool>)HasBeenCancelled,
+                    (Action<string>)SendErrorMessage,
+                    (Action<string, string>)RecordStart,
+                    (Action<string, string, int>)RecordEnd,
+                    (Action<string, string, DateTime, DateTime, string, string, int>)RecordResult);
+            }
+            catch (Exception ex)
+            {
+            }
+            finally
+            {
+                if (appDomain != null)
+                {
+                    string baseDirectory = appDomain.BaseDirectory;
+                    string cachePath = appDomain.SetupInformation.CachePath;
+                    AppDomain.Unload(appDomain);
+
+                    if (Directory.Exists(cachePath))
+                    {
+                        Directory.Delete(cachePath, true);
+                    }
+
+                    string path = Path.Combine(baseDirectory, runnerDllName);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
+            }
+        }
+
+        private AppDomain CreateAppDomain(string assemblyFilename, string configFilename, bool shadowCopy)
+        {
+            AppDomainSetup info = new AppDomainSetup();
+            info.ApplicationBase = Path.GetDirectoryName(assemblyFilename);
+            info.ApplicationName = Guid.NewGuid().ToString();
+            if (shadowCopy)
+            {
+                info.ShadowCopyFiles = "true";
+                info.ShadowCopyDirectories = info.ApplicationBase;
+                info.CachePath = Path.Combine(Path.GetTempPath(), info.ApplicationName);
+            }
+            info.ConfigurationFile = configFilename;
+            return AppDomain.CreateDomain(info.ApplicationName, null, info);
+        }
+
+        private dynamic CreateAppDomainExecutor(AppDomain VSRunnerDomain)
+        {
+            // until the vsrunner is included with mspec we will need to ship it with the adapter and copy it into the target mspec directory
+            // get the location of the adpter so we know where to copy the vsrunner from
+            Assembly mspecVsTestAdapterAssembly = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith(adapterName)).SingleOrDefault();
+            if (mspecVsTestAdapterAssembly == null)
+            {
+                throw new Exception();
+            }
+
+            // we will copy it to the vsrunner app domains base directory
+            string vsRunnerDestinationFileName = Path.Combine(VSRunnerDomain.BaseDirectory, runnerDllName);
+
+            // from the current mstestadapter domain location
+            string vsRunnerSourceFileName = Path.Combine(Path.GetDirectoryName(mspecVsTestAdapterAssembly.Location), runnerDllName);
+            if (File.Exists(vsRunnerDestinationFileName))
+            {
+                File.Delete(vsRunnerDestinationFileName);
+            }
+            File.Copy(vsRunnerSourceFileName, vsRunnerDestinationFileName);
+
+            // load the vs runner assembly into the appdomain
+            VSRunnerDomain.Load(runnerName);
+
+            return VSRunnerDomain.CreateInstanceAndUnwrap(runnerName, runnerClassName, false, BindingFlags.Default, (Binder)null, new object[0], (CultureInfo)null, (object[])null);
+        }
+
+        private void SendErrorMessage(string errorMessage)
+        {
+            this.frameworkHandle.SendMessage(Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging.TestMessageLevel.Error, errorMessage);
+        }
+
+        private void RecordStart(string testFullyQualifiedName, string testDisplayName)
+        {
+            this.frameworkHandle.RecordStart(new Microsoft.VisualStudio.TestPlatform.ObjectModel.TestCase(testFullyQualifiedName, uri, sourcePath) { DisplayName = testDisplayName });
+        }
+
+        private void RecordEnd(string testFullyQualifiedName, string testDisplayName, int outCome)
+        {
+            this.frameworkHandle.RecordEnd(new Microsoft.VisualStudio.TestPlatform.ObjectModel.TestCase(testFullyQualifiedName, uri, sourcePath) { DisplayName = testDisplayName }, (TestOutcome)outCome);
+        }
+
+        private void RecordResult(string testFullyQualifiedName, string testDisplayName, DateTime startTime, DateTime endTime, string errorMessage, string errorStackTrace, int outCome)
+        {
+            TestCase testCase = new Microsoft.VisualStudio.TestPlatform.ObjectModel.TestCase(testFullyQualifiedName, uri, sourcePath) { DisplayName = testDisplayName };
+            this.frameworkHandle.RecordResult(new TestResult(testCase)
+                        {
+                            ComputerName = Environment.MachineName,
+                            Duration = endTime - startTime,
+                            EndTime = endTime,
+                            ErrorMessage = errorMessage,
+                            ErrorStackTrace = errorStackTrace,
+                            Outcome = (TestOutcome)outCome,
+                            StartTime = startTime
+                        });
+        }
+
+        private bool HasBeenCancelled()
+        {
+            return this.canceled;
+        }
+
+        public void Cancel()
+        {
+            this.canceled = true;
+        }
+    }
+}
