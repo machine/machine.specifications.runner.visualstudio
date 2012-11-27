@@ -14,6 +14,8 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 * The adapter was tested on solutions with several thousand tests in multiple MSpec projects.
 * The adapter is built against MSpec version 0.5.10 and has been tested against test projects built against MSpec version 0.5.0 and above.
 
+![Alt text](./misc/TestWindowScreenShot.png "Screenshot")
+
 # What still needs to be done.
 * Test coverage is rather low, this needs to improve soon.
 * Check that behaviors work and add support if they do not.
