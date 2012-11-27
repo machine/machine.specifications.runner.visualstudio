@@ -5,6 +5,7 @@ Visual Studio 2012 Test Adapter for Machine.Specifictions (MSpec)
 
 Download the installer from the Visual Studio Gallery here http://visualstudiogallery.msdn.microsoft.com/4abcb54b-53b5-4c44-877f-0397556c5c44
 
+
  # Where the test adapter stands right now
   * Current version is 0.1.0 Beta 1
   * The MSpec Visual Studio 2012 test adapter has been tested on Visual Studio 2012 Professional Edition with and without Visual Studio Update 1.
