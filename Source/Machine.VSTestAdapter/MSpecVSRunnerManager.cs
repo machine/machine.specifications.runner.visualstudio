@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+﻿using Machine.Specifications.Runner;
+using Machine.Specifications.VSRunner;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using System;
 using System.Collections.Generic;
@@ -9,7 +11,7 @@ using System.Reflection;
 
 namespace Machine.VSTestAdapter
 {
-    public class MSpecVSRunnerManager : MarshalByRefObject, ICancelTarget
+    public class MSpecVSRunnerManager : MarshalByRefObject
     {
         private const string runnerName = "Machine.Specifications.VSRunner";
         private const string runnerDllName = "Machine.Specifications.VSRunner.dll";
@@ -18,10 +20,59 @@ namespace Machine.VSTestAdapter
         private IFrameworkHandle frameworkHandle;
         private Uri uri;
         private string sourcePath;
-        private bool canceled;
 
         public MSpecVSRunnerManager()
         {
+        }
+
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+
+        public void RunAllTestsInAssembly(string pathToAssembly, string pathToConfigFile, IFrameworkHandle frameworkHandle, Uri executorUri)
+        {
+            AppDomain appDomain = null;
+            this.frameworkHandle = frameworkHandle;
+            this.uri = executorUri;
+            this.sourcePath = pathToAssembly;
+            try
+            {
+                appDomain = this.CreateAppDomain(pathToAssembly, pathToConfigFile, true);
+                IAppDomainExecutor executor = CreateAppDomainExecutor(appDomain);
+                ISpecificationRunListener listener = new SpecificationRunListener(this.sourcePath, (Action<string>)SendErrorMessage,
+                    (Action<string, string>)RecordStart,
+                    (Action<string, string, int>)RecordEnd,
+                    (Action<string, string, DateTime, DateTime, string, string, int>)RecordResult);
+
+                executor.RunAllTestsInAssembly(pathToAssembly, listener);
+
+                SpecificationRunListener listenerConcrete = (SpecificationRunListener)listener;
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                if (appDomain != null)
+                {
+                    string baseDirectory = appDomain.BaseDirectory;
+                    string cachePath = appDomain.SetupInformation.CachePath;
+
+                    AppDomain.Unload(appDomain);
+
+                    if (Directory.Exists(cachePath))
+                    {
+                        Directory.Delete(cachePath, true);
+                    }
+
+                    string path = Path.Combine(baseDirectory, runnerDllName);
+                    if (File.Exists(path))
+                    {
+                        File.Delete(path);
+                    }
+                }
+            }
         }
 
         public void RunTestsInAssembly(string pathToAssembly, string pathToConfigFile, IFrameworkHandle frameworkHandle, IEnumerable<string> specsToRun, Uri executorUri)
@@ -33,15 +84,17 @@ namespace Machine.VSTestAdapter
             try
             {
                 appDomain = this.CreateAppDomain(pathToAssembly, pathToConfigFile, true);
-                dynamic executor = CreateAppDomainExecutor(appDomain);
-                executor.RunTestsInAssembly(pathToAssembly, specsToRun, executorUri,
-                    (Func<bool>)HasBeenCancelled,
-                    (Action<string>)SendErrorMessage,
+                IAppDomainExecutor executor = CreateAppDomainExecutor(appDomain);
+                ISpecificationRunListener listener = new SpecificationRunListener(this.sourcePath, (Action<string>)SendErrorMessage,
                     (Action<string, string>)RecordStart,
                     (Action<string, string, int>)RecordEnd,
                     (Action<string, string, DateTime, DateTime, string, string, int>)RecordResult);
+
+                executor.RunTestsInAssembly(pathToAssembly, specsToRun, listener);
+
+                SpecificationRunListener listenerConcrete = (SpecificationRunListener)listener;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
             }
             finally
@@ -50,6 +103,7 @@ namespace Machine.VSTestAdapter
                 {
                     string baseDirectory = appDomain.BaseDirectory;
                     string cachePath = appDomain.SetupInformation.CachePath;
+
                     AppDomain.Unload(appDomain);
 
                     if (Directory.Exists(cachePath))
@@ -136,16 +190,6 @@ namespace Machine.VSTestAdapter
                             Outcome = (TestOutcome)outCome,
                             StartTime = startTime
                         });
-        }
-
-        private bool HasBeenCancelled()
-        {
-            return this.canceled;
-        }
-
-        public void Cancel()
-        {
-            this.canceled = true;
         }
     }
 }

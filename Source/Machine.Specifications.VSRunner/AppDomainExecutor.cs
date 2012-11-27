@@ -26,16 +26,13 @@ namespace Machine.Specifications.VSRunner
             mspecRunner.RunAssembly(assemblyToRun);
         }
 
-        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<string> specsToRun, Uri adapterUri, Func<bool> checkHasBeenCancelled, Action<string> sendErrorMessage,
-            Action<string, string> recordStart,
-            Action<string, string, int> recordEnd,
-            Action<string, string, DateTime, DateTime, string, string, int> recordResult)
+        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<string> specsToRun, ISpecificationRunListener specificationRunListener)
         {
             try
             {
                 Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
 
-                DefaultRunner mspecRunner = new DefaultRunner(new SpecificationRunListener(pathToAssembly, checkHasBeenCancelled, sendErrorMessage, recordStart, recordEnd, recordResult), RunOptions.Default);
+                DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
                 foreach (string spec in specsToRun)
                 {
                     // get the spec type
@@ -49,15 +46,10 @@ namespace Machine.Specifications.VSRunner
                     mspecRunner.RunMember(assemblyToRun, specField);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }
-        }
-
-        private object CreateObject(string assemblyName, string typeName, params object[] args)
-        {
-            return AppDomain.CurrentDomain.CreateInstanceAndUnwrap(assemblyName, typeName, false, 0, null, args, null, null);
         }
     }
 }

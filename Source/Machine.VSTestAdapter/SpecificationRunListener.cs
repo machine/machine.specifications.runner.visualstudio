@@ -1,25 +1,26 @@
-﻿using Machine.Specifications.Runner;
+﻿using Machine.Specifications;
+using Machine.Specifications.Runner;
 using System;
 
-namespace Machine.Specifications.VSRunner
+namespace Machine.VSTestAdapter
 {
-    public class SpecificationRunListener : ISpecificationRunListener
+    public class SpecificationRunListener : MarshalByRefObject, ISpecificationRunListener
     {
         private string source;
         private RunStats currentRunStats;
-        private Func<bool> checkHasBeenCancelled;
         private Action<string> sendErrorMessage;
         private Action<string, string> recordStart;
         private Action<string, string, int> recordEnd;
         private Action<string, string, DateTime, DateTime, string, string, int> recordResult;
 
-        public SpecificationRunListener(string source, Func<bool> checkHasBeenCancelled, Action<string> sendErrorMessage,
+        public SpecificationRunListener(string source,
+            Action<string> sendErrorMessage,
             Action<string, string> recordStart,
             Action<string, string, int> recordEnd,
             Action<string, string, DateTime, DateTime, string, string, int> recordResult)
         {
             this.source = source;
-            this.checkHasBeenCancelled = checkHasBeenCancelled;
+            this.sendErrorMessage = sendErrorMessage;
             this.recordStart = recordStart;
             this.recordEnd = recordEnd;
             this.recordResult = recordResult;
@@ -48,6 +49,7 @@ namespace Machine.Specifications.VSRunner
                 this.currentRunStats.Stop();
                 this.currentRunStats = null;
             }
+            this.SendErrorMessage(Strings.RUNERROR);
         }
 
         public void OnRunEnd()
@@ -81,9 +83,6 @@ namespace Machine.Specifications.VSRunner
                 result.Exception != null ? result.Exception.Message : string.Empty, result.Exception != null ? result.Exception.StackTrace : null, testResult);
 
             this.currentRunStats = null;
-
-            // check if the run has been cancelled
-            this.IsRunCancelled();
         }
 
         private int GetVSTestOutcomeFromMSpecResult(Result result)
@@ -104,15 +103,6 @@ namespace Machine.Specifications.VSRunner
                     return 3;
                 default:
                     return 4;
-            }
-        }
-
-        public void IsRunCancelled()
-        {
-            if (this.checkHasBeenCancelled())
-            {
-                this.SendErrorMessage(Strings.RUNCANCELLED);
-                throw new Exception("Cancelled");
             }
         }
 

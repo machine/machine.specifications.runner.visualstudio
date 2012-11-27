@@ -7,9 +7,8 @@ using System.Linq;
 
 namespace Machine.VSTestAdapter
 {
-    public class SpecificationExecutor : MarshalByRefObject, ISpecificationExecutor, ICancelTarget
+    public class SpecificationExecutor : MarshalByRefObject, ISpecificationExecutor
     {
-        private const int PdbHiddenLine = 16707566;
         private MSpecVSRunnerManager runManager;
 
         public SpecificationExecutor()
@@ -18,22 +17,21 @@ namespace Machine.VSTestAdapter
 
         public override object InitializeLifetimeService()
         {
-            return (object)null;
+            return null;
         }
 
         public void RunAssembly(string source, Uri uri, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             source = Path.GetFullPath(source);
             if (!File.Exists(source))
+            {
                 throw new ArgumentException("Could not find file: " + source);
+            }
+
             string assemblyFilename = source;
             string defaultConfigFile = SpecificationExecutor.GetDefaultConfigFile(source);
-
-            //SpecificationRunListener specificationRunListener = new SpecificationRunListener(frameworkHandle, source, uri);
-            //using (Machine.VSTestAdapter.MSpecVSRunnerManager appDomainManager = new Machine.VSTestAdapter.MSpecVSRunnerManager(str3, defaultConfigFile, true))
-            //{
-            //    appDomainManager.CreateAppDomainExecutor().RunAllTestsInAssembly(str3, (ISpecificationRunListener)specificationRunListener);
-            //}
+            runManager = new MSpecVSRunnerManager();
+            runManager.RunAllTestsInAssembly(assemblyFilename, defaultConfigFile, frameworkHandle, uri);
         }
 
         public void RunAssemblySpecifications(string source, Uri uri, IRunContext runContext, IFrameworkHandle frameworkHandle, IEnumerable<TestCase> specifications)
@@ -55,16 +53,12 @@ namespace Machine.VSTestAdapter
         {
             string path = assemblyFile + ".config";
             if (File.Exists(path))
-                return Path.GetFullPath(path);
-            else
-                return string.Empty;
-        }
-
-        public void Cancel()
-        {
-            if (this.runManager != null)
             {
-                this.runManager.Cancel();
+                return Path.GetFullPath(path);
+            }
+            else
+            {
+                return string.Empty;
             }
         }
     }

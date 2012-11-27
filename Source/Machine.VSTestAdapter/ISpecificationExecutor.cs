@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace Machine.VSTestAdapter
 {
-    public interface ISpecificationExecutor : ICancelTarget
+    public interface ISpecificationExecutor
     {
         void RunAssembly(string source, Uri uri, IRunContext runContext, IFrameworkHandle frameworkHandle);
 

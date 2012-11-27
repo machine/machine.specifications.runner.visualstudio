@@ -1,12 +1,9 @@
 ﻿using System;
 
-namespace Machine.Specifications.VSRunner
+namespace Machine.VSTestAdapter
 {
     public class RunStats
     {
-        private DateTime startTime;
-        private DateTime endTime;
-
         public DateTime StartTime { get; private set; }
 
         public DateTime EndTime { get; private set; }

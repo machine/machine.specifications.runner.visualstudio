@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="DISCOVERER_COMPLETE" xml:space="preserve">
-    <value>Machine Specifications Visual Studio Test Adapter - Discovering Complete - {0} specifications in {2} of {1} assemblies scanned.</value>
+    <value>Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned.</value>
   </data>
   <data name="DISCOVERER_ERROR" xml:space="preserve">
     <value>Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {0} - {1}</value>
@@ -130,12 +130,27 @@
     <value>Machine Specifications Visual Studio Test Adapter - Discovering Specifications.</value>
   </data>
   <data name="EXECUTOR_COMPLETE" xml:space="preserve">
-    <value>Machine Specifications Visual Studio Test Adapter - Executing Complete - {0} specifications in {1} assemblies.</value>
+    <value>Machine Specifications Visual Studio Test Adapter - Execution Complete - {0} specifications in {1} assemblies.</value>
   </data>
   <data name="EXECUTOR_ERROR" xml:space="preserve">
     <value>Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}</value>
   </data>
+  <data name="EXECUTOR_EXECUTINGIN" xml:space="preserve">
+    <value>Machine Specifications Visual Studio Test Adapter - Executing tests in {0}</value>
+  </data>
   <data name="EXECUTOR_STARTING" xml:space="preserve">
     <value>Machine Specifications Visual Studio Test Adapter - Executing Specifications.</value>
+  </data>
+  <data name="RUNERROR" xml:space="preserve">
+    <value>Machine Specifications Visual Studio Test Adapter - Fatal error while executing test.</value>
+  </data>
+  <data name="TRAIT_CLASS" xml:space="preserve">
+    <value>ClassName</value>
+  </data>
+  <data name="TRAIT_SUBJECT" xml:space="preserve">
+    <value>Subject</value>
+  </data>
+  <data name="TRAIT_SUBJECT_NOSUBJECT" xml:space="preserve">
+    <value>No Subject</value>
   </data>
 </root>

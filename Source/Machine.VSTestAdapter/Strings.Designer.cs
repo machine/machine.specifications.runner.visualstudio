@@ -61,7 +61,7 @@ namespace Machine.VSTestAdapter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Discovering Complete - {0} specifications in {2} of {1} assemblies scanned..
+        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned..
         /// </summary>
         public static string DISCOVERER_COMPLETE {
             get {
@@ -97,7 +97,7 @@ namespace Machine.VSTestAdapter {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Executing Complete - {0} specifications in {1} assemblies..
+        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Execution Complete - {0} specifications in {1} assemblies..
         /// </summary>
         public static string EXECUTOR_COMPLETE {
             get {
@@ -115,11 +115,56 @@ namespace Machine.VSTestAdapter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Executing tests in {0}.
+        /// </summary>
+        public static string EXECUTOR_EXECUTINGIN {
+            get {
+                return ResourceManager.GetString("EXECUTOR_EXECUTINGIN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Executing Specifications..
         /// </summary>
         public static string EXECUTOR_STARTING {
             get {
                 return ResourceManager.GetString("EXECUTOR_STARTING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Machine Specifications Visual Studio Test Adapter - Fatal error while executing test..
+        /// </summary>
+        public static string RUNERROR {
+            get {
+                return ResourceManager.GetString("RUNERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ClassName.
+        /// </summary>
+        public static string TRAIT_CLASS {
+            get {
+                return ResourceManager.GetString("TRAIT_CLASS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subject.
+        /// </summary>
+        public static string TRAIT_SUBJECT {
+            get {
+                return ResourceManager.GetString("TRAIT_SUBJECT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Subject.
+        /// </summary>
+        public static string TRAIT_SUBJECT_NOSUBJECT {
+            get {
+                return ResourceManager.GetString("TRAIT_SUBJECT_NOSUBJECT", resourceCulture);
             }
         }
     }

@@ -28,12 +28,12 @@ namespace Machine.VSTestAdapter
             this.AssemblyFilename = assemblyFilePath;
 
             List<MSpecTestCase> list = new List<MSpecTestCase>();
-            foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, new ReaderParameters()
+
+            // statically inspect the types in the assembly using mono.cecil
+            foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, new ReaderParameters() { ReadSymbols = true }).MainModule.Types)
             {
-                ReadSymbols = true
-            }).MainModule.Types)
-            {
-                foreach (FieldDefinition fieldDefinition in Enumerable.Where<FieldDefinition>((IEnumerable<FieldDefinition>)type.Fields, (Func<FieldDefinition, bool>)(x => x.FieldType.FullName == "Machine.Specifications.It" && !x.Name.Contains("__Cached"))))
+                // if a type is an It delegate generate some test case info for it
+                foreach (FieldDefinition fieldDefinition in type.Fields.Where(x => x.FieldType.FullName == "Machine.Specifications.It" && !x.Name.Contains("__Cached")))
                 {
                     MSpecTestCase testCase = new MSpecTestCase()
                     {
@@ -41,6 +41,8 @@ namespace Machine.VSTestAdapter
                         ContextFullType = type.FullName,
                         SpecificationName = fieldDefinition.Name
                     };
+
+                    // get the source code location for the It delegate from the PDB file using mono.cecil.pdb
                     this.UpdateTestCaseWithLocation(type, testCase);
                     list.Add(testCase);
                 }
@@ -70,21 +72,26 @@ namespace Machine.VSTestAdapter
         private void UpdateTestCaseWithLocation(TypeDefinition type, MSpecTestCase testCase)
         {
             if (!type.HasMethods)
+            {
                 return;
+            }
+
             string fieldFullName = testCase.SpecificationName.Replace(" ", "_");
             string constructorMethodFullName = string.Format("System.Void {0}::{1}", (object)testCase.ContextFullType, (object)".ctor()");
-            MethodDefinition methodDefinition = Enumerable.SingleOrDefault<MethodDefinition>(Enumerable.Where<MethodDefinition>((IEnumerable<MethodDefinition>)type.Methods, (Func<MethodDefinition, bool>)(x => x.FullName == constructorMethodFullName)));
+            MethodDefinition methodDefinition = type.Methods.Where(x => x.FullName == constructorMethodFullName).SingleOrDefault();
             if (methodDefinition.HasBody)
             {
+                // check if there is a subject attribute
                 if (type.HasCustomAttributes)
                 {
-                    List<CustomAttribute> list = Enumerable.ToList<CustomAttribute>(Enumerable.Where<CustomAttribute>((IEnumerable<CustomAttribute>)type.CustomAttributes, (Func<CustomAttribute, bool>)(x => x.AttributeType.FullName == "Machine.Specifications.SubjectAttribute")));
+                    List<CustomAttribute> list = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.SubjectAttribute").ToList();
                     if (list.Count > 0 && list[0].ConstructorArguments.Count > 0)
                     {
                         testCase.SubjectName = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
                     }
                 }
 
+                // now find the source code location
                 Instruction instruction = methodDefinition.Body.Instructions.Where(x => x.Operand != null &&
                                                               x.Operand.GetType().IsAssignableFrom(typeof(FieldDefinition)) &&
                                                               ((MemberReference)x.Operand).Name == fieldFullName).SingleOrDefault();
@@ -99,20 +106,6 @@ namespace Machine.VSTestAdapter
                     }
                     instruction = instruction.Previous;
                 }
-
-                //for (Instruction instruction = Enumerable.SingleOrDefault<Instruction>(Enumerable.Where<Instruction>(
-                //    Enumerable.Where<Instruction>((IEnumerable<Instruction>)methodDefinition.Body.Instructions,
-                //    (Func<Instruction, bool>)(x => x.Operand != null && x.Operand.GetType().IsAssignableFrom(typeof(FieldDefinition)))),
-                //    (Func<Instruction, bool>)(x => ((MemberReference)x.Operand).Name == fieldFullName)));
-                //    instruction != null; instruction = instruction.Previous)
-                //{
-                //    if (instruction.SequencePoint != null && instruction.SequencePoint.StartLine != 16707566)
-                //    {
-                //        testCase.CodeFilePath = instruction.SequencePoint.Document.Url;
-                //        testCase.LineNumber = instruction.SequencePoint.StartLine;
-                //        break;
-                //    }
-                //}
             }
         }
     }
