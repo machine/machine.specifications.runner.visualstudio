@@ -30,15 +30,18 @@ namespace Machine.VSTestAdapter
             List<MSpecTestCase> list = new List<MSpecTestCase>();
 
             // statically inspect the types in the assembly using mono.cecil
-            foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, new ReaderParameters() { ReadSymbols = true }).MainModule.Types)
+            foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, new ReaderParameters() { ReadSymbols = true }).MainModule.GetTypes())
             {
                 // if a type is an It delegate generate some test case info for it
                 foreach (FieldDefinition fieldDefinition in type.Fields.Where(x => x.FieldType.FullName == "Machine.Specifications.It" && !x.Name.Contains("__Cached")))
                 {
+                    string typeName = NormalizeCecilTypeName(type.Name);
+                    string typeFullName = NormalizeCecilTypeName(type.FullName);
+
                     MSpecTestCase testCase = new MSpecTestCase()
                     {
-                        ContextType = type.Name,
-                        ContextFullType = type.FullName,
+                        ContextType = typeName,
+                        ContextFullType = typeFullName,
                         SpecificationName = fieldDefinition.Name
                     };
 
@@ -48,6 +51,11 @@ namespace Machine.VSTestAdapter
                 }
             }
             return list.Select(x => x);
+        }
+
+        private string NormalizeCecilTypeName(string cecilTypeName)
+        {
+            return cecilTypeName.Replace('/', '+');
         }
 
         public bool SourceDirectoryContainsMSpec(string assemblyFileName)
@@ -77,8 +85,7 @@ namespace Machine.VSTestAdapter
             }
 
             string fieldFullName = testCase.SpecificationName.Replace(" ", "_");
-            string constructorMethodFullName = string.Format("System.Void {0}::{1}", (object)testCase.ContextFullType, (object)".ctor()");
-            MethodDefinition methodDefinition = type.Methods.Where(x => x.FullName == constructorMethodFullName).SingleOrDefault();
+            MethodDefinition methodDefinition = type.Methods.Where(x => x.IsConstructor && x.Parameters.Count == 0).SingleOrDefault();
             if (methodDefinition.HasBody)
             {
                 // check if there is a subject attribute
