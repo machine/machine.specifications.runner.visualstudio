@@ -85,7 +85,7 @@ namespace Machine.VSTestAdapter
             }
 
             string fieldFullName = testCase.SpecificationName.Replace(" ", "_");
-            MethodDefinition methodDefinition = type.Methods.Where(x => x.IsConstructor && x.Parameters.Count == 0).SingleOrDefault();
+            MethodDefinition methodDefinition = type.Methods.Where(x => x.IsConstructor && x.Parameters.Count == 0 && x.Name.EndsWith(".ctor")).SingleOrDefault();
             if (methodDefinition.HasBody)
             {
                 // check if there is a subject attribute
