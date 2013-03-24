@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+﻿using EnvDTE;
+using EnvDTE80;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System;
@@ -52,6 +54,12 @@ namespace Machine.VSTestAdapter
 
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
+            DTE dte = discoveryContext as DTE;
+            DTE2 dte2 = discoveryContext as DTE2;
+
+            DTE dter = discoverySink as DTE;
+            DTE2 dte2r = discoverySink as DTE2;
+
             // indicate start of discovery
             logger.SendMessage(TestMessageLevel.Informational, Strings.DISCOVERER_STARTING);
             int discoveredSpecCount = 0;
@@ -107,6 +115,12 @@ namespace Machine.VSTestAdapter
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
+            DTE dte = frameworkHandle as DTE;
+            DTE2 dte2 = frameworkHandle as DTE2;
+
+            DTE dter = runContext as DTE;
+            DTE2 dte2r = runContext as DTE2;
+
             frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
             int executedSpecCount = 0;
             string currentAsssembly = string.Empty;
