@@ -20,7 +20,7 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
         private static string PassingSpecWithSubject_FullType = "OnePassingOneFailingOneThrowingSpec.PassingSpecWithSubject";
         private static string PassingSpecWithSubject_SpecificationName = "should_add_the_numbers_correctly";
         private static string PassingSpecWithSubject_Subject = "ATESTSUBJECT";
-        private static string PassingSpecWithSubject_Source = "PassingSpecWithSubject.cs";
+        private static string PassingSpecWithSubject_Source = "OnePassingOneFailingOneThrowingSpec\\PassingSpecWithSubject.cs";
 
         private static string FailingSpec_Type = "FailingSpec";
 
