@@ -7,12 +7,13 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 
 
 # Where the test adapter stands right now
-* Current version is 0.1.0 Beta 1
+* Current version is 0.1.1 Beta 2
 * The MSpec Visual Studio 2012 test adapter has been tested on Visual Studio 2012 Professional Edition with and without Visual Studio Update 1.
 * Running with Visual Studio Update 1 is preferable, as grouping by trait (Classname and MSpec Subject) is available.
 * Only .NET 4.0 and .NET 4.5 MSpec assemblies have been tested.
 * The adapter was tested on solutions with several thousand tests in multiple MSpec projects.
-* The adapter is built against MSpec version 0.5.10 and has been tested against test projects built against MSpec version 0.5.0 and above.
+* The adapter is built against MSpec version 0.5.12 and has been tested against test projects built against MSpec version 0.5.0 and above.
+* Support for nested types has been added.
 
 ![Alt text](https://github.com/eugeneduvenage/machine.vstestadapter/raw/dev/Misc/TestWindowScreenShot.png)
 
