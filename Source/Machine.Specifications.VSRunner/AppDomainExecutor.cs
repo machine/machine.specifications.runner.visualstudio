@@ -28,11 +28,11 @@ namespace Machine.Specifications.VSRunner
 
         public void RunTestsInAssembly(string pathToAssembly, IEnumerable<string> specsToRun, ISpecificationRunListener specificationRunListener)
         {
+            Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
+            DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
             try
             {
-                Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
-
-                DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
+                mspecRunner.StartRun(assemblyToRun);
                 foreach (string spec in specsToRun)
                 {
                     // get the spec type
@@ -49,6 +49,10 @@ namespace Machine.Specifications.VSRunner
             catch (Exception)
             {
                 throw;
+            }
+            finally
+            {
+                mspecRunner.EndRun(assemblyToRun);
             }
         }
     }
