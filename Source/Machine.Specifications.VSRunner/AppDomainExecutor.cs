@@ -28,10 +28,12 @@ namespace Machine.Specifications.VSRunner
 
         public void RunTestsInAssembly(string pathToAssembly, IEnumerable<string> specsToRun, ISpecificationRunListener specificationRunListener)
         {
-            Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
-            DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
+            DefaultRunner mspecRunner = null;
+            Assembly assemblyToRun = null;
             try
             {
+                assemblyToRun = Assembly.LoadFrom(pathToAssembly);
+                mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
                 mspecRunner.StartRun(assemblyToRun);
                 foreach (string spec in specsToRun)
                 {
@@ -52,7 +54,12 @@ namespace Machine.Specifications.VSRunner
             }
             finally
             {
-                mspecRunner.EndRun(assemblyToRun);
+                if (mspecRunner != null && assemblyToRun != null)
+                {
+                    mspecRunner.EndRun(assemblyToRun);
+                    mspecRunner = null;
+                    assemblyToRun = null;
+                }
             }
         }
     }
