@@ -7,7 +7,7 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 
 
 # Where the test adapter stands right now
-* Current version is 0.1.2 Beta 2
+* Current version is 0.1.2
 * The MSpec Visual Studio 2012 test adapter has been tested on Visual Studio 2012 Professional Edition with and without Visual Studio Update 1 and Update 2.
 * Running with Visual Studio Update 1 or greater is preferable, as grouping by trait (Classname and MSpec Subject) is available.
 * Only .NET 4.0 and .NET 4.5 MSpec assemblies have been tested.
@@ -22,9 +22,6 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 * Check that behaviors work and add support if they do not.
 * Add some performance improvements.
 * Merge the VSRunner into the Machine.Specifications project.
-
-# Known issues
-* Every now and again once all the tests are successfully run, Visual Studio reports an error that an attempt has been made to access an AppDomain that has been unloaded, XUnit reported a simialr issue originally before fixing it, I need to take a deeper look.
 
 # Contributing
 * Source code is located at https://github.com/eugeneduvenage/machine.vstestadapter
