@@ -29,25 +29,36 @@ namespace Machine.VSTestAdapter
 
             List<MSpecTestCase> list = new List<MSpecTestCase>();
 
+            List<IDelegateFieldScanner> fieldScanners = new List<IDelegateFieldScanner>();
+            fieldScanners.Add(new ItDelegateFieldScanner());
+            fieldScanners.Add(new CustomDelegateFieldScanner());
+
             // statically inspect the types in the assembly using mono.cecil
             foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, new ReaderParameters() { ReadSymbols = true }).MainModule.GetTypes())
             {
                 // if a type is an It delegate generate some test case info for it
-                foreach (FieldDefinition fieldDefinition in type.Fields.Where(x => x.FieldType.FullName == "Machine.Specifications.It" && !x.Name.Contains("__Cached")))
+                foreach(FieldDefinition fieldDefinition in type.Fields.Where(x=>!x.Name .Contains("__Cached")))
                 {
-                    string typeName = NormalizeCecilTypeName(type.Name);
-                    string typeFullName = NormalizeCecilTypeName(type.FullName);
-
-                    MSpecTestCase testCase = new MSpecTestCase()
+                    foreach(IDelegateFieldScanner scanner in fieldScanners)
                     {
-                        ContextType = typeName,
-                        ContextFullType = typeFullName,
-                        SpecificationName = fieldDefinition.Name
-                    };
+                        if(scanner.ProcessFieldDefinition(fieldDefinition))
+                        {
+                            string typeName = NormalizeCecilTypeName(type.Name);
+                            string typeFullName = NormalizeCecilTypeName(type.FullName);
 
-                    // get the source code location for the It delegate from the PDB file using mono.cecil.pdb
-                    this.UpdateTestCaseWithLocation(type, testCase);
-                    list.Add(testCase);
+                            MSpecTestCase testCase = new MSpecTestCase()
+                            {
+                                ContextType = typeName,
+                                ContextFullType = typeFullName,
+                                SpecificationName = fieldDefinition.Name
+                            };
+
+                            // get the source code location for the It delegate from the PDB file using mono.cecil.pdb
+                            this.UpdateTestCaseWithLocation(type, testCase);
+                            list.Add(testCase);
+                            break;
+                        }
+                    }
                 }
             }
             return list.Select(x => x);

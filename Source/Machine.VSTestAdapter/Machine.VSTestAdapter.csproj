@@ -65,6 +65,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomDelegateFieldScanner.cs" />
+    <Compile Include="IDelegateFieldScanner.cs" />
+    <Compile Include="ItDelegateFieldScanner.cs" />
     <Compile Include="MSpecVSRunnerManager.cs" />
     <Compile Include="ISpecificationExecutor.cs" />
     <Compile Include="ISpecificationDiscoverer.cs" />
