@@ -25,5 +25,7 @@ namespace CustomDelegateSpec
         };
          
         private They should_have_the_same_hash_code = () => resultA.ShouldEqual(resultB);
+
+        private It should_result_in_the_same_hash_code = () => resultA.ShouldEqual(resultB);
     }
 }
