@@ -76,6 +76,7 @@
     <Compile Include="MSpecTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RunStats.cs" />
+    <Compile Include="ScopedAssemblyResolver.cs" />
     <Compile Include="SpecificationDiscoverer.cs" />
     <Compile Include="SpecificationExecutor.cs" />
     <Compile Include="SpecificationRunListener.cs" />
