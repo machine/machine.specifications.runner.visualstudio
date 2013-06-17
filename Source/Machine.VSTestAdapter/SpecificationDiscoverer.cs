@@ -12,7 +12,9 @@ namespace Machine.VSTestAdapter
         private const int PdbHiddenLine = 0xFEEFEE;
 
         public string AssemblyFilename { get; set; }
+
         public IAssemblyResolver AssemblyResolver { get; set; }
+
         public ReaderParameters ReaderParameters { get; set; }
 
         public SpecificationDiscoverer()
@@ -47,11 +49,11 @@ namespace Machine.VSTestAdapter
             foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, this.ReaderParameters).MainModule.GetTypes())
             {
                 // if a type is an It delegate generate some test case info for it
-                foreach(FieldDefinition fieldDefinition in type.Fields.Where(x=>!x.Name .Contains("__Cached")))
+                foreach (FieldDefinition fieldDefinition in type.Fields.Where(x => !x.Name.Contains("__Cached")))
                 {
-                    foreach(IDelegateFieldScanner scanner in fieldScanners)
+                    foreach (IDelegateFieldScanner scanner in fieldScanners)
                     {
-                        if(scanner.ProcessFieldDefinition(fieldDefinition))
+                        if (scanner.ProcessFieldDefinition(fieldDefinition))
                         {
                             string typeName = NormalizeCecilTypeName(type.Name);
                             string typeFullName = NormalizeCecilTypeName(type.FullName);
