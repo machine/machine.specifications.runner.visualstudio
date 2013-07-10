@@ -1,7 +1,7 @@
 Machine.VSTestAdapter
 =====================
 
-Visual Studio 2012 Test Adapter for Machine.Specifictions (MSpec)
+Visual Studio 2012, 2013 Preview Test Adapter for Machine.Specifictions (MSpec)
 
 Download the installer from the Visual Studio Gallery here http://visualstudiogallery.msdn.microsoft.com/4abcb54b-53b5-4c44-877f-0397556c5c44
 
