@@ -85,6 +85,7 @@
     <Compile Include="TestAdapter\When_discovering_an_assembly_that_results_in_an_exception.cs" />
     <Compile Include="TestAdapter\When_discovering_a_single_assembly_that_is_not_an_mspec_project.cs" />
     <Compile Include="TestAdapter\When_discovering_a_single_assembly_with_two_specifications.cs" />
+    <Compile Include="Discoverer\When_discovering_the_customdelegateproject.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
