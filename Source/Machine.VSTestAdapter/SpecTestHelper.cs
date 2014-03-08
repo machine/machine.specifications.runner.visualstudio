@@ -25,6 +25,18 @@ namespace Machine.VSTestAdapter
 
                 dynTestCase.Traits.Add(classTrait);
                 dynTestCase.Traits.Add(subjectTrait);
+
+                if (mspecTestCase.Tags != null)
+                {
+                    foreach (var tag in mspecTestCase.Tags)
+                    {
+                        if (!string.IsNullOrEmpty(tag))
+                        {
+                            dynamic tagTrait = traitCreator(Strings.TRAIT_TAG, tag);
+                            dynTestCase.Traits.Add(tagTrait);
+                        }
+                    }
+                }
             }
 
             Debug.WriteLine(string.Format("TestCase {0}", (object)testCase.FullyQualifiedName));

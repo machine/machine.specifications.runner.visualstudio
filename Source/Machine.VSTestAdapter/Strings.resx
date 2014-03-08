@@ -153,4 +153,7 @@
   <data name="TRAIT_SUBJECT_NOSUBJECT" xml:space="preserve">
     <value>No Subject</value>
   </data>
+  <data name="TRAIT_TAG" xml:space="preserve">
+    <value>Tag</value>
+  </data>
 </root>

@@ -119,6 +119,21 @@ namespace Machine.VSTestAdapter
                     {
                         testCase.SubjectName = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
                     }
+
+                    List<CustomAttribute> tagsList = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.TagsAttribute").ToList();
+                    if (tagsList.Count > 0 && tagsList[0].ConstructorArguments.Count > 0)
+                    {
+                        List<string> tags = new List<string>();
+                        tags.Add(tagsList[0].ConstructorArguments[0].Value.ToString());
+                        if (tagsList[0].ConstructorArguments.Count == 2)
+                        {
+                            foreach (CustomAttributeArgument additionalTag in ((IEnumerable<CustomAttributeArgument>)tagsList[0].ConstructorArguments[1].Value))
+                            {
+                                tags.Add(additionalTag.Value.ToString());
+                            }
+                        }
+                        testCase.Tags = tags.ToArray();
+                    }
                 }
 
                 // now find the source code location
