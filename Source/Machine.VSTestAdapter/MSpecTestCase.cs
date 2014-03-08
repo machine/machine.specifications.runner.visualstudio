@@ -16,6 +16,8 @@ namespace Machine.VSTestAdapter
 
         public int LineNumber { get; set; }
 
+        public string[] Tags { get; set; }
+
         public override object InitializeLifetimeService()
         {
             return (object)null;

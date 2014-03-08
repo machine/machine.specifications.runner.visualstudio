@@ -16,8 +16,17 @@ namespace Machine.VSTestAdapter
             {
                 IEnumerable<CustomAttribute> fieldsWithDelgateAttributes = typeDefinition.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.DelegateUsageAttribute");
 
-                bool hasAssertAttributes = fieldsWithDelgateAttributes.Any(x=>x.ConstructorArguments.Any(y=>y.Type.FullName == "Machine.Specifications.DelegateUsage" && (int)y.Value == 3));
-                return hasAssertAttributes;
+                if (fieldsWithDelgateAttributes.Count() > 0)
+                {
+                    bool hasAssertAttributes = fieldsWithDelgateAttributes.Any(x => x.ConstructorArguments.Any(y => y.Type.FullName == "Machine.Specifications.DelegateUsage" && (int)y.Value == 3));
+                    return hasAssertAttributes;
+                }
+
+                fieldsWithDelgateAttributes = typeDefinition.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.AssertDelegateAttribute");
+                if (fieldsWithDelgateAttributes.Count() > 0)
+                {
+                    return true;
+                }
 
             }
             return false;
