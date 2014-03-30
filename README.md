@@ -7,7 +7,7 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 
 
 # Where the test adapter stands right now
-* Current version is 0.1.5 (minor bug-fix,s relating to traits no longer working in VS 2013 wityh version 0.1.4, VS2012 was unaffected)
+* Current version is 0.1.5 (minor bug-fix, relating to traits no longer working in VS 2013 with version 0.1.4, VS2012 was unaffected)
 * The MSpec Visual Studio 2012 test adapter has been tested on :
 	* Visual Studio 2012 including Visual Studio Updates 1, 2 and 3 
 	* Visual Studio 2013 
