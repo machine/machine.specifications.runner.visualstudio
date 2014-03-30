@@ -4,7 +4,7 @@
   <Identifier Id="Machine.VSTestAdapter.Eugene Duvenage.889BA1F5-0E35-48BC-8D0F-F06489464E05">
     <Name xml:space="preserve">MSpec Test Adapter</Name>
     <Author>Eugene Duvenage</Author>
-    <Version>0.1.4.0</Version>
+    <Version>0.1.5.0</Version>
     <Description xml:space="preserve">Machine Specifications Visual Studio 2012, 2013 Test Adapter</Description>
     <Locale>1033</Locale>
     <MoreInfoUrl>https://github.com/eugeneduvenage/machine.vstestadapter</MoreInfoUrl>

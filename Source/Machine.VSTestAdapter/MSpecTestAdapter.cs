@@ -35,7 +35,7 @@ namespace Machine.VSTestAdapter
             if (vsObjectModel != null)
             {
                 FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(vsObjectModel.Location);
-                if (fileInfo.ProductBuildPart > 50727)
+                if ((fileInfo.FileMajorPart == 11 && fileInfo.ProductBuildPart > 50727) || fileInfo.FileMajorPart >= 12)
                 {
                     UseTraits = true;
                 }
