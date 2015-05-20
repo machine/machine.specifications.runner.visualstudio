@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0" 
+<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0"
       xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
   <Identifier Id="Machine.VSTestAdapter.Eugene Duvenage.889BA1F5-0E35-48BC-8D0F-F06489464E05">
     <Name xml:space="preserve">MSpec Test Adapter</Name>
@@ -19,6 +19,11 @@
         <Edition>Pro</Edition>
       </VisualStudio>
       <VisualStudio Version="12.0">
+        <Edition>Ultimate</Edition>
+        <Edition>Premium</Edition>
+        <Edition>Pro</Edition>
+      </VisualStudio>
+      <VisualStudio Version="14.0">
         <Edition>Ultimate</Edition>
         <Edition>Premium</Edition>
         <Edition>Pro</Edition>
