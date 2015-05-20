@@ -1,10 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter", "Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj", "{53236A16-453D-49C2-880D-87523ECE381F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.VSIX", "Source\Machine.VSTestAdapter.VSIX\Machine.VSTestAdapter.VSIX.csproj", "{432FE7FF-05A5-4E57-A999-48F32C23DDB3}"
-EndProject
+# Visual Studio 14
+VisualStudioVersion = 14.0.22823.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A4146871-B7AE-4141-821C-566ED5BC4B8E}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\NuGet.Config = .nuget\NuGet.Config
@@ -12,9 +10,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A41468
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter", "Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj", "{53236A16-453D-49C2-880D-87523ECE381F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.VSIX", "Source\Machine.VSTestAdapter.VSIX\Machine.VSTestAdapter.VSIX.csproj", "{432FE7FF-05A5-4E57-A999-48F32C23DDB3}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.Specs", "Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.RemoteDomain", "Source\Machine.Specifications.VSRunner\Machine.Specifications.VSRunner.csproj", "{F88CBEBD-9D83-4899-BF61-04C35ECA1663}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.Specifications.VSRunner", "Source\Machine.Specifications.VSRunner\Machine.Specifications.VSRunner.csproj", "{F88CBEBD-9D83-4899-BF61-04C35ECA1663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
