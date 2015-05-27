@@ -16,7 +16,7 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
         private static ISpecificationDiscoverer discoverer;
         private static IEnumerable<MSpecTestCase> results;
 
-        private static string CustomDelegateTypeSpec_Type = "When_getting_the_hash_code_of_equal_strings";
+        private static string CustomDelegateTypeSpec_Type = "When_getting_the_hash_code_of_equal_strings_with_custom_assert_delegate";
 
         private Establish context = () =>
         {
@@ -32,10 +32,13 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
             results = discoverer.EnumerateSpecs(path);
         };
 
-        private It should_discover_the_customdelegate_type_spec = () =>
+        private It should_discover_the_customdelegate_type_spec_they = () =>
         {
-            MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == CustomDelegateTypeSpec_Type).SingleOrDefault();
+            MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == CustomDelegateTypeSpec_Type 
+                        && x.SpecificationName == "should_have_the_same_hash_code" ).SingleOrDefault();
             discoveredSpec.ShouldNotBeNull();
         };
+
+       
     }
 }
