@@ -22,7 +22,7 @@ namespace OnePassingOneFailingOneThrowingSpec
                 result = sut.Add(a, b);
             };
 
-        It should_add_the_numbers_correctly = () =>
+        It should_add_the_numbers_correctly_tags = () =>
             {
                 result.ShouldEqual(expectedResult);
             };

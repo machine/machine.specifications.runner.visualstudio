@@ -4,7 +4,7 @@ using System;
 namespace CustomDelegateSpec
 {
     [Subject(typeof(String), "Equality")]
-    public class When_getting_the_hash_code_of_equal_strings_without_custom_assert_delegate
+    public class When_getting_the_hash_code_of_equal_strings_with_custom_assert_delegate
     {
         private static string a;
         private static string b;
@@ -18,12 +18,14 @@ namespace CustomDelegateSpec
             b = "foo";
         };
 
-        private WhenDoing thisstuff = () =>
+        private Because of = () =>
         {
             resultA = a.GetHashCode();
             resultB = b.GetHashCode();
         };
          
-        private It should_have_the_same_hash_code = () => resultA.ShouldEqual(resultB);
+        private They should_have_the_same_hash_code = () => resultA.ShouldEqual(resultB);
+
+        private It should_result_in_the_same_hash_code = () => resultA.ShouldEqual(resultA);
     }
 }
