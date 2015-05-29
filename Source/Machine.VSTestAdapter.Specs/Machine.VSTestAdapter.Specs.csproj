@@ -78,7 +78,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Discoverer\when_discovering_a_test.cs" />
     <Compile Include="Discoverer\When_discovering_the_OneNestedTypeProject.cs" />
     <Compile Include="Discoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
     <Compile Include="Executor\When_executing_the_OnePassingOneFailingOneThrowingProject.cs" />

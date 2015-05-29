@@ -39,6 +39,12 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
             discoveredSpec.ShouldNotBeNull();
         };
 
+        It should_not_have_duplicates = () => {
+            var typeCount = results.Where(x => x.ContextFullType.Contains(CustomDelegateTypeSpec_Type)).Count();
+
+            typeCount.ShouldEqual(2);
+        };
+
        
     }
 }
