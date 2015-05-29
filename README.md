@@ -29,5 +29,5 @@ Download the installer from the Visual Studio Gallery here http://visualstudioga
 * Merge the VSRunner into the Machine.Specifications project.
 
 # Contributing
-* Source code is located at https://github.com/eugeneduvenage/machine.vstestadapter
+* Source code is located at https://github.com/jonathanwilkins/machine.vstestadapter
 * Please fork the dev branch and not master before making changes and submitting pull requests.
