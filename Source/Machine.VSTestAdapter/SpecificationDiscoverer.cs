@@ -1,5 +1,6 @@
 ﻿using Mono.Cecil;
 using Mono.Cecil.Cil;
+using Mono.Collections.Generic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -46,7 +47,8 @@ namespace Machine.VSTestAdapter
             fieldScanners.Add(new CustomDelegateFieldScanner());
 
             // statically inspect the types in the assembly using mono.cecil
-            foreach (TypeDefinition type in AssemblyDefinition.ReadAssembly(this.AssemblyFilename, this.ReaderParameters).MainModule.GetTypes())
+            var assembly = AssemblyDefinition.ReadAssembly(this.AssemblyFilename, this.ReaderParameters);
+            foreach (TypeDefinition type in GetNestedTypes(assembly.MainModule.Types))
             {
                 // if a type is an It delegate generate some test case info for it
                 foreach (FieldDefinition fieldDefinition in type.Fields.Where(x => !x.Name.Contains("__Cached")))
@@ -74,6 +76,23 @@ namespace Machine.VSTestAdapter
                 }
             }
             return list.Select(x => x);
+        }
+
+        private IEnumerable<TypeDefinition> GetNestedTypes(Collection<TypeDefinition> types)
+        {
+            for (int i = 0; i < types.Count; i++)
+            {
+                var type = types[i];
+
+                if (!type.FullName.EndsWith("/<>c"))
+                    yield return type;
+
+                if (!type.HasNestedTypes)
+                    continue;
+
+                foreach (var nested in GetNestedTypes(type.NestedTypes))
+                    yield return nested;
+            }
         }
 
         private string NormalizeCecilTypeName(string cecilTypeName)
