@@ -91,6 +91,7 @@
     <Compile Include="TestCaseCollector.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Machine.VSTestAdapter.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

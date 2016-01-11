@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+    <metadata>
+        <id>Machine.VSTestAdapter</id>
+        <version>$version$</version>
+        <authors>https://github.com/JonathanWilkins/machine.vstestadapter</authors>
+        <projectUrl>https://github.com/JonathanWilkins/machine.vstestadapter</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Machine.Specifications Visual Studio Test Adapter</description>
+        <dependencies>
+            <dependency id="Machine.Specifications" version="0.7.0" />
+            <dependency id="Mono.Cecil" version="0.9.6.1" />
+        </dependencies>
+    </metadata>
+    <files>
+      <file src="bin\$configuration$\*.dll" target="lib\net45" />
+      <file src="bin\$configuration$\*.pdb" target="lib\net45" />
+    </files>
+</package>
