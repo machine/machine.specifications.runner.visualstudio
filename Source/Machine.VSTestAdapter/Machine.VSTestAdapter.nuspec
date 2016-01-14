@@ -7,6 +7,10 @@
         <projectUrl>https://github.com/JonathanWilkins/machine.vstestadapter</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Machine.Specifications Visual Studio Test Adapter</description>
+        <dependencies>
+          <dependency id="Machine.Specifications" version="[0.9.3,0.10)" />
+          <dependency id="Mono.Cecil" version="[0.9.6.1,0.10)" />
+        </dependencies>
     </metadata>
     <files>
       <file src="bin\$configuration$\*.dll" target="lib\net45" />
