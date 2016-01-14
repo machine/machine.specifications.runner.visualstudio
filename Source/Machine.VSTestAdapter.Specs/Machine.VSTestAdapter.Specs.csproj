@@ -103,6 +103,18 @@
       <Project>{53236a16-453d-49c2-880d-87523ece381f}</Project>
       <Name>Machine.VSTestAdapter</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestData\CustomDelegateSpec\CustomDelegateSpec.csproj">
+      <Project>{d4ddb684-13d9-448c-827a-2810d87c7f0b}</Project>
+      <Name>CustomDelegateSpec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestData\OneNestedTypeSpec\OneNestedTypeSpec.csproj">
+      <Project>{fafbe47c-7331-4cd0-bb65-a79d7da97627}</Project>
+      <Name>OneNestedTypeSpec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestData\OnePassingOneFailingOneThrowingSpec\OnePassingOneFailingOneThrowingSpec.csproj">
+      <Project>{5dd45942-a2eb-4d58-8171-fcc97eff87f3}</Project>
+      <Name>OnePassingOneFailingOneThrowingSpec</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
