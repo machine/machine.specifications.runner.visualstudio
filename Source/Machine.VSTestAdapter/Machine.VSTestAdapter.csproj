@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Machine.VSTestAdapter</RootNamespace>
-    <AssemblyName>Machine.VSTestAdapter</AssemblyName>
+    <AssemblyName>Machine.TestAdapter</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
@@ -39,7 +39,7 @@
       <HintPath>..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel">
-      <HintPath>..\Microsoft.VisualStudio.TestPlatform.ObjectModel Binaries\VS14\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
+      <HintPath>..\Microsoft.VisualStudio.TestPlatform.ObjectModel Binaries\VS14Update1\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
@@ -91,6 +91,7 @@
     <Compile Include="TestCaseCollector.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Machine.VSTestAdapter.nuspec" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>

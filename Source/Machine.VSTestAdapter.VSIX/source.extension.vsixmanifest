@@ -33,6 +33,6 @@
   </Identifier>
   <References />
   <Content>
-    <CustomExtension Type="UnitTestExtension">Machine.VSTestAdapter.dll</CustomExtension>
+    <CustomExtension Type="UnitTestExtension">Machine.TestAdapter.dll</CustomExtension>
   </Content>
 </Vsix>

@@ -48,7 +48,7 @@
       <HintPath>..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel">
-      <HintPath>..\Microsoft.VisualStudio.TestPlatform.ObjectModel Binaries\VS14\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
+      <HintPath>..\Microsoft.VisualStudio.TestPlatform.ObjectModel Binaries\VS14Update1\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.dll</HintPath>
