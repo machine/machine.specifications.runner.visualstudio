@@ -1,0 +1,23 @@
+version: 1.7.0.{build}
+configuration: Release
+platform: Any CPU
+assembly_info:
+  patch: true
+  file: Source\**\AssemblyInfo.*
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: 1.7.0-beta2
+before_build:
+- cmd: >-
+    powershell -f patch-vsix-version.ps1 -version "%APPVEYOR_BUILD_VERSION%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
+
+    nuget restore
+build:
+  project: machine.vstestadapter.sln
+  publish_nuget: true
+  verbosity: minimal
+test:
+  assemblies: '**\*.Specs.dll'
+artifacts:
+- path: '**\*.vsix'
+- path: Source\**\*.nupkg

@@ -32,20 +32,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Machine.Fakes">
-      <HintPath>..\..\packages\Machine.Fakes.2.1.0\lib\net40\Machine.Fakes.dll</HintPath>
+    <Reference Include="Machine.Fakes, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Machine.Fakes.2.7.0\lib\net40\Machine.Fakes.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Fakes.Adapters.NSubstitute">
-      <HintPath>..\..\packages\Machine.Fakes.NSubstitute.2.1.0\lib\net40\Machine.Fakes.Adapters.NSubstitute.dll</HintPath>
+    <Reference Include="Machine.Fakes.Adapters.NSubstitute, Version=2.7.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Machine.Fakes.NSubstitute.2.7.0\lib\net40\Machine.Fakes.Adapters.NSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications">
-      <HintPath>..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.dll</HintPath>
+    <Reference Include="Machine.Specifications, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Clr4">
-      <HintPath>..\..\packages\Machine.Specifications.0.7.0\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+    <Reference Include="Machine.Specifications.Clr4, Version=0.9.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Machine.Specifications.0.9.3\lib\net45\Machine.Specifications.Clr4.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Machine.Specifications.Should">
-      <HintPath>..\..\packages\Machine.Specifications.Should.0.7.1\lib\net45\Machine.Specifications.Should.dll</HintPath>
+    <Reference Include="Machine.Specifications.Should, Version=0.8.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Machine.Specifications.Should.0.8.0\lib\net45\Machine.Specifications.Should.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.VisualStudio.TestPlatform.ObjectModel">
       <HintPath>..\Microsoft.VisualStudio.TestPlatform.ObjectModel Binaries\VS14Update1\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll</HintPath>
@@ -66,8 +71,9 @@
       <HintPath>..\..\packages\Mono.Cecil.0.9.6.1\lib\net45\Mono.Cecil.Rocks.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="NSubstitute">
-      <HintPath>..\..\packages\NSubstitute.1.7.2.0\lib\NET45\NSubstitute.dll</HintPath>
+    <Reference Include="NSubstitute, Version=1.9.2.0, Culture=neutral, PublicKeyToken=92dd2e9066daa5ca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\NSubstitute.1.9.2.0\lib\net45\NSubstitute.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -89,12 +95,25 @@
     <Compile Include="Discoverer\When_discovering_the_customdelegateproject.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj">
       <Project>{53236a16-453d-49c2-880d-87523ece381f}</Project>
       <Name>Machine.VSTestAdapter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestData\CustomDelegateSpec\CustomDelegateSpec.csproj">
+      <Project>{d4ddb684-13d9-448c-827a-2810d87c7f0b}</Project>
+      <Name>CustomDelegateSpec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestData\OneNestedTypeSpec\OneNestedTypeSpec.csproj">
+      <Project>{fafbe47c-7331-4cd0-bb65-a79d7da97627}</Project>
+      <Name>OneNestedTypeSpec</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\TestData\OnePassingOneFailingOneThrowingSpec\OnePassingOneFailingOneThrowingSpec.csproj">
+      <Project>{5dd45942-a2eb-4d58-8171-fcc97eff87f3}</Project>
+      <Name>OnePassingOneFailingOneThrowingSpec</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
@@ -105,18 +124,6 @@
     </Content>
     <Content Include="..\TestData\bin\CustomDelegateSpec.pdb">
       <Link>TestData\CustomDelegateSpec.pdb</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\TestData\bin\Machine.Specifications.Clr4.dll">
-      <Link>TestData\Machine.Specifications.Clr4.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\TestData\bin\Machine.Specifications.dll">
-      <Link>TestData\Machine.Specifications.dll</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="..\TestData\bin\Machine.Specifications.Should.dll">
-      <Link>TestData\Machine.Specifications.Should.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="..\TestData\bin\OneNestedTypeSpec.dll">
