@@ -15,7 +15,7 @@ namespace Machine.VSTestAdapter
     {
         private const string runnerName = "Machine.Specifications.VSRunner";
         private const string runnerDllName = "Machine.Specifications.VSRunner.dll";
-        private const string adapterName = "Machine.VSTestAdapter";
+        private readonly static string adapterName = typeof(MSpecVSRunnerManager).Assembly.GetName().Name;
         private const string runnerClassName = "Machine.Specifications.VSRunner.AppDomainExecutor";
         private IFrameworkHandle frameworkHandle;
         private Uri uri;
