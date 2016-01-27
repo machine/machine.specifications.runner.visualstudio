@@ -1,38 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Vsix xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="1.0.0"
-      xmlns="http://schemas.microsoft.com/developer/vsx-schema/2010">
-  <Identifier Id="Machine.VSTestAdapter.Eugene Duvenage.889BA1F5-0E35-48BC-8D0F-F06489464E05">
-    <Name xml:space="preserve">MSpec Test Adapter</Name>
-    <Author>Jonathan Wilkinse</Author>
-    <Version>0.1.6.0</Version>
-    <Description xml:space="preserve">Machine Specifications Visual Studio 2012, 2013 Test Adapter</Description>
-    <Locale>1033</Locale>
-    <MoreInfoUrl>https://github.com/jonathanwilkins/machine.vstestadapter</MoreInfoUrl>
+<?xml version="1.0" encoding="utf-8"?>
+<PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
+  <Metadata>
+    <Identity Id="Machine.VSTestAdapter.Eugene Duvenage.889BA1F5-0E35-48BC-8D0F-F06489464E05" Version="1.7.0" Language="en-US" Publisher="Jonathan Wilkinse" />
+    <DisplayName>Machine.VSTestAdapter</DisplayName>
+    <Description>Machine Specifications Test Adapter</Description>
+    <MoreInfo>https://github.com/machine-visualstudio/machine.vstestadapter</MoreInfo>
     <License>License.txt</License>
+    <ReleaseNotes>https://github.com/machine-visualstudio/machine.vstestadapter/releases</ReleaseNotes>
     <Icon>Machine.VSTestAdapter-64x64.png</Icon>
     <PreviewImage>Machine.VSTestAdapter-256x256.png</PreviewImage>
-    <InstalledByMsi>false</InstalledByMsi>
-    <SupportedProducts>
-      <VisualStudio Version="11.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-      <VisualStudio Version="12.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-      <VisualStudio Version="14.0">
-        <Edition>Ultimate</Edition>
-        <Edition>Premium</Edition>
-        <Edition>Pro</Edition>
-      </VisualStudio>
-    </SupportedProducts>
-    <SupportedFrameworkRuntimeEdition MinVersion="2.0" MaxVersion="4.5" />
-  </Identifier>
-  <References />
-  <Content>
-    <CustomExtension Type="UnitTestExtension">Machine.TestAdapter.dll</CustomExtension>
-  </Content>
-</Vsix>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="[11.0,15.0)" Id="Microsoft.VisualStudio.Community" />
+    <InstallationTarget Version="[11.0,15.0)" Id="Microsoft.VisualStudio.Pro" />
+    <InstallationTarget Version="[11.0,15.0)" Id="Microsoft.VisualStudio.Enterprise" />
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.5,)" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="UnitTestExtension" d:Source="Project" d:ProjectName="Machine.VSTestAdapter" Path="|Machine.VSTestAdapter|" />
+  </Assets>
+</PackageManifest>
