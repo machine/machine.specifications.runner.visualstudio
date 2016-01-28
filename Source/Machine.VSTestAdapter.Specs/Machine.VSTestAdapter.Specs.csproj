@@ -116,7 +116,9 @@
       <Name>OnePassingOneFailingOneThrowingSpec</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="..\TestData\bin\CustomDelegateSpec.dll">
       <Link>TestData\CustomDelegateSpec.dll</Link>

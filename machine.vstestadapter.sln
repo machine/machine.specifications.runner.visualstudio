@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22823.1
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A4146871-B7AE-4141-821C-566ED5BC4B8E}"
 	ProjectSection(SolutionItems) = preProject
@@ -11,8 +11,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A41468
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter", "Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj", "{53236A16-453D-49C2-880D-87523ECE381F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.VSIX", "Source\Machine.VSTestAdapter.VSIX\Machine.VSTestAdapter.VSIX.csproj", "{432FE7FF-05A5-4E57-A999-48F32C23DDB3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.Specs", "Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
 EndProject
@@ -26,6 +24,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneNestedTypeSpec", "Source
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomDelegateSpec", "Source\TestData\CustomDelegateSpec\CustomDelegateSpec.csproj", "{D4DDB684-13D9-448C-827A-2810D87C7F0B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.VSIX", "Source\Machine.VSTestAdapter.VSIX\Machine.VSTestAdapter.VSIX.csproj", "{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,10 +36,6 @@ Global
 		{53236A16-453D-49C2-880D-87523ECE381F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53236A16-453D-49C2-880D-87523ECE381F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53236A16-453D-49C2-880D-87523ECE381F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{432FE7FF-05A5-4E57-A999-48F32C23DDB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{432FE7FF-05A5-4E57-A999-48F32C23DDB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{432FE7FF-05A5-4E57-A999-48F32C23DDB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{432FE7FF-05A5-4E57-A999-48F32C23DDB3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -60,6 +56,10 @@ Global
 		{D4DDB684-13D9-448C-827A-2810D87C7F0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D4DDB684-13D9-448C-827A-2810D87C7F0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D4DDB684-13D9-448C-827A-2810D87C7F0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
