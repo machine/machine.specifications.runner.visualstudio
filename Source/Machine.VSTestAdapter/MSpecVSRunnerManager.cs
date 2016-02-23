@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace Machine.VSTestAdapter
 {
@@ -15,7 +16,7 @@ namespace Machine.VSTestAdapter
     {
         private const string runnerName = "Machine.Specifications.VSRunner";
         private const string runnerDllName = "Machine.Specifications.VSRunner.dll";
-        private const string adapterName = "Machine.VSTestAdapter";
+        private const string adapterName = "Machine.TestAdapter";
         private const string runnerClassName = "Machine.Specifications.VSRunner.AppDomainExecutor";
         private IFrameworkHandle frameworkHandle;
         private Uri uri;
