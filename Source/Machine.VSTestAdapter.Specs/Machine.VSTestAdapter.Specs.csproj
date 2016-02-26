@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuiltInDiscoverer\When_discovering_the_customdelegateproject.cs" />
+    <Compile Include="BuiltInDiscoverer\When_discovering_the_OneNestedTypeProject.cs" />
+    <Compile Include="BuiltInDiscoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
     <Compile Include="CecilDiscoverer\When_discovering_the_OneNestedTypeProject.cs" />
     <Compile Include="CecilDiscoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
     <Compile Include="Executor\When_executing_the_OnePassingOneFailingOneThrowingProject.cs" />
