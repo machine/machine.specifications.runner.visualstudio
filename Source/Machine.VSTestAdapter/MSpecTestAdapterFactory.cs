@@ -1,4 +1,5 @@
 ﻿using System;
+using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
 using Machine.VSTestAdapter.Discovery.Cecil;
 

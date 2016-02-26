@@ -2,7 +2,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery
 {
     public static class SpecTestHelper
     {

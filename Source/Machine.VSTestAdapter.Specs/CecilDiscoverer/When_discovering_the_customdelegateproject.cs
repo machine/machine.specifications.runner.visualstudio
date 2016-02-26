@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Machine.VSTestAdapter.Discovery.Cecil;
+using Machine.VSTestAdapter.Discovery;
 
 namespace Machine.VSTestAdapter.Specs.CecilDiscoverer
 {
