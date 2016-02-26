@@ -88,7 +88,7 @@
     <Compile Include="Discovery\Cecil\CecilSpecificationDiscoverer.cs" />
     <Compile Include="SpecificationExecutor.cs" />
     <Compile Include="SpecificationRunListener.cs" />
-    <Compile Include="Discovery\SpecTestHelper.cs" />
+    <Compile Include="SpecTestHelper.cs" />
     <Compile Include="Strings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

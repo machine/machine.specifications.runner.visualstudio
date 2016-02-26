@@ -8,32 +8,32 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
     public class AssemblyTestDiscoveryIsolatedScope : IDisposable
     {
-        private Lazy<TestDiscoverer> _testDiscoverer = new Lazy<TestDiscoverer>();
-        private AppDomain _appDomain;
-        private readonly string _assemblyPath;
+        private Lazy<TestDiscoverer> testDiscoverer = new Lazy<TestDiscoverer>();
+        private AppDomain appDomain;
+        private readonly string assemblyPath;
 
         public AssemblyTestDiscoveryIsolatedScope(string assemblyPath)
         {
             if (string.IsNullOrEmpty(assemblyPath))
                 throw new ArgumentException($"{nameof(assemblyPath)} is null or empty.", nameof(assemblyPath));
 
-            _assemblyPath = assemblyPath;
+            this.assemblyPath = assemblyPath;
         }
 
 
         private TestDiscoverer CreateTestDiscovererInstance(string assemblyPath)
         {
-            _appDomain = CreateAppDomain(assemblyPath);
+            appDomain = CreateAppDomain(assemblyPath);
 
-            return (TestDiscoverer)_appDomain.CreateInstanceAndUnwrap(typeof(TestDiscoverer).Assembly.FullName, typeof(TestDiscoverer).FullName);
+            return (TestDiscoverer)appDomain.CreateInstanceAndUnwrap(typeof(TestDiscoverer).Assembly.FullName, typeof(TestDiscoverer).FullName);
         }
 
 
         public IEnumerable<MSpecTestCase> DiscoverTests()
         {
-            TestDiscoverer discoverer = CreateTestDiscovererInstance(_assemblyPath);
+            TestDiscoverer discoverer = CreateTestDiscovererInstance(assemblyPath);
 
-            return discoverer.DiscoverTests(_assemblyPath)
+            return discoverer.DiscoverTests(assemblyPath)
                 .Select(test => new MSpecTestCase() {
                     CodeFilePath = test.CodeFilePath,
                     ContextFullType = test.ContextFullType,
@@ -66,7 +66,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
         {
-            foreach (Assembly assembly in assemblies) {
+            foreach (Assembly assembly in assemblies)
+            {
                 string assemblyLocation = assembly.Location;
                 string assemblyName = Path.GetFileName(assemblyLocation);
                 string assemblyFileDestination = Path.Combine(destination, assemblyName);
@@ -76,9 +77,10 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
         public void Dispose()
         {
-            if (_appDomain != null) {
-                AppDomain.Unload(_appDomain);
-                _appDomain = null;
+            if (appDomain != null)
+            {
+                AppDomain.Unload(appDomain);
+                appDomain = null;
             }
         }
     }

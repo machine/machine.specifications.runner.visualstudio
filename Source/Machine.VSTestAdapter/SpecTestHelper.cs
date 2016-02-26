@@ -1,8 +1,9 @@
 ﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using System;
 using System.Diagnostics;
+using Machine.VSTestAdapter.Discovery;
 
-namespace Machine.VSTestAdapter.Discovery
+namespace Machine.VSTestAdapter
 {
     public static class SpecTestHelper
     {

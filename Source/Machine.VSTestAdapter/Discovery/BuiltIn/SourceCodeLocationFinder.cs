@@ -7,11 +7,11 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
     public class SourceCodeLocationFinder
     {
-        private readonly Lazy<AssemblyDefinition> _assemblyDefinition;
+        private readonly Lazy<AssemblyDefinition> assemblyDefinition;
 
         public SourceCodeLocationFinder(string assemblyFilePath)
         {
-            _assemblyDefinition = new Lazy<AssemblyDefinition>(() => { return LoadAssembly(assemblyFilePath); });
+            assemblyDefinition = new Lazy<AssemblyDefinition>(() => { return LoadAssembly(assemblyFilePath); });
         }
 
         private AssemblyDefinition LoadAssembly(string assemblyFilePath)
@@ -22,7 +22,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
         }
 
         private AssemblyDefinition Assembly {
-            get { return _assemblyDefinition.Value; }
+            get { return assemblyDefinition.Value; }
         }
 
         public SourceCodeLocationInfo GetFieldLocation(string fullTypeName, string fieldName)
