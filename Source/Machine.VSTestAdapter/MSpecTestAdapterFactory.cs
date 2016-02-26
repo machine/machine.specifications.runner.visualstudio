@@ -1,4 +1,6 @@
 ﻿using System;
+using Machine.VSTestAdapter.Discovery.BuiltIn;
+using Machine.VSTestAdapter.Discovery.Cecil;
 
 namespace Machine.VSTestAdapter
 {
@@ -25,7 +27,9 @@ namespace Machine.VSTestAdapter
 
         public MSpecTestAdapterFactory()
         {
-            this.discovererCreator = () => { return new SpecificationDiscoverer(); };
+            this.discovererCreator = () => { return new BuiltInSpecificationDiscoverer(); };
+            //this.discovererCreator = () => { return new CecilSpecificationDiscoverer(); };
+            
             this.executorCreator = () => { return new SpecificationExecutor(); };
         }
 

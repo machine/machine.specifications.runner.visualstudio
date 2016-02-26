@@ -5,8 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Machine.VSTestAdapter.Discovery.Cecil;
 
-namespace Machine.VSTestAdapter.Specs.Discoverer
+namespace Machine.VSTestAdapter.Specs.CecilDiscoverer
 {
     public class When_discovering_the_customdelegateproject : WithFakes
     {
@@ -20,7 +21,7 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
 
         private Establish context = () =>
         {
-            discoverer = new SpecificationDiscoverer();
+            discoverer = new CecilSpecificationDiscoverer();
             testDebugDirectory = Helper.GetTestDebugDirectory();
             testSourceDirectory = Helper.GetTestSourceDirectory();
         };

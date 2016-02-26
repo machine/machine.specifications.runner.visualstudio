@@ -1,6 +1,6 @@
 ﻿using Mono.Cecil;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery.Cecil
 {
     public interface IDelegateFieldScanner
     {
