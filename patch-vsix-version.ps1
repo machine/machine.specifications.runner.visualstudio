@@ -10,6 +10,4 @@ if ((Test-Path $manifestFile) -ne $true) {
 
 Write-Host "Applying version ${version} to ${manifestFile}"
 
- -replace '<Identity (.*?) Version=".*?"','<Identity $1 Version="$version"'
-
 (Get-Content $manifestFile) | Foreach-Object {$_ -replace '<Identity (.*?) Version=".*?"',"<Identity `$1 Version=""$version"""} | Set-Content $manifestFile
