@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -11,6 +11,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
         private Lazy<TestDiscoverer> testDiscoverer = new Lazy<TestDiscoverer>();
         private AppDomain appDomain;
         private readonly string assemblyPath;
+        private string appName = typeof(AssemblyTestDiscoveryIsolatedScope).Assembly.GetName().Name;
 
         public AssemblyTestDiscoveryIsolatedScope(string assemblyPath)
         {
@@ -23,7 +24,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
         private TestDiscoverer CreateTestDiscovererInstance(string assemblyPath)
         {
-            appDomain = CreateAppDomain(assemblyPath);
+            appDomain = CreateAppDomain(assemblyPath, this.appName);
 
             return (TestDiscoverer)appDomain.CreateInstanceAndUnwrap(typeof(TestDiscoverer).Assembly.FullName, typeof(TestDiscoverer).FullName);
         }
@@ -46,7 +47,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 .ToList();
         }
 
-        private static AppDomain CreateAppDomain(string assemblyPath)
+        private static AppDomain CreateAppDomain(string assemblyPath, string appName)
         {
             CopyRequiredRuntimeDependencies(new[] {
                 typeof(TestDiscoverer).Assembly,
@@ -57,11 +58,12 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             }, Path.GetDirectoryName(assemblyPath));
 
             AppDomainSetup setup = new AppDomainSetup();
-            setup.ApplicationName = "Machine.TestAdapter" + "-" + Path.GetFileNameWithoutExtension(assemblyPath);
+            setup.ApplicationName = appName;
             setup.ShadowCopyFiles = "true";
             setup.ApplicationBase = setup.PrivateBinPath = Path.GetDirectoryName(assemblyPath);
+            setup.CachePath = Path.Combine(Path.GetTempPath(), appName, Guid.NewGuid().ToString());
 
-            return AppDomain.CreateDomain("discovery.dll", null, setup);
+            return AppDomain.CreateDomain($"{appName}.dll", null, setup);
         }
 
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
@@ -79,8 +81,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
         {
             if (appDomain != null)
             {
+                string cacheDirectory = appDomain.SetupInformation.CachePath;
+
                 AppDomain.Unload(appDomain);
                 appDomain = null;
+
+                if (Directory.Exists(cacheDirectory))
+                    Directory.Delete(cacheDirectory, true);
             }
         }
     }
