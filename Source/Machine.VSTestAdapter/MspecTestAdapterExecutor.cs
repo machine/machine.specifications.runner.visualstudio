@@ -16,16 +16,32 @@ namespace Machine.VSTestAdapter
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             //Debugger.Launch();
-            // this a temporary hack until I can figure out why running the specs per assembly directly using mspec does not work with a large number of specifications
-            // when they are run diectly the first 100 or so specs run fine and then an error occurs saying it has taken more than 10 seconds and is being stopped
-            // for now we just rediscover and run them like that, makes no sense
-            TestCaseCollector collector = new TestCaseCollector();
-            this.DiscoverTests(sources, runContext, frameworkHandle, collector);
-            this.RunTests(collector.TestCases, runContext, frameworkHandle);
+            string currentAsssembly = string.Empty;
+
+            try
+            {
+                ISpecificationExecutor specificationExecutor = this.adapterFactory.CreateExecutor();
+
+                foreach (string source in sources)
+                {
+                    currentAsssembly = source;
+
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
+
+                    specificationExecutor.RunAssembly(currentAsssembly, MSpecTestAdapter.uri, runContext, frameworkHandle);
+                }
+
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Complete on {0} assemblies ", sources.Count()));
+            }
+            catch (Exception ex)
+            {
+                frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
+            }
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
+            //Debugger.Launch();
             frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
             int executedSpecCount = 0;
             string currentAsssembly = string.Empty;
