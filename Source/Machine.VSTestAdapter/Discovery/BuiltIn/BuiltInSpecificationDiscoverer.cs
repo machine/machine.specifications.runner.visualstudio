@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
@@ -9,8 +10,20 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
     {
         public IEnumerable<MSpecTestCase> EnumerateSpecs(string assemblyFilePath)
         {
-            using (var scope = new AssemblyTestDiscoveryIsolatedScope(assemblyFilePath)) {
-                return scope.DiscoverTests();
+            using (IsolatedAppDomainExecutionScope<TestDiscoverer> scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath)) {
+                TestDiscoverer discoverer = scope.CreateInstance();
+
+                return discoverer.DiscoverTests(assemblyFilePath)
+                    .Select(test => new MSpecTestCase() {
+                        CodeFilePath = test.CodeFilePath,
+                        ContextFullType = test.ContextFullType,
+                        ContextType = test.ContextType,
+                        LineNumber = test.LineNumber,
+                        SpecificationName = test.SpecificationName,
+                        SubjectName = test.SubjectName,
+                        Tags = test.Tags
+                    })
+                    .ToList();
             }
         }
 

@@ -68,9 +68,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Discovery\BuiltIn\IsolatedAppDomainExecutionScope.cs" />
     <Compile Include="Discovery\BuiltIn\BuiltInSpecificationDiscoverer.cs" />
     <Compile Include="Discovery\BuiltIn\SourceCodeLocationFinder.cs" />
-    <Compile Include="Discovery\BuiltIn\AssemblyTestDiscoveryIsolatedScope.cs" />
     <Compile Include="Discovery\BuiltIn\TestDiscoverer.cs" />
     <Compile Include="Discovery\Cecil\CustomDelegateFieldScanner.cs" />
     <Compile Include="Discovery\Cecil\IDelegateFieldScanner.cs" />
