@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BuiltInDiscoverer\When_discovering_the_customdelegateproject.cs" />
+    <Compile Include="BuiltInDiscoverer\When_discovering_behaviors.cs" />
     <Compile Include="BuiltInDiscoverer\When_discovering_the_OneNestedTypeProject.cs" />
     <Compile Include="BuiltInDiscoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
     <Compile Include="CecilDiscoverer\When_discovering_the_OneNestedTypeProject.cs" />
@@ -118,6 +119,10 @@
       <Project>{5dd45942-a2eb-4d58-8171-fcc97eff87f3}</Project>
       <Name>OnePassingOneFailingOneThrowingSpec</Name>
     </ProjectReference>
+    <ProjectReference Include="..\TestData\SampleSpecs\SampleSpecs.csproj">
+      <Project>{64e9f680-210d-4a69-bf87-13ba3e0fd3b7}</Project>
+      <Name>SampleSpecs</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -145,6 +150,14 @@
     </Content>
     <Content Include="..\TestData\bin\OnePassingOneFailingOneThrowingSpec.pdb">
       <Link>TestData\OnePassingOneFailingOneThrowingSpec.pdb</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\TestData\bin\SampleSpecs.dll">
+      <Link>TestData\SampleSpecs.dll</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\TestData\bin\SampleSpecs.pdb">
+      <Link>TestData\SampleSpecs.pdb</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
