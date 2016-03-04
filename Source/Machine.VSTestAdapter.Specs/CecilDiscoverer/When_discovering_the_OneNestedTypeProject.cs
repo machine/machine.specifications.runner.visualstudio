@@ -37,13 +37,13 @@ namespace Machine.VSTestAdapter.Specs.CecilDiscoverer
 
         private It should_discover_the_nested_type_spec = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == NestedTypeSpec_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == NestedTypeSpec_Type).SingleOrDefault();
                 discoveredSpec.ShouldNotBeNull();
             };
 
         private It should_normalize_the_nested_type_name = () =>
         {
-            results.Where(x => x.ContextType == NestedTypeSpec_Type)
+            results.Where(x => x.ClassName == NestedTypeSpec_Type)
                 .First()
                 .ContextFullType.ShouldEqual(NestedTypeSpec_FullType);
         };

@@ -4,11 +4,11 @@ namespace Machine.VSTestAdapter.Discovery
 {
     public class MSpecTestCase : MarshalByRefObject
     {
-        public string SubjectName { get; set; }
+        public string Subject { get; set; }
 
         public string ContextFullType { get; set; }
 
-        public string ContextType { get; set; }
+        public string ClassName { get; set; }
 
         public string SpecificationName { get; set; }
 

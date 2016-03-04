@@ -36,7 +36,7 @@ namespace Machine.VSTestAdapter.Specs.CecilDiscoverer
 
         private It should_discover_the_customdelegate_type_spec_they = () =>
         {
-            MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == CustomDelegateTypeSpec_Type 
+            MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == CustomDelegateTypeSpec_Type 
                         && x.SpecificationName == "should_have_the_same_hash_code" ).SingleOrDefault();
             discoveredSpec.ShouldNotBeNull();
         };

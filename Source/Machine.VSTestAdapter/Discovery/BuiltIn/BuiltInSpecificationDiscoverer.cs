@@ -17,10 +17,10 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                     .Select(test => new MSpecTestCase() {
                         CodeFilePath = test.CodeFilePath,
                         ContextFullType = test.ContextFullType,
-                        ContextType = test.ContextType,
+                        ClassName = test.ClassName,
                         LineNumber = test.LineNumber,
                         SpecificationName = test.SpecificationName,
-                        SubjectName = test.SubjectName,
+                        Subject = test.Subject,
                         Tags = test.Tags
                     })
                     .ToList();

@@ -44,31 +44,31 @@ namespace Machine.VSTestAdapter.Specs.BuiltInDiscoverer
 
         private It should_discover_the_passing_specifications_type = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == PassingSpecWithSubject_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == PassingSpecWithSubject_Type).SingleOrDefault();
                 discoveredSpec.ShouldNotBeNull();
             };
 
         private It should_discover_the_passing_specifications_fulltype = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == PassingSpecWithSubject_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == PassingSpecWithSubject_Type).SingleOrDefault();
                 discoveredSpec.ContextFullType.ShouldEqual(PassingSpecWithSubject_FullType);
             };
 
         private It should_discover_the_passing_specifications_specification_name = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == PassingSpecWithSubject_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == PassingSpecWithSubject_Type).SingleOrDefault();
                 discoveredSpec.SpecificationName.ShouldEqual(PassingSpecWithSubject_SpecificationName);
             };
 
         private It should_discover_the_passing_specifications_subject = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == PassingSpecWithSubject_Type).SingleOrDefault();
-                discoveredSpec.SubjectName.ShouldEqual(PassingSpecWithSubject_Subject);
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == PassingSpecWithSubject_Type).SingleOrDefault();
+                discoveredSpec.Subject.ShouldEqual(PassingSpecWithSubject_Subject);
             };
 
         private It should_discover_the_passing_specifications_source = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == PassingSpecWithSubject_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == PassingSpecWithSubject_Type).SingleOrDefault();
                 string lowerCaseDiscoverSourcePath = discoveredSpec.CodeFilePath.ToLower();
                 string lowerCaseExpectedSourcePath = Path.GetFullPath(Path.Combine(testSourceDirectory, PassingSpecWithSubject_Source)).ToLower();
 
@@ -77,19 +77,19 @@ namespace Machine.VSTestAdapter.Specs.BuiltInDiscoverer
 
         private It should_discover_the_failing_specifications_type = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == FailingSpec_Type).SingleOrDefault();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == FailingSpec_Type).SingleOrDefault();
                 discoveredSpec.ShouldNotBeNull();
             };
 
         private It should_discover_the_failing_specification_has_no_specification_name = () =>
             {
-                MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == FailingSpec_Type).SingleOrDefault();
-                discoveredSpec.SubjectName.ShouldBeNull();
+                MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == FailingSpec_Type).SingleOrDefault();
+                discoveredSpec.Subject.ShouldBeNull();
             };
 
         private It should_discover_the_throwing_specifications_type = () =>
         {
-            MSpecTestCase discoveredSpec = results.Where(x => x.ContextType == ThrowingSpec_Type).SingleOrDefault();
+            MSpecTestCase discoveredSpec = results.Where(x => x.ClassName == ThrowingSpec_Type).SingleOrDefault();
             discoveredSpec.ShouldNotBeNull();
         };
     }

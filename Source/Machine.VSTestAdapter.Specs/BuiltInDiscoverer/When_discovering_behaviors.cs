@@ -36,7 +36,7 @@ namespace Machine.VSTestAdapter.Specs.BuiltInDiscoverer
         private It should_discover_the_sample_behavior = () =>
         {
             MSpecTestCase discoveredSpec = results.SingleOrDefault(x => SpecificationName.Equals(x.SpecificationName, StringComparison.Ordinal) && 
-                                                                          SpecType.Equals(x.ContextType, StringComparison.Ordinal));
+                                                                          SpecType.Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
             discoveredSpec.LineNumber.ShouldEqual(14);

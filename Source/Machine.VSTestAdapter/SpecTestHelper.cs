@@ -21,8 +21,8 @@ namespace Machine.VSTestAdapter
             if (MSpecTestAdapter.UseTraits)
             {
                 dynamic dynTestCase = testCase;
-                dynamic classTrait = traitCreator(Strings.TRAIT_CLASS, mspecTestCase.ContextType);
-                dynamic subjectTrait = traitCreator(Strings.TRAIT_SUBJECT, string.IsNullOrEmpty(mspecTestCase.SubjectName) ? Strings.TRAIT_SUBJECT_NOSUBJECT : mspecTestCase.SubjectName);
+                dynamic classTrait = traitCreator(Strings.TRAIT_CLASS, mspecTestCase.ClassName);
+                dynamic subjectTrait = traitCreator(Strings.TRAIT_SUBJECT, string.IsNullOrEmpty(mspecTestCase.Subject) ? Strings.TRAIT_SUBJECT_NOSUBJECT : mspecTestCase.Subject);
 
                 dynTestCase.Traits.Add(classTrait);
                 dynTestCase.Traits.Add(subjectTrait);

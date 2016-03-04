@@ -32,8 +32,8 @@ namespace Machine.VSTestAdapter.Specs.TestAdapter
 
                 // mock - return two specifications
                 discoverer.WhenToldTo(x => x.EnumerateSpecs(Param.IsAny<string>()))
-                    .Return(new MSpecTestCase[] {   new MSpecTestCase() { ContextType = "Test1Type", ContextFullType ="Test1FullType", SpecificationName = "Test1SpecName"} ,
-                                                    new MSpecTestCase() { ContextType = "Test2Type", ContextFullType ="Test2FullType", SpecificationName = "Test2SpecName"}
+                    .Return(new MSpecTestCase[] {   new MSpecTestCase() { ClassName = "Test1Type", ContextFullType ="Test1FullType", SpecificationName = "Test1SpecName"} ,
+                                                    new MSpecTestCase() { ClassName = "Test2Type", ContextFullType ="Test2FullType", SpecificationName = "Test2SpecName"}
                                                 });
 
                 // mock - use the MSpecTestAdapterFactory, adapter factory, constructor overload to specify the mocked discoverer and executor

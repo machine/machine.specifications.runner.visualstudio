@@ -62,7 +62,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
 
                             MSpecTestCase testCase = new MSpecTestCase()
                             {
-                                ContextType = typeName,
+                                ClassName = typeName,
                                 ContextFullType = typeFullName,
                                 SpecificationName = fieldDefinition.Name
                             };
@@ -136,7 +136,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                     List<CustomAttribute> list = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.SubjectAttribute").ToList();
                     if (list.Count > 0 && list[0].ConstructorArguments.Count > 0)
                     {
-                        testCase.SubjectName = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
+                        testCase.Subject = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
                     }
 
                     List<CustomAttribute> tagsList = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.TagsAttribute").ToList();
