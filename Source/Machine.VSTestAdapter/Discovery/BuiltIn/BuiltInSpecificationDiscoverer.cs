@@ -13,17 +13,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             using (IsolatedAppDomainExecutionScope<TestDiscoverer> scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath)) {
                 TestDiscoverer discoverer = scope.CreateInstance();
 
-                return discoverer.DiscoverTests(assemblyFilePath)
-                    .Select(test => new MSpecTestCase() {
-                        CodeFilePath = test.CodeFilePath,
-                        ContextFullType = test.ContextFullType,
-                        ClassName = test.ClassName,
-                        LineNumber = test.LineNumber,
-                        SpecificationName = test.SpecificationName,
-                        Subject = test.Subject,
-                        Tags = test.Tags
-                    })
-                    .ToList();
+                return discoverer.DiscoverTests(assemblyFilePath).ToList();
             }
         }
 
