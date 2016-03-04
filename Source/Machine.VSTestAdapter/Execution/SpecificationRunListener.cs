@@ -1,8 +1,9 @@
 ﻿using Machine.Specifications;
 using Machine.Specifications.Runner;
 using System;
+using Machine.VSTestAdapter.Execution;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Execution
 {
     public class SpecificationRunListener : MarshalByRefObject, ISpecificationRunListener
     {

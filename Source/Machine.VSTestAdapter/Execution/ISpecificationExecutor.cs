@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using System;
 using System.Collections.Generic;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Execution
 {
     public interface ISpecificationExecutor
     {

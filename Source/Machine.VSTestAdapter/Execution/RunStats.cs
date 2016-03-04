@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Execution
 {
     public class RunStats
     {

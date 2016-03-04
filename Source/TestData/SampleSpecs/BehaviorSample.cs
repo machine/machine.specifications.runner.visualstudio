@@ -24,6 +24,9 @@ namespace SampleSpecs
             
         };
 
+        #pragma warning disable CS0169
+
         Behaves_like<SampleBehavior> some_behavior;
+        #pragma warning restore CS0169
     }
 }

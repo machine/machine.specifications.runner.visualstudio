@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Execution
 {
     public class SpecificationExecutor : MarshalByRefObject, ISpecificationExecutor
     {

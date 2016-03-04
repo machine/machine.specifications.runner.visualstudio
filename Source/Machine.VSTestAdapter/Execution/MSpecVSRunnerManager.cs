@@ -9,7 +9,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Execution
 {
     public class MSpecVSRunnerManager : MarshalByRefObject
     {

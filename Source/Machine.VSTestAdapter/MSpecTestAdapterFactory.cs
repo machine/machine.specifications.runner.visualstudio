@@ -1,7 +1,7 @@
 ﻿using System;
 using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
-using Machine.VSTestAdapter.Discovery.Cecil;
+using Machine.VSTestAdapter.Execution;
 
 namespace Machine.VSTestAdapter
 {

@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System.Collections.Generic;
 using Machine.VSTestAdapter.Discovery;
+using Machine.VSTestAdapter.Execution;
 
 namespace Machine.VSTestAdapter.Specs.TestAdapter
 {
