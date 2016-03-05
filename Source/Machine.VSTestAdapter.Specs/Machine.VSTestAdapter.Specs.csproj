@@ -90,7 +90,11 @@
     <Compile Include="BuiltInDiscoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
     <Compile Include="CecilDiscoverer\When_discovering_the_OneNestedTypeProject.cs" />
     <Compile Include="CecilDiscoverer\When_discovering_the_OnePassingOneFailingOneThrowingProject.cs" />
-    <Compile Include="Executor\When_executing_the_OnePassingOneFailingOneThrowingProject.cs" />
+    <Compile Include="Execution\RunListener\TestCaseMapperBehavior.cs" />
+    <Compile Include="Execution\RunListener\When_there_is_an_error_reported.cs" />
+    <Compile Include="Execution\RunListener\When_specification_ends_with_a_fail.cs" />
+    <Compile Include="Execution\RunListener\When_specification_ends_with_a_pass.cs" />
+    <Compile Include="Execution\RunListener\When_specification_starts.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestAdapter\When_discovering_an_assembly_that_results_in_an_exception.cs" />

@@ -4,10 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Machine.VSTestAdapter.Discovery.BuiltIn
+namespace Machine.VSTestAdapter
 {
 
-    public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : new()
+    public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()
     {
         private AppDomain appDomain;
         private string appName = typeof(IsolatedAppDomainExecutionScope<>).Assembly.GetName().Name;

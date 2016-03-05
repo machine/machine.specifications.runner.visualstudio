@@ -14,8 +14,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter", "So
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.Specs", "Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.Specifications.VSRunner", "Source\Machine.Specifications.VSRunner\Machine.Specifications.VSRunner.csproj", "{F88CBEBD-9D83-4899-BF61-04C35ECA1663}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestData", "TestData", "{5CFB1BA0-2342-424F-A4C1-612E2EB90EB4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnePassingOneFailingOneThrowingSpec", "Source\TestData\OnePassingOneFailingOneThrowingSpec\OnePassingOneFailingOneThrowingSpec.csproj", "{5DD45942-A2EB-4D58-8171-FCC97EFF87F3}"
@@ -47,10 +45,6 @@ Global
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F88CBEBD-9D83-4899-BF61-04C35ECA1663}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F88CBEBD-9D83-4899-BF61-04C35ECA1663}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F88CBEBD-9D83-4899-BF61-04C35ECA1663}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F88CBEBD-9D83-4899-BF61-04C35ECA1663}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5DD45942-A2EB-4D58-8171-FCC97EFF87F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5DD45942-A2EB-4D58-8171-FCC97EFF87F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5DD45942-A2EB-4D58-8171-FCC97EFF87F3}.Release|Any CPU.ActiveCfg = Release|Any CPU

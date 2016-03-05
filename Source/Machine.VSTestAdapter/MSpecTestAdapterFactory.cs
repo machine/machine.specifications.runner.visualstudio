@@ -13,14 +13,10 @@ namespace Machine.VSTestAdapter
         public MSpecTestAdapterFactory(Func<ISpecificationDiscoverer> discovererCreator, Func<ISpecificationExecutor> executorCreator)
         {
             if (discovererCreator == null)
-            {
-                throw new ArgumentNullException("discovererCreator");
-            }
+                throw new ArgumentNullException(nameof(discovererCreator));
 
             if (executorCreator == null)
-            {
-                throw new ArgumentNullException("executorCreator");
-            }
+                throw new ArgumentNullException(nameof(executorCreator));
 
             this.discovererCreator = discovererCreator;
             this.executorCreator = executorCreator;

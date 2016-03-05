@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Machine.Specifications.VSRunner
 {
-    public class AppDomainExecutor : MarshalByRefObject, IAppDomainExecutor
+    public class AppDomainExecutor : MarshalByRefObject
     {
         public override object InitializeLifetimeService()
         {

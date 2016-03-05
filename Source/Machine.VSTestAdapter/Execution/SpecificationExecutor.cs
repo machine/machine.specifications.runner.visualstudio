@@ -4,61 +4,41 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Machine.Specifications.VSRunner;
 
 namespace Machine.VSTestAdapter.Execution
 {
-    public class SpecificationExecutor : MarshalByRefObject, ISpecificationExecutor
+    public class SpecificationExecutor : ISpecificationExecutor
     {
-        private MSpecVSRunnerManager runManager;
-
         public SpecificationExecutor()
         {
         }
 
-        public override object InitializeLifetimeService()
-        {
-            return null;
-        }
-
-        public void RunAssembly(string source, Uri uri, IRunContext runContext, IFrameworkHandle frameworkHandle)
+        public void RunAssembly(string source, Uri executorUri, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             source = Path.GetFullPath(source);
-            if (!File.Exists(source))
-            {
-                throw new ArgumentException("Could not find file: " + source);
-            }
 
-            string assemblyFilename = source;
-            string defaultConfigFile = SpecificationExecutor.GetDefaultConfigFile(source);
-            runManager = new MSpecVSRunnerManager();
-            runManager.RunAllTestsInAssembly(assemblyFilename, defaultConfigFile, frameworkHandle, uri);
+            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(source))
+            {
+                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri);
+
+                AppDomainExecutor executor = scope.CreateInstance();
+                executor.RunAllTestsInAssembly(source, listener);
+            }
         }
 
-        public void RunAssemblySpecifications(string source, Uri uri, IRunContext runContext, IFrameworkHandle frameworkHandle, IEnumerable<TestCase> specifications)
+        public void RunAssemblySpecifications(string source, Uri executorUri, IRunContext runContext, IFrameworkHandle frameworkHandle, IEnumerable<TestCase> specifications)
         {
             source = Path.GetFullPath(source);
-            if (!File.Exists(source))
-            {
-                throw new ArgumentException("Could not find file: " + source);
-            }
 
-            string assemblyFilename = source;
-            string defaultConfigFile = SpecificationExecutor.GetDefaultConfigFile(source);
-            IEnumerable<string> specsToRun = specifications.Select(x => x.FullyQualifiedName).ToList();
-            runManager = new MSpecVSRunnerManager();
-            runManager.RunTestsInAssembly(assemblyFilename, defaultConfigFile, frameworkHandle, specsToRun, uri);
-        }
+            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(source))
+            {
+                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri);
 
-        private static string GetDefaultConfigFile(string assemblyFile)
-        {
-            string path = assemblyFile + ".config";
-            if (File.Exists(path))
-            {
-                return Path.GetFullPath(path);
-            }
-            else
-            {
-                return string.Empty;
+                AppDomainExecutor executor = scope.CreateInstance();
+
+                List<string> specsToRun = specifications.Select(x => x.FullyQualifiedName).ToList();
+                executor.RunTestsInAssembly(source, specsToRun, listener);
             }
         }
     }
