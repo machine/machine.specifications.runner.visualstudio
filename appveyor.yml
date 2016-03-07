@@ -1,8 +1,9 @@
 environment:
-  release_version: '1.7.0'
-  assembly_version: '1.7.0'
+  nuget_version: '2.0.0-beta1'
+  vsix_version: '2.0.0'
+  assembly_version: '2.0.0'
 
-version: '$(release_version)+{build}'
+version: '$(nuget_version)+{build}'
 configuration: Release
 platform: Any CPU
 assembly_info:
@@ -10,10 +11,10 @@ assembly_info:
   file: Source\**\AssemblyInfo.*
   assembly_version: '$(assembly_version).{build}'
   assembly_file_version: '$(assembly_version).{build}'
-  assembly_informational_version: '$(release_version)'
+  assembly_informational_version: '$(nuget_version)'
 before_build:
 - cmd: >-
-    powershell -f patch-vsix-version.ps1 -version "%ASSEMBLY_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
+    powershell -f patch-vsix-version.ps1 -version "%VSIX_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
 
     nuget restore
 build:
