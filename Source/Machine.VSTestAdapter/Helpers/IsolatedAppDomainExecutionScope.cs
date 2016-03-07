@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Helpers
 {
 
     public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()

@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Machine.Specifications.VSRunner;
+using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter.Execution
 {
@@ -37,8 +37,8 @@ namespace Machine.VSTestAdapter.Execution
 
                 AppDomainExecutor executor = scope.CreateInstance();
 
-                List<string> specsToRun = specifications.Select(x => x.FullyQualifiedName).ToList();
-                executor.RunTestsInAssembly(source, specsToRun, listener);
+                List<VisualStudioTestIdentifier> testsToRun = specifications.Select(x => x.ToVisualStudioTestIdentifier()).ToList();
+                executor.RunTestsInAssembly(source, testsToRun, listener);
             }
         }
     }

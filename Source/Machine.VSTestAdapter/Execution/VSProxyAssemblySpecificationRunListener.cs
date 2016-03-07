@@ -4,6 +4,7 @@ using System;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter.Execution
 {
@@ -61,12 +62,10 @@ namespace Machine.VSTestAdapter.Execution
         #region Mapping
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification)
         {
-            string specificationName = specification.FieldName;
-            string fullyQualifiedName = string.Format("{0}::{1}", specification.ContainingType, (object)specificationName);
-            string displayName = specificationName.Replace("_", " ");
+            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier();
 
-            return new TestCase(fullyQualifiedName, this.executorUri, this.assemblyPath) {
-                DisplayName = displayName,
+            return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
+                DisplayName = vsTestId.DisplayName,
             };
         }
 

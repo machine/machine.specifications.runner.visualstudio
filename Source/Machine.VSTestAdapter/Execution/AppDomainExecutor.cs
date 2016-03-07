@@ -6,8 +6,12 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Machine.Specifications.Explorers;
+using Machine.Specifications.Model;
+using Machine.Specifications;
+using Machine.VSTestAdapter.Helpers;
 
-namespace Machine.Specifications.VSRunner
+namespace Machine.VSTestAdapter.Execution
 {
     public class AppDomainExecutor : MarshalByRefObject
     {
@@ -25,73 +29,55 @@ namespace Machine.Specifications.VSRunner
             Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
 
             DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
+
             mspecRunner.RunAssembly(assemblyToRun);
         }
 
-        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<string> specsToRun, ISpecificationRunListener specificationRunListener)
+        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener)
         {
             DefaultRunner mspecRunner = null;
-            dynamic dynMSpeccRunner = null;
             Assembly assemblyToRun = null;
-            bool canIndicateStartAndEnd = false;
-
-            // determine the mspec version, if its greater or equal to 0.5.12 we can call the start and endrun methods in mspec
-            string pathToMSpec = Path.Combine(Path.GetDirectoryName(pathToAssembly), "Machine.Specifications.dll");
-            if (File.Exists(pathToMSpec))
-            {
-                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(pathToMSpec);
-                if (fileInfo.FileMinorPart > 5)
-                {
-                    canIndicateStartAndEnd = true;
-                }
-                else
-                    if (fileInfo.FileMinorPart == 5 && fileInfo.FileBuildPart >= 12)
-                    {
-                        canIndicateStartAndEnd = true;
-                    }
-            }
+       
             try
             {
                 assemblyToRun = Assembly.LoadFrom(pathToAssembly);
                 mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
-                dynMSpeccRunner = mspecRunner;
-                if (canIndicateStartAndEnd)
-                {
-                    dynMSpeccRunner.StartRun(assemblyToRun);
-                }
-                foreach (string spec in specsToRun)
-                {
-                    // get the spec type
-                    string[] splits = spec.Split(new string[] { "::" }, StringSplitOptions.RemoveEmptyEntries);
-                    string specClassName = splits[0];
-                    string specFieldName = splits[1];
 
-                    Type specType = assemblyToRun.GetType(specClassName);
-                    if (specType != null)
+                IEnumerable<Context> specificationContexts = new AssemblyExplorer().FindContextsIn(assemblyToRun) ?? Enumerable.Empty<Context>();
+                Dictionary<string, Context> contextMap = specificationContexts.ToDictionary(c => c.Type.FullName, StringComparer.Ordinal);
+
+                // We use explicit assembly start and end to wrap the RunMember loop
+                mspecRunner.StartRun(assemblyToRun);
+
+                foreach (VisualStudioTestIdentifier test in specsToRun)
+                {
+                    Context context = contextMap[test.ContainerTypeFullName];
+                    if (context == null)
+                        continue;
+
+                    Specification specification = context.Specifications.SingleOrDefault(spec => spec.FieldInfo.Name.Equals(test.FieldName, StringComparison.Ordinal));
+                    
+                    if (specification is BehaviorSpecification)
                     {
-                        // get the method info from the type
-                        MemberInfo specField = specType.GetMembers(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.Name == specFieldName).SingleOrDefault();
-                        if (specField != null)
-                            mspecRunner.RunMember(assemblyToRun, specField);
+                        // MSpec doesn't expose any way to run an an "It" coming from a "[Behavior]", so we have to do some trickery
+                        VisualStudioTestIdentifier mapTo = test;
+                        VisualStudioTestIdentifier listenFor = specification.ToVisualStudioTestIdentifier();
+                        DefaultRunner behaviorRunner = new DefaultRunner(new SingleBehaviorTestRunListenerWrapper(specificationRunListener, listenFor, mapTo), RunOptions.Default);
+                        behaviorRunner.RunMember(assemblyToRun, context.Type);
+                    } 
+                    else 
+                    {
+                        mspecRunner.RunMember(assemblyToRun, specification.FieldInfo);
                     }
+
                 }
-            }
-            catch (Exception)
-            {
-                throw;
+            } catch (Exception e) {
+                specificationRunListener.OnFatalError(new ExceptionResult(e));
             }
             finally
             {
                 if (mspecRunner != null && assemblyToRun != null)
-                {
-                    if (canIndicateStartAndEnd)
-                    {
-                        dynMSpeccRunner.EndRun(assemblyToRun);
-                    }
-                    mspecRunner = null;
-                    dynMSpeccRunner = null;
-                    assemblyToRun = null;
-                }
+                    mspecRunner.EndRun(assemblyToRun);
             }
         }
     }

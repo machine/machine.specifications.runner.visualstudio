@@ -3,17 +3,17 @@ using System;
 using System.Diagnostics;
 using Machine.VSTestAdapter.Discovery;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Helpers
 {
     public static class SpecTestHelper
     {
         public static TestCase GetVSTestCaseFromMSpecTestCase(string source, MSpecTestCase mspecTestCase, Uri uri, Func<string, string, dynamic> traitCreator)
         {
-            string specificationName = mspecTestCase.SpecificationName;
-            string fullyQualifiedName = string.Format("{0}::{1}", (object)mspecTestCase.ContextFullType, (object)specificationName);
-            TestCase testCase = new TestCase(fullyQualifiedName, uri, source)
+            VisualStudioTestIdentifier vsTest = mspecTestCase.ToVisualStudioTestIdentifier();
+
+            TestCase testCase = new TestCase(vsTest.FullyQualifiedName, uri, source)
             {
-                DisplayName = mspecTestCase.SpecificationName.Replace("_", " "),
+                DisplayName = vsTest.DisplayName,
                 CodeFilePath = mspecTestCase.CodeFilePath,
                 LineNumber = mspecTestCase.LineNumber
             };
@@ -44,4 +44,5 @@ namespace Machine.VSTestAdapter
             return testCase;
         }
     }
+
 }
