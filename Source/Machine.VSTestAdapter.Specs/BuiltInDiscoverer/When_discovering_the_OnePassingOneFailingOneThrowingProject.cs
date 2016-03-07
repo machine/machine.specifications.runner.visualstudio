@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Machine.VSTestAdapter.Discovery;
+using Machine.VSTestAdapter.Discovery.BuiltIn;
 
-namespace Machine.VSTestAdapter.Specs.Discoverer
+namespace Machine.VSTestAdapter.Specs.BuiltInDiscoverer
 {
     public class When_discovering_the_OnePassingOneFailingOneThrowingProject : WithFakes
     {
@@ -28,7 +30,7 @@ namespace Machine.VSTestAdapter.Specs.Discoverer
 
         private Establish context = () =>
             {
-                discoverer = new SpecificationDiscoverer();
+                discoverer = new BuiltInSpecificationDiscoverer();
                 testDebugDirectory = Helper.GetTestDebugDirectory();
                 testSourceDirectory = Helper.GetTestSourceDirectory();
             };

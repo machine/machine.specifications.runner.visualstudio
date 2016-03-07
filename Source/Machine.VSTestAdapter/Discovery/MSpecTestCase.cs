@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery
 {
     public class MSpecTestCase : MarshalByRefObject
     {

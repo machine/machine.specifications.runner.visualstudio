@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery.Cecil
 {
     public class CustomDelegateFieldScanner : IDelegateFieldScanner
     {

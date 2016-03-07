@@ -65,11 +65,15 @@ namespace Machine.Specifications.VSRunner
                     string[] splits = spec.Split(new string[] { "::" }, StringSplitOptions.RemoveEmptyEntries);
                     string specClassName = splits[0];
                     string specFieldName = splits[1];
-                    Type specType = assemblyToRun.GetType(specClassName);
 
-                    // get the method info from the type
-                    MemberInfo specField = specType.GetMembers(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.Name == specFieldName).SingleOrDefault();
-                    mspecRunner.RunMember(assemblyToRun, specField);
+                    Type specType = assemblyToRun.GetType(specClassName);
+                    if (specType != null)
+                    {
+                        // get the method info from the type
+                        MemberInfo specField = specType.GetMembers(BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Public).Where(x => x.Name == specFieldName).SingleOrDefault();
+                        if (specField != null)
+                            mspecRunner.RunMember(assemblyToRun, specField);
+                    }
                 }
             }
             catch (Exception)

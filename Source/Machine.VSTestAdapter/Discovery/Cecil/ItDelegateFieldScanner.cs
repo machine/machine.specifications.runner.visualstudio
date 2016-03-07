@@ -1,4 +1,4 @@
-﻿namespace Machine.VSTestAdapter
+﻿namespace Machine.VSTestAdapter.Discovery.Cecil
 {
     public class ItDelegateFieldScanner : IDelegateFieldScanner
     {

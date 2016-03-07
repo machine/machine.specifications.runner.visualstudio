@@ -1,7 +1,7 @@
 ﻿using Mono.Cecil;
 using System.IO;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery.Cecil
 {
     public class ScopedAssemblyResolver : BaseAssemblyResolver
     {

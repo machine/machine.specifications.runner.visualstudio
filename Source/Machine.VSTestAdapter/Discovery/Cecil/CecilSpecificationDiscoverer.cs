@@ -6,9 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
-namespace Machine.VSTestAdapter
+namespace Machine.VSTestAdapter.Discovery.Cecil
 {
-    public class SpecificationDiscoverer : ISpecificationDiscoverer
+    public class CecilSpecificationDiscoverer : ISpecificationDiscoverer
     {
         private const int PdbHiddenLine = 0xFEEFEE;
 
@@ -18,7 +18,7 @@ namespace Machine.VSTestAdapter
 
         public ReaderParameters ReaderParameters { get; set; }
 
-        public SpecificationDiscoverer()
+        public CecilSpecificationDiscoverer()
         {
         }
 
