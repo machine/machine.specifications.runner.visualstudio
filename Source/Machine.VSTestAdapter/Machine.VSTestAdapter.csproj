@@ -84,8 +84,7 @@
     <Compile Include="MspecTestAdapterExecutor.cs" />
     <Compile Include="Execution\ISpecificationExecutor.cs" />
     <Compile Include="Discovery\ISpecificationDiscoverer.cs" />
-    <Compile Include="MSpecTestAdapter.cs" />
-    <Compile Include="MSpecTestAdapterFactory.cs" />
+    <Compile Include="MSpecTestAdapterDiscoverer.cs" />
     <Compile Include="Discovery\MSpecTestCase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Discovery\Cecil\ScopedAssemblyResolver.cs" />
@@ -96,7 +95,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Strings.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestCaseCollector.cs" />
     <Compile Include="Helpers\VisualStudioTestIdentifier.cs" />
   </ItemGroup>
   <ItemGroup>

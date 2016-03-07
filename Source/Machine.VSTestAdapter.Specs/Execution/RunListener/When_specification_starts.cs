@@ -7,7 +7,7 @@ using Machine.VSTestAdapter.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Specs.Execution
+namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 {
     
 

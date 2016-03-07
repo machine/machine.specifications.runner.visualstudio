@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
-namespace Machine.VSTestAdapter.Specs.Execution
+namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 {
 
     [Subject(typeof(VSProxyAssemblySpecificationRunListener))]

@@ -27,7 +27,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath);
 
 
-            foreach (Specification spec in context.Specifications.Where(spec => spec.IsExecutable).ToList())
+            foreach (Specification spec in context.Specifications.ToList())
             {
                 MSpecTestCase testCase = new MSpecTestCase();
 

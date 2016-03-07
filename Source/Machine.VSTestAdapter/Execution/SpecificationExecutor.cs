@@ -10,10 +10,6 @@ namespace Machine.VSTestAdapter.Execution
 {
     public class SpecificationExecutor : ISpecificationExecutor
     {
-        public SpecificationExecutor()
-        {
-        }
-
         public void RunAssembly(string source, Uri executorUri, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             source = Path.GetFullPath(source);
@@ -27,18 +23,17 @@ namespace Machine.VSTestAdapter.Execution
             }
         }
 
-        public void RunAssemblySpecifications(string source, Uri executorUri, IRunContext runContext, IFrameworkHandle frameworkHandle, IEnumerable<TestCase> specifications)
+        public void RunAssemblySpecifications(string assemblyPath, IEnumerable<VisualStudioTestIdentifier> specifications, Uri executorUri, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            source = Path.GetFullPath(source);
+            assemblyPath = Path.GetFullPath(assemblyPath);
 
-            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(source))
+            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(assemblyPath))
             {
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri);
+                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, executorUri);
 
                 AppDomainExecutor executor = scope.CreateInstance();
 
-                List<VisualStudioTestIdentifier> testsToRun = specifications.Select(x => x.ToVisualStudioTestIdentifier()).ToList();
-                executor.RunTestsInAssembly(source, testsToRun, listener);
+                executor.RunTestsInAssembly(assemblyPath, specifications, listener);
             }
         }
     }

@@ -22,8 +22,11 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
         {
         }
 
-        public IEnumerable<MSpecTestCase> EnumerateSpecs(string assemblyFilePath)
+        public IEnumerable<MSpecTestCase> DiscoverSpecs(string assemblyFilePath)
         {
+            if (!this.AssemblyContainsMSpecReference(assemblyFilePath) || !this.SourceDirectoryContainsMSpec(assemblyFilePath))
+                return new List<MSpecTestCase>();
+
             assemblyFilePath = Path.GetFullPath(assemblyFilePath);
             if (!File.Exists(assemblyFilePath))
             {
@@ -100,12 +103,12 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
             return cecilTypeName.Replace('/', '+');
         }
 
-        public bool SourceDirectoryContainsMSpec(string assemblyFileName)
+        private bool SourceDirectoryContainsMSpec(string assemblyFileName)
         {
             return File.Exists(Path.Combine(Path.GetDirectoryName(assemblyFileName), "Machine.Specifications.dll"));
         }
 
-        public bool AssemblyContainsMSpecReference(string assemblyFileName)
+        private bool AssemblyContainsMSpecReference(string assemblyFileName)
         {
             AssemblyDefinition asmDef = AssemblyDefinition.ReadAssembly(assemblyFileName);
             foreach (AssemblyNameReference anrRef in asmDef.MainModule.AssemblyReferences)

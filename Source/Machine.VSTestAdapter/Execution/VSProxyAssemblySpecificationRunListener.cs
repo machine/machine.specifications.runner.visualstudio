@@ -12,9 +12,9 @@ namespace Machine.VSTestAdapter.Execution
     {
         private readonly IFrameworkHandle frameworkHandle;
         private readonly string assemblyPath;
+        private readonly Uri executorUri;
 
         private RunStats currentRunStats;
-        readonly Uri executorUri;
 
         public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri)
         {

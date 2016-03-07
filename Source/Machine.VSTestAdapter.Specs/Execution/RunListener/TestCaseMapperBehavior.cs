@@ -3,7 +3,7 @@ using System.Linq;
 using Machine.Specifications;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
-namespace Machine.VSTestAdapter.Specs.Execution
+namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 {
     [Behaviors]
     public class TestCaseMapperBehavior
