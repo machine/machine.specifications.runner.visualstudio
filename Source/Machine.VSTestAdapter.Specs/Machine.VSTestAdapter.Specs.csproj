@@ -103,10 +103,13 @@
     <Compile Include="Execution\When_running_a_spec_that_fails.cs" />
     <Compile Include="Execution\When_running_a_spec_that_is_ignored.cs" />
     <Compile Include="Execution\When_running_a_spec_that_is_not_implemented.cs" />
+    <Compile Include="Execution\When_running_a_spec_that_requres_bindingRedirects.cs" />
     <Compile Include="Execution\When_running_a_spec_that_passes.cs" />
     <Compile Include="Execution\When_running_a_spec_that_throws.cs" />
     <Compile Include="Execution\When_running_a_spec_with_custom_act_assert_delegates_passes.cs" />
-    <Compile Include="Execution\With_ExecutionSetup.cs" />
+    <Compile Include="Execution\When_running_an_assembly_with_behaviors.cs" />
+    <Compile Include="Execution\With_AssemblyExecutionSetup.cs" />
+    <Compile Include="Execution\With_SingleSpecExecutionSetup.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="When_there_is_an_unhandled_error_during_test_discovery.cs" />

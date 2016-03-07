@@ -18,7 +18,7 @@ namespace Machine.VSTestAdapter.Specs.Execution.RunListener
     {
         static VSProxyAssemblySpecificationRunListener RunListener;
         protected static TestCase TestCase;
-        static SpecificationInfo SpecificationInfo = new SpecificationInfo("leader", "name", "ContainingType", "field_name");
+        static SpecificationInfo SpecificationInfo = new SpecificationInfo("leader", "field name", "ContainingType", "field_name");
 
         Establish context = () => {
             The<IFrameworkHandle>()

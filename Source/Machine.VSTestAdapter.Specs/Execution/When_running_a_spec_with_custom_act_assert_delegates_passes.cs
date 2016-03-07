@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-    public class When_running_a_spec_with_custom_act_assert_delegates_passes : With_ExecutionSetup
+    public class When_running_a_spec_with_custom_act_assert_delegates_passes : With_SingleSpecExecutionSetup
     {
 
         Establish context = () => {

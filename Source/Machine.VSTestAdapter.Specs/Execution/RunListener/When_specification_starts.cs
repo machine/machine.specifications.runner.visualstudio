@@ -28,7 +28,7 @@ namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 
 
         Because of = () => {
-            RunListener.OnSpecificationStart(new SpecificationInfo("leader", "name", "ContainingType", "field_name"));
+            RunListener.OnSpecificationStart(new SpecificationInfo("leader", "field name", "ContainingType", "field_name"));
         };
 
         It should_notify_visual_studio = () => {

@@ -7,7 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 namespace Machine.VSTestAdapter.Specs.Execution
 {
 
-    public class When_running_a_nested_spec_passes : With_ExecutionSetup
+    public class When_running_a_nested_spec_passes : With_SingleSpecExecutionSetup
     {
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.Parent+NestedSpec", "should_remember_that_true_is_true");

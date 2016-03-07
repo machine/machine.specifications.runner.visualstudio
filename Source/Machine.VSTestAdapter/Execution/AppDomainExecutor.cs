@@ -60,9 +60,8 @@ namespace Machine.VSTestAdapter.Execution
                     if (specification is BehaviorSpecification)
                     {
                         // MSpec doesn't expose any way to run an an "It" coming from a "[Behavior]", so we have to do some trickery
-                        VisualStudioTestIdentifier mapTo = test;
-                        VisualStudioTestIdentifier listenFor = specification.ToVisualStudioTestIdentifier();
-                        DefaultRunner behaviorRunner = new DefaultRunner(new SingleBehaviorTestRunListenerWrapper(specificationRunListener, listenFor, mapTo), RunOptions.Default);
+                        VisualStudioTestIdentifier listenFor = specification.ToVisualStudioTestIdentifier(context);
+                        DefaultRunner behaviorRunner = new DefaultRunner(new SingleBehaviorTestRunListenerWrapper(specificationRunListener, listenFor), RunOptions.Default);
                         behaviorRunner.RunMember(assemblyToRun, context.Type);
                     } 
                     else 

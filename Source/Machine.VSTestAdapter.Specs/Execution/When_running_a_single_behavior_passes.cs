@@ -17,7 +17,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
 
     
 
-    public class When_running_a_single_behavior_passes : With_ExecutionSetup
+    public class When_running_a_single_behavior_passes : With_SingleSpecExecutionSetup
     {
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.BehaviorSampleSpec", "sample_behavior_test");
@@ -36,4 +36,6 @@ namespace Machine.VSTestAdapter.Specs.Execution
                 ).OnlyOnce();
         };
     }
+
+    
 }

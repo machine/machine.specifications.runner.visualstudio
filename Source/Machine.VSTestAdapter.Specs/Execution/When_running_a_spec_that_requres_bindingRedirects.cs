@@ -8,13 +8,16 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-    public class When_running_a_spec_that_passes : With_SingleSpecExecutionSetup
+    /// <summary>
+    /// This spec relies on the use of Machine.Fakes.NSubstitute in the test, which requires a bindingRedirect for NSubstitute
+    /// </summary>
+    public class When_running_a_spec_that_requres_bindingRedirects : With_SingleSpecExecutionSetup
     {
         Establish context = () => {
-            SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "should_pass");
+            SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.AssemblyBindingSampleSpec", "should_be_true");
         };
 
-        It should_tell_visual_studio_it_passed = () => {
+        It should_work = () => {
             The<IFrameworkHandle>()
                 .WasToldTo(handle => 
                     handle.RecordEnd(Param<TestCase>.Matches(testCase => testCase.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),

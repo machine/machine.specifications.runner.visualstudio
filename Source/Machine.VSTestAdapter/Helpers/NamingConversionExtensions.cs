@@ -9,10 +9,10 @@ namespace Machine.VSTestAdapter.Helpers
 {
     public static class NamingConversionExtensions
     {
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this SpecificationInfo specification)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this SpecificationInfo specification, ContextInfo context)
         {
-            return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", specification.ContainingType, specification.FieldName)) {
-                DisplayName = specification.FieldName.Replace("_", " ")
+            return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", context?.TypeName ?? specification.ContainingType, specification.FieldName)) {
+                DisplayName = specification.Name
             };
         }
 
@@ -29,9 +29,9 @@ namespace Machine.VSTestAdapter.Helpers
             };
         }
 
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this Specification specification)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this Specification specification, Context context)
         {
-            return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", specification.FieldInfo.DeclaringType.FullName, specification.FieldInfo.Name)) {
+            return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", context.Type.FullName, specification.FieldInfo.Name)) {
                 DisplayName = specification.Name
             };
         }

@@ -14,6 +14,7 @@ namespace Machine.VSTestAdapter.Execution
         private readonly string assemblyPath;
         private readonly Uri executorUri;
 
+        private ContextInfo currentContext;
         private RunStats currentRunStats;
 
         public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri)
@@ -59,10 +60,21 @@ namespace Machine.VSTestAdapter.Execution
             this.frameworkHandle.RecordResult(ConverResultToTestResult(testCase, result, this.currentRunStats));
         }
 
+        public void OnContextStart(ContextInfo context)
+        {
+            currentContext = context;
+        }
+
+        public void OnContextEnd(ContextInfo context)
+        {
+            currentContext = null;
+        }
+
+
         #region Mapping
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification)
         {
-            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier();
+            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
 
             return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
                 DisplayName = vsTestId.DisplayName,
@@ -118,14 +130,6 @@ namespace Machine.VSTestAdapter.Execution
         }
 
         public void OnAssemblyStart(AssemblyInfo assembly)
-        {
-        }
-
-        public void OnContextEnd(ContextInfo context)
-        {
-        }
-
-        public void OnContextStart(ContextInfo context)
         {
         }
 

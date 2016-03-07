@@ -45,7 +45,7 @@ namespace Machine.VSTestAdapter.Helpers
             setup.ShadowCopyFiles = "true";
             setup.ApplicationBase = setup.PrivateBinPath = Path.GetDirectoryName(assemblyPath);
             setup.CachePath = Path.Combine(Path.GetTempPath(), appName, Guid.NewGuid().ToString());
-            setup.ConfigurationFile = Path.Combine(Path.GetDirectoryName(assemblyPath), (Path.GetFileNameWithoutExtension(assemblyPath) + ".config"));
+            setup.ConfigurationFile = Path.Combine(Path.GetDirectoryName(assemblyPath), (Path.GetFileName(assemblyPath) + ".config"));
 
             return AppDomain.CreateDomain($"{appName}.dll", null, setup);
         }

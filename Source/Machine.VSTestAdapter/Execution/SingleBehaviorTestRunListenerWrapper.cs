@@ -15,11 +15,10 @@ namespace Machine.VSTestAdapter.Execution
     {
         private readonly ISpecificationRunListener runListener;
         private readonly VisualStudioTestIdentifier listenFor;
-        private readonly VisualStudioTestIdentifier mapTo;
+        private ContextInfo currentContext;
 
-        public SingleBehaviorTestRunListenerWrapper(ISpecificationRunListener runListener, VisualStudioTestIdentifier listenFor, VisualStudioTestIdentifier mapTo)
+        public SingleBehaviorTestRunListenerWrapper(ISpecificationRunListener runListener, VisualStudioTestIdentifier listenFor)
         {
-            Contract.Requires(mapTo != null);
             if (listenFor == null)
                 throw new ArgumentNullException(nameof(listenFor));
             if (runListener == null)
@@ -27,32 +26,38 @@ namespace Machine.VSTestAdapter.Execution
 
             this.runListener = runListener;
             this.listenFor = listenFor;
-            this.mapTo = mapTo;
+        }
+
+
+        public void OnContextEnd(ContextInfo context)
+        {
+            currentContext = null;
+            runListener.OnContextEnd(context);
+        }
+
+        public void OnContextStart(ContextInfo context)
+        {
+            currentContext = context;
+            runListener.OnContextStart(context);
         }
 
         public void OnSpecificationEnd(SpecificationInfo specification, Result result)
         {
-            if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier()))
+            if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier(currentContext)))
                 return;
 
-            runListener.OnSpecificationEnd(new SpecificationInfo(specification.Leader, specification.Name, mapTo.ContainerTypeFullName, mapTo.FieldName) {
-                CapturedOutput = specification.CapturedOutput,
-            }, result);
+            runListener.OnSpecificationEnd(specification, result);
         }
 
         public void OnSpecificationStart(SpecificationInfo specification)
         {
-            if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier()))
+            if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier(currentContext)))
                 return;
 
-            runListener.OnSpecificationStart(new SpecificationInfo(specification.Leader, specification.Name, mapTo.ContainerTypeFullName, mapTo.FieldName) {
-                CapturedOutput = specification.CapturedOutput,
-            });
+            runListener.OnSpecificationStart(specification);
         }
 
-
-        #region Stubs
-             public void OnAssemblyEnd(AssemblyInfo assembly)
+        public void OnAssemblyEnd(AssemblyInfo assembly)
         {
             runListener.OnAssemblyEnd(assembly);
         }
@@ -60,16 +65,6 @@ namespace Machine.VSTestAdapter.Execution
         public void OnAssemblyStart(AssemblyInfo assembly)
         {
             runListener.OnAssemblyStart(assembly);
-        }
-
-        public void OnContextEnd(ContextInfo context)
-        {
-            runListener.OnContextEnd(context);
-        }
-
-        public void OnContextStart(ContextInfo context)
-        {
-            runListener.OnContextStart(context);
         }
 
         public void OnFatalError(ExceptionResult exception)
@@ -86,6 +81,5 @@ namespace Machine.VSTestAdapter.Execution
         {
             runListener.OnRunStart();
         }
-        #endregion
     }
 }

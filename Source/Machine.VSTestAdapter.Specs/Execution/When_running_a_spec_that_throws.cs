@@ -8,7 +8,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-      public class When_running_a_spec_that_throws : With_ExecutionSetup
+      public class When_running_a_spec_that_throws : With_SingleSpecExecutionSetup
     {
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "unhandled_exception");

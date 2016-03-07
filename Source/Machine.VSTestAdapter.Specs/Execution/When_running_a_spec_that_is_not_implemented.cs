@@ -9,7 +9,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 namespace Machine.VSTestAdapter.Specs.Execution
 {
       
-      public class When_running_a_spec_that_is_not_implemented : With_ExecutionSetup
+      public class When_running_a_spec_that_is_not_implemented : With_SingleSpecExecutionSetup
     {
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "not_implemented");

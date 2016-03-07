@@ -20,15 +20,11 @@ namespace Machine.VSTestAdapter
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             //Debugger.Launch();
-            
-            foreach (string source in sources)
-            {
-                string currentAsssembly = string.Empty;
 
+            foreach (string currentAsssembly in sources)
+            {
                 try
                 {
-                    currentAsssembly = source;
-
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 
                     this.executor.RunAssembly(currentAsssembly, uri, runContext, frameworkHandle);
@@ -50,8 +46,8 @@ namespace Machine.VSTestAdapter
             int executedSpecCount = 0;
             string currentAsssembly = string.Empty;
             try {
-                IEnumerable<IGrouping<string, TestCase>> groupBySource = tests.GroupBy(x => x.Source);
-                foreach (IGrouping<string, TestCase> grouping in groupBySource) {
+                IEnumerable<IGrouping<string, TestCase>> groupByAssembly = tests.GroupBy(x => x.Source);
+                foreach (IGrouping<string, TestCase> grouping in groupByAssembly) {
                     currentAsssembly = grouping.Key;
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 
@@ -61,7 +57,7 @@ namespace Machine.VSTestAdapter
                     executedSpecCount += grouping.Count();
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_COMPLETE, executedSpecCount, groupBySource.Count()));
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_COMPLETE, executedSpecCount, groupByAssembly.Count()));
             } catch (Exception ex)
             {
                 frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
