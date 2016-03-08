@@ -27,11 +27,11 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath);
 
 
-            foreach (Specification spec in context.Specifications.Where(spec => spec.IsExecutable).ToList())
+            foreach (Specification spec in context.Specifications.ToList())
             {
                 MSpecTestCase testCase = new MSpecTestCase();
 
-                testCase.ContextType = context.Type.Name;
+                testCase.ClassName = context.Type.Name;
                 testCase.ContextFullType = context.Type.FullName;
                 testCase.SpecificationName = spec.FieldInfo.Name;
 
@@ -53,7 +53,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                     testCase.Tags = context.Tags.Select(tag => tag.Name).ToArray();
 
                 if (context.Subject != null)
-                    testCase.SubjectName = context.Subject.FullConcern;
+                    testCase.Subject = context.Subject.FullConcern;
 
                 yield return testCase;
             }

@@ -2,13 +2,14 @@
 
 namespace Machine.VSTestAdapter.Discovery
 {
-    public class MSpecTestCase : MarshalByRefObject
+    [Serializable]
+    public class MSpecTestCase
     {
-        public string SubjectName { get; set; }
+        public string Subject { get; set; }
 
         public string ContextFullType { get; set; }
 
-        public string ContextType { get; set; }
+        public string ClassName { get; set; }
 
         public string SpecificationName { get; set; }
 
@@ -17,10 +18,5 @@ namespace Machine.VSTestAdapter.Discovery
         public int LineNumber { get; set; }
 
         public string[] Tags { get; set; }
-
-        public override object InitializeLifetimeService()
-        {
-            return (object)null;
-        }
     }
 }

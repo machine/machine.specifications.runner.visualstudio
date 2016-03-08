@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using Machine.VSTestAdapter.Execution;
+using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter
 {
@@ -12,32 +14,29 @@ namespace Machine.VSTestAdapter
     {
         public void Cancel()
         {
+            // Not supported
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             //Debugger.Launch();
-            string currentAsssembly = string.Empty;
 
-            try
+            foreach (string currentAsssembly in sources)
             {
-                ISpecificationExecutor specificationExecutor = this.adapterFactory.CreateExecutor();
-
-                foreach (string source in sources)
+                try
                 {
-                    currentAsssembly = source;
-
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 
-                    specificationExecutor.RunAssembly(currentAsssembly, MSpecTestAdapter.uri, runContext, frameworkHandle);
+                    this.executor.RunAssembly(currentAsssembly, uri, runContext, frameworkHandle);
                 }
+                catch (Exception ex)
+                {
+                    frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
+                }
+            }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Complete on {0} assemblies ", sources.Count()));
-            }
-            catch (Exception ex)
-            {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
-            }
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Complete on {0} assemblies ", sources.Count()));
+            
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
@@ -46,21 +45,20 @@ namespace Machine.VSTestAdapter
             frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
             int executedSpecCount = 0;
             string currentAsssembly = string.Empty;
-            try
-            {
-                ISpecificationExecutor specificationExecutor = this.adapterFactory.CreateExecutor();
-                IEnumerable<IGrouping<string, TestCase>> groupBySource = tests.GroupBy(x => x.Source);
-                foreach (IGrouping<string, TestCase> grouping in groupBySource)
-                {
+            try {
+                IEnumerable<IGrouping<string, TestCase>> groupByAssembly = tests.GroupBy(x => x.Source);
+                foreach (IGrouping<string, TestCase> grouping in groupByAssembly) {
                     currentAsssembly = grouping.Key;
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
-                    specificationExecutor.RunAssemblySpecifications(currentAsssembly, MSpecTestAdapter.uri, runContext, frameworkHandle, grouping);
+
+                    List<VisualStudioTestIdentifier> testsToRun = grouping.Select(test => test.ToVisualStudioTestIdentifier()).ToList();
+
+                    this.executor.RunAssemblySpecifications(currentAsssembly, testsToRun, uri, runContext, frameworkHandle);
                     executedSpecCount += grouping.Count();
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_COMPLETE, executedSpecCount, groupBySource.Count()));
-            }
-            catch (Exception ex)
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_COMPLETE, executedSpecCount, groupByAssembly.Count()));
+            } catch (Exception ex)
             {
                 frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
             }

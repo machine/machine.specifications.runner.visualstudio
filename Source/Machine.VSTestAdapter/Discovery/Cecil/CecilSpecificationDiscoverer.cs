@@ -22,8 +22,11 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
         {
         }
 
-        public IEnumerable<MSpecTestCase> EnumerateSpecs(string assemblyFilePath)
+        public IEnumerable<MSpecTestCase> DiscoverSpecs(string assemblyFilePath)
         {
+            if (!this.AssemblyContainsMSpecReference(assemblyFilePath) || !this.SourceDirectoryContainsMSpec(assemblyFilePath))
+                return new List<MSpecTestCase>();
+
             assemblyFilePath = Path.GetFullPath(assemblyFilePath);
             if (!File.Exists(assemblyFilePath))
             {
@@ -62,7 +65,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
 
                             MSpecTestCase testCase = new MSpecTestCase()
                             {
-                                ContextType = typeName,
+                                ClassName = typeName,
                                 ContextFullType = typeFullName,
                                 SpecificationName = fieldDefinition.Name
                             };
@@ -100,12 +103,12 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
             return cecilTypeName.Replace('/', '+');
         }
 
-        public bool SourceDirectoryContainsMSpec(string assemblyFileName)
+        private bool SourceDirectoryContainsMSpec(string assemblyFileName)
         {
             return File.Exists(Path.Combine(Path.GetDirectoryName(assemblyFileName), "Machine.Specifications.dll"));
         }
 
-        public bool AssemblyContainsMSpecReference(string assemblyFileName)
+        private bool AssemblyContainsMSpecReference(string assemblyFileName)
         {
             AssemblyDefinition asmDef = AssemblyDefinition.ReadAssembly(assemblyFileName);
             foreach (AssemblyNameReference anrRef in asmDef.MainModule.AssemblyReferences)
@@ -136,7 +139,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                     List<CustomAttribute> list = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.SubjectAttribute").ToList();
                     if (list.Count > 0 && list[0].ConstructorArguments.Count > 0)
                     {
-                        testCase.SubjectName = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
+                        testCase.Subject = Enumerable.First<CustomAttributeArgument>((IEnumerable<CustomAttributeArgument>)list[0].ConstructorArguments).Value.ToString();
                     }
 
                     List<CustomAttribute> tagsList = type.CustomAttributes.Where(x => x.AttributeType.FullName == "Machine.Specifications.TagsAttribute").ToList();
