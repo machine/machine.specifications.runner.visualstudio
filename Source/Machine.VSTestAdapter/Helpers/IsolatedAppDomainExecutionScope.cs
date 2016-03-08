@@ -52,12 +52,27 @@ namespace Machine.VSTestAdapter.Helpers
 
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
         {
-            foreach (Assembly assembly in assemblies)
-            {
+            foreach (Assembly assembly in assemblies) {
                 string assemblyLocation = assembly.Location;
                 string assemblyName = Path.GetFileName(assemblyLocation);
                 string assemblyFileDestination = Path.Combine(destination, assemblyName);
-                File.Copy(assemblyLocation, assemblyFileDestination, true);
+                if (!File.Exists(assemblyFileDestination))
+                    CopyWithoutLockingSourceFile(assemblyLocation, assemblyFileDestination);
+            }
+        }
+
+        private static void CopyWithoutLockingSourceFile(string sourceFile, string destinationFile)
+        {
+            const int BUFFER_SIZE = 10 * 1024;
+
+            using (FileStream inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, BUFFER_SIZE))
+            using (FileStream outputFile = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, BUFFER_SIZE)) {
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int bytes;
+
+                while ((bytes = inputFile.Read(buffer, 0, buffer.Length)) > 0) {
+                    outputFile.Write(buffer, 0, bytes);
+                }
             }
         }
 
