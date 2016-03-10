@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace Machine.VSTestAdapter.Helpers
 {
@@ -23,8 +24,26 @@ namespace Machine.VSTestAdapter.Helpers
 
         public T CreateInstance()
         {
-            if (appDomain == null)
-                appDomain = CreateAppDomain(assemblyPath, this.appName);
+            if (appDomain == null) {
+                // Because we need to copy files around - we create a global cross-process mutex here to avoid multi-process race conditions
+                // in the case where both of those are true:
+                //  1. VSTest is told to run tests in parallel, so it spawns multiple processes
+                //  2. There are multiple test assemblies in the same directory
+                using (Mutex mutex = new Mutex(false, String.Format("{0}_{1}", this.appName, Path.GetDirectoryName(this.assemblyPath).Replace(Path.DirectorySeparatorChar, '_')))) {
+                    try {
+                        mutex.WaitOne(TimeSpan.FromMinutes(1));
+                    } catch (AbandonedMutexException) { }
+
+                    try {
+                        appDomain = CreateAppDomain(assemblyPath, this.appName);
+                    } finally {
+                        try {
+                            mutex.ReleaseMutex();
+                        } catch {
+                        }
+                    }
+                }
+            }
 
             return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
@@ -53,11 +72,12 @@ namespace Machine.VSTestAdapter.Helpers
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
         {
             foreach (Assembly assembly in assemblies) {
-                string assemblyLocation = assembly.Location;
-                string assemblyName = Path.GetFileName(assemblyLocation);
-                string assemblyFileDestination = Path.Combine(destination, assemblyName);
-                if (!File.Exists(assemblyFileDestination))
-                    CopyWithoutLockingSourceFile(assemblyLocation, assemblyFileDestination);
+                string sourceAssemblyFile = assembly.Location;
+                string destinationAssemblyFile = Path.Combine(destination, Path.GetFileName(sourceAssemblyFile));
+
+                // file doesn't exist or is older
+                if (!File.Exists(destinationAssemblyFile) || File.GetLastWriteTimeUtc(sourceAssemblyFile) > File.GetLastWriteTimeUtc(destinationAssemblyFile))
+                    CopyWithoutLockingSourceFile(sourceAssemblyFile, destinationAssemblyFile);
             }
         }
 
