@@ -19,7 +19,7 @@ namespace Machine.VSTestAdapter.Helpers
         public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this MSpecTestCase specification)
         {
             return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", specification.ContextFullType, specification.SpecificationName)) {
-                DisplayName = specification.SpecificationName.Replace("_", " ")
+                DisplayName = specification.SpecificationDisplayName
             };
         }
         public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this TestCase testCase)

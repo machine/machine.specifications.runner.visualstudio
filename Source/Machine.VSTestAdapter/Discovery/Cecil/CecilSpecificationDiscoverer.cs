@@ -67,7 +67,8 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                             {
                                 ClassName = typeName,
                                 ContextFullType = typeFullName,
-                                SpecificationName = fieldDefinition.Name
+                                SpecificationName = fieldDefinition.Name,
+                                SpecificationDisplayName = fieldDefinition.Name.Replace("_", " "),
                             };
 
                             // get the source code location for the It delegate from the PDB file using mono.cecil.pdb
