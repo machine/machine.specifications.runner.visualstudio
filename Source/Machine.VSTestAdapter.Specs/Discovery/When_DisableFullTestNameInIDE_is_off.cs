@@ -25,7 +25,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery
 
         It should_use_full_type_and_field_name_for_display_name = () => {
             The<ITestCaseDiscoverySink>()
-                .WasToldTo(d => d.SendTestCase(Param<TestCase>.Matches(t => t.DisplayName.Equals("When something should pass", StringComparison.Ordinal))))
+                .WasToldTo(d => d.SendTestCase(Param<TestCase>.Matches(t => t.DisplayName.Equals("When something it should pass", StringComparison.Ordinal))))
                 .OnlyOnce();
         };        
     }
