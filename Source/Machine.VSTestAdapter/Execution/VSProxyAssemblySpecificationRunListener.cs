@@ -79,10 +79,10 @@ namespace Machine.VSTestAdapter.Execution
         #region Mapping
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification, Settings settings)
         {
-            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext, settings.DisplayFullTestNameInOutput);
+            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
 
             return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
-                DisplayName = vsTestId.DisplayName,
+                DisplayName = settings.DisplayFullTestNameInOutput ? $"{this.currentContext?.TypeName}: {specification.FieldName}" : specification.Name,
             };
         }
 
