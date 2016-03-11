@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\Settings.cs" />
     <Compile Include="Execution\SingleBehaviorTestRunListenerWrapper.cs" />
     <Compile Include="Helpers\NamingConversionExtensions.cs" />
     <Compile Include="Execution\RunStats.cs" />

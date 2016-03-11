@@ -2,6 +2,7 @@
 using System.IO;
 using Machine.Fakes;
 using Machine.Specifications;
+using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
@@ -19,7 +20,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
         };
 
         Because of = () => {
-            Executor.RunAssembly(AssemblyPath, new Uri("bla://executor"), An<IRunContext>(), The<IFrameworkHandle>());
+            Executor.RunAssembly(AssemblyPath, An<Settings>(), new Uri("bla://executor"), The<IFrameworkHandle>());
         };
     }
 }

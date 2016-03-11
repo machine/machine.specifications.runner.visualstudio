@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Machine.Fakes;
 using Machine.Specifications;
 using Machine.Specifications.Runner;
+using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -20,7 +21,7 @@ namespace Machine.VSTestAdapter.Specs.Execution.RunListener
         static VSProxyAssemblySpecificationRunListener RunListener;
 
         Establish context = () => {
-            RunListener = new VSProxyAssemblySpecificationRunListener("assemblyPath", The<IFrameworkHandle>(), new Uri("bla://executorUri"));
+            RunListener = new VSProxyAssemblySpecificationRunListener("assemblyPath", The<IFrameworkHandle>(), new Uri("bla://executorUri"), An<Settings>());
         };
 
 

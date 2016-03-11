@@ -2,6 +2,7 @@
 using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
+using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -16,7 +17,7 @@ namespace Machine.VSTestAdapter.Specs
 
         Establish context = () => {
             The<ISpecificationExecutor>()
-                .WhenToldTo(d => d.RunAssembly(Param<string>.IsAnything, Param<Uri>.IsAnything, Param<IRunContext>.IsAnything, Param<IFrameworkHandle>.IsAnything))
+                .WhenToldTo(d => d.RunAssembly(Param<string>.IsAnything, Param<Settings>.IsNotNull, Param<Uri>.IsAnything, Param<IFrameworkHandle>.IsAnything))
                 .Throw(new InvalidOperationException());
 
             Adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());

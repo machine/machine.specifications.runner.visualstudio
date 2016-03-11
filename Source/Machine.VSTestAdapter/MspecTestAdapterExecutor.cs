@@ -7,6 +7,7 @@ using System.Linq;
 using System.Diagnostics;
 using Machine.VSTestAdapter.Execution;
 using Machine.VSTestAdapter.Helpers;
+using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter
 {
@@ -27,7 +28,9 @@ namespace Machine.VSTestAdapter
                 {
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 
-                    this.executor.RunAssembly(currentAsssembly, uri, runContext, frameworkHandle);
+                    Settings settings = GetSettings(runContext);
+
+                    this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
                 }
                 catch (Exception ex)
                 {
@@ -42,10 +45,16 @@ namespace Machine.VSTestAdapter
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
             //Debugger.Launch();
+
             frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
+
             int executedSpecCount = 0;
+
             string currentAsssembly = string.Empty;
-            try {
+            try
+            {
+                Settings settings = GetSettings(runContext);
+
                 IEnumerable<IGrouping<string, TestCase>> groupByAssembly = tests.GroupBy(x => x.Source);
                 foreach (IGrouping<string, TestCase> grouping in groupByAssembly) {
                     currentAsssembly = grouping.Key;
@@ -53,7 +62,7 @@ namespace Machine.VSTestAdapter
 
                     List<VisualStudioTestIdentifier> testsToRun = grouping.Select(test => test.ToVisualStudioTestIdentifier()).ToList();
 
-                    this.executor.RunAssemblySpecifications(currentAsssembly, testsToRun, uri, runContext, frameworkHandle);
+                    this.executor.RunAssemblySpecifications(currentAsssembly, testsToRun, settings, uri, frameworkHandle);
                     executedSpecCount += grouping.Count();
                 }
 
@@ -65,6 +74,11 @@ namespace Machine.VSTestAdapter
             finally
             {
             }
+        }
+
+        private static Settings GetSettings(IRunContext runContext)
+        {
+            return Settings.Parse(runContext?.RunSettings?.SettingsXml);
         }
     }
 }

@@ -34,6 +34,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 testCase.ClassName = context.Type.Name;
                 testCase.ContextFullType = context.Type.FullName;
                 testCase.SpecificationName = spec.FieldInfo.Name;
+                testCase.SpecificationDisplayName = spec.Name;
 
                 string fieldDeclaringType;
                 if (spec.FieldInfo.DeclaringType.IsGenericType && !spec.FieldInfo.DeclaringType.IsGenericTypeDefinition)

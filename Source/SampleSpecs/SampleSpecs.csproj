@@ -70,6 +70,7 @@
     <Compile Include="NestedSpecSample.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StandardSpec.cs" />
+    <Compile Include="When_something.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

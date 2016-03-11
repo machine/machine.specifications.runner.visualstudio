@@ -28,9 +28,8 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers
+// You can specify all the values or you can default the Build and Revision NumbersC:\code\machine.vstestadapter\Source\Machine.VSTestAdapter\Properties\AssemblyInfo.cs
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("0.1.5.0")]
-[assembly: AssemblyFileVersion("0.1.5.0")]
+[assembly: AssemblyVersion("0.1.*")]
 [assembly: AssemblyInformationalVersion("0.1.6-beta.1")]

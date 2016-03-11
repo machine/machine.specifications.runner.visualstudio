@@ -13,7 +13,7 @@ namespace Machine.VSTestAdapter.Helpers
 
             TestCase testCase = new TestCase(vsTest.FullyQualifiedName, uri, source)
             {
-                DisplayName = vsTest.DisplayName,
+                DisplayName = mspecTestCase.SpecificationDisplayName,
                 CodeFilePath = mspecTestCase.CodeFilePath,
                 LineNumber = mspecTestCase.LineNumber
             };

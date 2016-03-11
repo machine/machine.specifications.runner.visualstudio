@@ -11,6 +11,7 @@ namespace Machine.VSTestAdapter.Discovery
 
         public string ClassName { get; set; }
 
+        public string SpecificationDisplayName { get; set; }
         public string SpecificationName { get; set; }
 
         public string CodeFilePath { get; set; }

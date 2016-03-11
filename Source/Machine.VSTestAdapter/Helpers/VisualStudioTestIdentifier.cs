@@ -21,8 +21,6 @@ namespace Machine.VSTestAdapter.Helpers
             FullyQualifiedName = fullyQualifiedName;
         }
 
-        public string DisplayName { get; set; }
-
         public string FullyQualifiedName { get; private set; }
 
         public string FieldName {
