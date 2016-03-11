@@ -22,13 +22,13 @@ namespace Machine.VSTestAdapter
         {
             //Debugger.Launch();
 
-            foreach (string currentAsssembly in sources)
+            Settings settings = GetSettings(runContext);
+
+            foreach (string currentAsssembly in sources.Distinct())
             {
                 try
                 {
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
-
-                    Settings settings = GetSettings(runContext);
 
                     this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
                 }
@@ -50,10 +50,11 @@ namespace Machine.VSTestAdapter
 
             int executedSpecCount = 0;
 
+            Settings settings = GetSettings(runContext);
+
             string currentAsssembly = string.Empty;
             try
             {
-                Settings settings = GetSettings(runContext);
 
                 IEnumerable<IGrouping<string, TestCase>> groupByAssembly = tests.GroupBy(x => x.Source);
                 foreach (IGrouping<string, TestCase> grouping in groupByAssembly) {
