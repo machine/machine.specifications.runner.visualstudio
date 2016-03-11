@@ -84,6 +84,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\When_adapter_runs_tests.cs" />
+    <Compile Include="Configuration\When_parsing_configuration_and_mspec_section_is_missing.cs" />
+    <Compile Include="Configuration\When_parsing_valid_configuration.cs" />
     <Compile Include="Discovery\BuiltIn\When_discovering_specs.cs" />
     <Compile Include="Discovery\BuiltIn\When_discovering_behaviors.cs" />
     <Compile Include="Discovery\BuiltIn\When_discovering_specs_in_nested_types.cs" />
@@ -108,6 +111,7 @@
     <Compile Include="Execution\When_running_a_spec_that_throws.cs" />
     <Compile Include="Execution\When_running_a_spec_with_custom_act_assert_delegates_passes.cs" />
     <Compile Include="Execution\When_running_an_assembly_with_behaviors.cs" />
+    <Compile Include="Execution\When_using_displayfulltestname_setting.cs" />
     <Compile Include="Execution\With_AssemblyExecutionSetup.cs" />
     <Compile Include="Execution\With_SingleSpecExecutionSetup.cs" />
     <Compile Include="Helper.cs" />

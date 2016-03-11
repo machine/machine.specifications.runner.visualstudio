@@ -9,17 +9,17 @@ namespace Machine.VSTestAdapter.Helpers
 {
     public static class NamingConversionExtensions
     {
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this SpecificationInfo specification, ContextInfo context)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this SpecificationInfo specification, ContextInfo context, bool displayFullTestName = true)
         {
             return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", context?.TypeName ?? specification.ContainingType, specification.FieldName)) {
-                DisplayName = specification.Name
+                DisplayName = displayFullTestName ? $"{context.TypeName}: {specification.FieldName}" : specification.Name
             };
         }
 
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this MSpecTestCase specification)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this MSpecTestCase specification, bool displayFullTestName = true)
         {
             return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", specification.ContextFullType, specification.SpecificationName)) {
-                DisplayName = specification.SpecificationDisplayName
+                DisplayName = displayFullTestName ? $"{specification.ContextFullType} {specification.SpecificationName}" : specification.SpecificationDisplayName
             };
         }
         public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this TestCase testCase)
@@ -29,10 +29,10 @@ namespace Machine.VSTestAdapter.Helpers
             };
         }
 
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this Specification specification, Context context)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this Specification specification, Context context, bool displayFullTestName = true)
         {
             return new VisualStudioTestIdentifier(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", context.Type.FullName, specification.FieldInfo.Name)) {
-                DisplayName = specification.Name
+                DisplayName = displayFullTestName ? $"{context.Type.FullName}: {specification.FieldInfo.Name}" : specification.Name
             };
         }
     }

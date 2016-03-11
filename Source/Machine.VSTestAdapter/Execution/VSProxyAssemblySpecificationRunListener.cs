@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using Machine.VSTestAdapter.Helpers;
+using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter.Execution
 {
@@ -16,9 +17,12 @@ namespace Machine.VSTestAdapter.Execution
 
         private ContextInfo currentContext;
         private RunStats currentRunStats;
+        readonly Settings settings;
 
-        public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri)
+        public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri, Settings settings)
         {
+            if (settings == null)
+                throw new ArgumentNullException(nameof(settings));
             if (executorUri == null)
                 throw new ArgumentNullException(nameof(executorUri));
             if (assemblyPath == null)
@@ -29,6 +33,7 @@ namespace Machine.VSTestAdapter.Execution
             this.frameworkHandle = frameworkHandle;
             this.assemblyPath = assemblyPath;
             this.executorUri = executorUri;
+            this.settings = settings;
         }
 
         public void OnFatalError(ExceptionResult exception)
@@ -44,7 +49,7 @@ namespace Machine.VSTestAdapter.Execution
 
         public void OnSpecificationStart(SpecificationInfo specification)
         {
-            TestCase testCase = ConvertSpecificationToTestCase(specification);
+            TestCase testCase = ConvertSpecificationToTestCase(specification, this.settings);
             this.frameworkHandle.RecordStart(testCase);
             this.currentRunStats = new RunStats();
         }
@@ -54,7 +59,7 @@ namespace Machine.VSTestAdapter.Execution
             if (this.currentRunStats != null)
                 this.currentRunStats.Stop();
 
-            TestCase testCase = ConvertSpecificationToTestCase(specification);
+            TestCase testCase = ConvertSpecificationToTestCase(specification, this.settings);
 
             this.frameworkHandle.RecordEnd(testCase, MapSpecificationResultToTestOutcome(result));
             this.frameworkHandle.RecordResult(ConverResultToTestResult(testCase, result, this.currentRunStats));
@@ -72,9 +77,9 @@ namespace Machine.VSTestAdapter.Execution
 
 
         #region Mapping
-        private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification)
+        private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification, Settings settings)
         {
-            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
+            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext, settings.DisplayFullTestNameInOutput);
 
             return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
                 DisplayName = vsTestId.DisplayName,

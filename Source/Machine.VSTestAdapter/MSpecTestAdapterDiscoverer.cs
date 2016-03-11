@@ -10,6 +10,7 @@ using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Helpers;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
 using Machine.VSTestAdapter.Execution;
+using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter
 {
@@ -62,17 +63,22 @@ namespace Machine.VSTestAdapter
             int discoveredSpecCount = 0;
             int sourcesWithSpecs = 0;
 
+            
             foreach (string assemblyPath in sources)
             {
                 try
                 {
                     sourcesWithSpecs++;
 
-                    // indicate which assembly we are looking in
                     logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_LOOKINGIN, assemblyPath));
 
-                    // do the actual discovery
-                    foreach (TestCase discoveredTest in this.GetTestCases((ISpecificationDiscoverer)discoverer, assemblyPath))
+                    //Settings config = Settings.Parse(discoveryContext?.RunSettings?.SettingsXml);
+
+                    List<TestCase> specs = discoverer.DiscoverSpecs(assemblyPath)
+                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, MSpecTestAdapter.uri, CreateTrait))
+                        .ToList();
+
+                    foreach (TestCase discoveredTest in specs)
                     {
                         discoveredSpecCount++;
                         if (discoverySink != null)
@@ -89,18 +95,6 @@ namespace Machine.VSTestAdapter
 
             // indicate that we are finished discovering
             logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_COMPLETE, discoveredSpecCount, sources.Count(), sourcesWithSpecs));
-        }
-
-        private IEnumerable<TestCase> GetTestCases(ISpecificationDiscoverer discoverer, string sourcePath)
-        {
-            if (discoverer != null)
-            {
-                // discover the mspec tests in the assembly and convert them to vstest cases
-                foreach (MSpecTestCase mspecTestCase in discoverer.DiscoverSpecs(sourcePath))
-                {
-                    yield return SpecTestHelper.GetVSTestCaseFromMSpecTestCase(sourcePath, mspecTestCase, MSpecTestAdapter.uri, CreateTrait);
-                }
-            }
         }
 
         private dynamic CreateTrait(string traitName, string traitValue)
