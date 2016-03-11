@@ -3,10 +3,11 @@
     <metadata>
         <id>Machine.Specifications.Runner.VisualStudio</id>
         <version>$version$</version>
-        <authors>https://github.com/JonathanWilkins/machine.vstestadapter</authors>
-        <projectUrl>https://github.com/JonathanWilkins/machine.vstestadapter</projectUrl>
+        <authors>https://github.com/machine-visualstudio</authors>
+        <projectUrl>https://github.com/machine-visualstudio</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
-        <description>Machine.Specifications Visual Studio Test Adapter</description>
+        <description>Machine.Specifications (MSpec) adapter for viewing and running mspec tests in Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</description>
+        <tags>mspec unit testing context specification bdd tdd tfs visualstudio vsts vso</tags>
         <dependencies>
           <dependency id="Machine.Specifications" version="[0.9.3,0.10)" />
           <dependency id="Mono.Cecil" version="[0.9.6.1,0.10)" />
