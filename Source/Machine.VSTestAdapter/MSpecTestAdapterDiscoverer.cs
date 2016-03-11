@@ -11,6 +11,7 @@ using Machine.VSTestAdapter.Helpers;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
 using Machine.VSTestAdapter.Execution;
 using Machine.VSTestAdapter.Configuration;
+using System.IO;
 
 namespace Machine.VSTestAdapter
 {
@@ -63,19 +64,21 @@ namespace Machine.VSTestAdapter
             int discoveredSpecCount = 0;
             int sourcesWithSpecs = 0;
 
+            Settings settings = GetSettings(discoveryContext);
             
-            foreach (string assemblyPath in sources)
+            foreach (string assemblyPath in sources.Distinct())
             {
                 try
                 {
+                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(assemblyPath)), "Machine.Specifications.dll")))
+                        continue;
+
                     sourcesWithSpecs++;
 
                     logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_LOOKINGIN, assemblyPath));
 
-                    //Settings config = Settings.Parse(discoveryContext?.RunSettings?.SettingsXml);
-
                     List<TestCase> specs = discoverer.DiscoverSpecs(assemblyPath)
-                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, MSpecTestAdapter.uri, CreateTrait))
+                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.uri, CreateTrait))
                         .ToList();
 
                     foreach (TestCase discoveredTest in specs)

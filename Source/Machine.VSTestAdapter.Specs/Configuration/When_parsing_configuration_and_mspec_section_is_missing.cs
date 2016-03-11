@@ -16,7 +16,7 @@ namespace Machine.VSTestAdapter.Specs.Configuration
         };
 
         It should_default_to_DisplayFullTestName_off = () => {
-            Settings.DisplayFullTestNameInOutput.ShouldBeFalse();
+            Settings.DisableFullTestNameInOutput.ShouldBeFalse();
         };
         
     }

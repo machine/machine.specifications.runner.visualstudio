@@ -33,6 +33,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
                 testCase.ClassName = context.Type.Name;
                 testCase.ContextFullType = context.Type.FullName;
+                testCase.ContextDisplayName = context.Type.Name.Replace("_", " ");
                 testCase.SpecificationName = spec.FieldInfo.Name;
                 testCase.SpecificationDisplayName = spec.Name;
 

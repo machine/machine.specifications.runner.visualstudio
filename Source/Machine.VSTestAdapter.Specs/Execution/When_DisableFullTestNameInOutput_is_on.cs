@@ -12,7 +12,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-    public class When_using_displayfulltestname_setting : With_SingleSpecExecutionSetup
+    public class When_DisableFullTestNameInOutput_is_on : With_SingleSpecExecutionSetup
     {
         static TestCase RecordStartTestCase;
         static TestCase RecordEndTestCase;
@@ -20,7 +20,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.When_something", "should_pass");
 
-            The<Settings>().DisplayFullTestNameInOutput = true;
+            The<Settings>().DisableFullTestNameInOutput = true;
 
             The<IFrameworkHandle>()
                 .WhenToldTo(handle => 
@@ -37,8 +37,8 @@ namespace Machine.VSTestAdapter.Specs.Execution
         };
 
         It should_display_both_the_context_name_and_specification_name_on_a_single_line = () => {
-            RecordStartTestCase.DisplayName.ShouldEqual("SampleSpecs.When_something: should_pass");
-            RecordEndTestCase.DisplayName.ShouldEqual("SampleSpecs.When_something: should_pass");
+            RecordStartTestCase.DisplayName.ShouldEqual("should pass");
+            RecordEndTestCase.DisplayName.ShouldEqual("should pass");
         };
     }
 }

@@ -8,6 +8,7 @@ namespace Machine.VSTestAdapter.Discovery
         public string Subject { get; set; }
 
         public string ContextFullType { get; set; }
+        public object ContextDisplayName { get; set; }
 
         public string ClassName { get; set; }
 

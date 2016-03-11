@@ -68,6 +68,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                                 ClassName = typeName,
                                 ContextFullType = typeFullName,
                                 SpecificationName = fieldDefinition.Name,
+                                ContextDisplayName = typeName.Replace("_", " "),
                                 SpecificationDisplayName = fieldDefinition.Name.Replace("_", " "),
                             };
 

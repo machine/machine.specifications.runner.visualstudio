@@ -9,7 +9,6 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Configuration
 {
-       [Subject(typeof(Settings), "Configuration")]
     public class When_adapter_runs_tests : WithFakes
     {
         static string ConfigurationXml = @"<RunSettings>
@@ -17,7 +16,8 @@ namespace Machine.VSTestAdapter.Specs.Configuration
     <MaxCpuCount>0</MaxCpuCount>
   </RunConfiguration>
   <MSpec>
-    <DisplayFullTestNameInOutput>true</DisplayFullTestNameInOutput>
+    <DisableFullTestNameInIDE>true</DisableFullTestNameInIDE>
+    <DisableFullTestNameInOutput>true</DisableFullTestNameInOutput>
   </MSpec>
 </RunSettings>";
 
@@ -36,9 +36,16 @@ namespace Machine.VSTestAdapter.Specs.Configuration
         };
 
 
-        It should_pick_up_DisplayFullTestName = () => {
+        It should_pick_up_DisableFullTestNameInIDE = () => {
             The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
-                                                                       Param<Settings>.Matches(s => s.DisplayFullTestNameInOutput == true),
+                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInIDE == true),
+                                                                       Param<Uri>.IsAnything,
+                                                                       Param<IFrameworkHandle>.IsAnything));
+        };
+
+        It should_pick_up_DisableFullTestNameInOutput = () => {
+            The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
+                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInOutput == true),
                                                                        Param<Uri>.IsAnything,
                                                                        Param<IFrameworkHandle>.IsAnything));
         };

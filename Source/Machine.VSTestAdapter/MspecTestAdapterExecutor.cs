@@ -78,7 +78,7 @@ namespace Machine.VSTestAdapter
             }
         }
 
-        private static Settings GetSettings(IRunContext runContext)
+        private static Settings GetSettings(IDiscoveryContext runContext)
         {
             return Settings.Parse(runContext?.RunSettings?.SettingsXml);
         }
