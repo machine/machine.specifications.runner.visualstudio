@@ -10,8 +10,8 @@ namespace Machine.VSTestAdapter.Configuration
 {
     public class Settings
     {
-
-        public bool DisplayFullTestNameInOutput { get; set; }
+        public bool DisableFullTestNameInIDE { get; set; }
+        public bool DisableFullTestNameInOutput { get; set; }
 
         public static Settings Parse(string xml)
         {
@@ -25,7 +25,8 @@ namespace Machine.VSTestAdapter.Configuration
             if (mspecConfig == null)
                 return config;
 
-            config.DisplayFullTestNameInOutput = "true".Equals(mspecConfig.Element("DisplayFullTestNameInOutput")?.Value ?? "false", StringComparison.InvariantCultureIgnoreCase);
+            config.DisableFullTestNameInOutput = "true".Equals(mspecConfig.Element("DisableFullTestNameInOutput")?.Value ?? "false", StringComparison.InvariantCultureIgnoreCase);
+            config.DisableFullTestNameInIDE = "true".Equals(mspecConfig.Element("DisableFullTestNameInIDE")?.Value ?? "false", StringComparison.InvariantCultureIgnoreCase);
 
             return config;
         }

@@ -7,13 +7,13 @@ namespace Machine.VSTestAdapter.Helpers
 {
     public static class SpecTestHelper
     {
-        public static TestCase GetVSTestCaseFromMSpecTestCase(string source, MSpecTestCase mspecTestCase, Uri uri, Func<string, string, dynamic> traitCreator)
+        public static TestCase GetVSTestCaseFromMSpecTestCase(string source, MSpecTestCase mspecTestCase, bool disableFullTestNames, Uri testRunnerUri, Func<string, string, dynamic> traitCreator)
         {
             VisualStudioTestIdentifier vsTest = mspecTestCase.ToVisualStudioTestIdentifier();
 
-            TestCase testCase = new TestCase(vsTest.FullyQualifiedName, uri, source)
+            TestCase testCase = new TestCase(vsTest.FullyQualifiedName, testRunnerUri, source)
             {
-                DisplayName = mspecTestCase.SpecificationDisplayName,
+                DisplayName = disableFullTestNames ? mspecTestCase.SpecificationDisplayName : $"{mspecTestCase.ContextDisplayName} it {mspecTestCase.SpecificationDisplayName}",
                 CodeFilePath = mspecTestCase.CodeFilePath,
                 LineNumber = mspecTestCase.LineNumber
             };

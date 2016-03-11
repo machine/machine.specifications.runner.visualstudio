@@ -14,7 +14,6 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.SpecificationDisplayName.ShouldEqual("should pass");
             discoveredSpec.LineNumber.ShouldEqual(14);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
@@ -24,7 +23,6 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.SpecificationDisplayName.ShouldEqual("should be ignored");
             discoveredSpec.LineNumber.ShouldEqual(20);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
@@ -34,7 +32,6 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.SpecificationDisplayName.ShouldEqual("not implemented");
             discoveredSpec.LineNumber.ShouldEqual(0);
             discoveredSpec.CodeFilePath.ShouldBeNull();
         };

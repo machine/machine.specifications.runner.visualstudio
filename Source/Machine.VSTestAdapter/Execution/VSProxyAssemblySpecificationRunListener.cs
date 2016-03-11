@@ -82,7 +82,7 @@ namespace Machine.VSTestAdapter.Execution
             VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
 
             return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
-                DisplayName = settings.DisplayFullTestNameInOutput ? $"{this.currentContext?.TypeName}: {specification.FieldName}" : specification.Name,
+                DisplayName = settings.DisableFullTestNameInOutput ? specification.Name : $"{this.currentContext?.TypeName}.{specification.FieldName}",
             };
         }
 
