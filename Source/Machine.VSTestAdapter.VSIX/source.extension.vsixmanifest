@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Id="Machine.VSTestAdapter.Eugene Duvenage.889BA1F5-0E35-48BC-8D0F-F06489464E05" Version="1.7.0" Language="en-US" Publisher="Jonathan Wilkins" />
+    <Identity Id="Machine.VSTestAdapter.Jonathan Wilkins.4128beef-dc42-48e6-a83e-02a04463c685" Version="1.7.0" Language="en-US" Publisher="Jonathan Wilkins" />
     <DisplayName>Machine.VSTestAdapter</DisplayName>
     <Description>Machine Specifications Test Adapter</Description>
     <MoreInfo>https://github.com/machine-visualstudio/machine.vstestadapter</MoreInfo>
