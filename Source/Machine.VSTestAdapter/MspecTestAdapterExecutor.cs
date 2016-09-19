@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Diagnostics;
+using System.IO;
 using Machine.VSTestAdapter.Execution;
 using Machine.VSTestAdapter.Helpers;
 using Machine.VSTestAdapter.Configuration;
@@ -30,6 +31,12 @@ namespace Machine.VSTestAdapter
             {
                 try
                 {
+                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(currentAsssembly)),"Machine.Specifications.dll")))
+                    {
+                        frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine.Specifications.dll not found for {0}", currentAsssembly));
+                        continue;
+                    }
+
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 
                     this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
