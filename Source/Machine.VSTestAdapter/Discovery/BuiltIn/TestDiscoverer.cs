@@ -33,7 +33,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
                 testCase.ClassName = context.Type.Name;
                 testCase.ContextFullType = context.Type.FullName;
-                testCase.ContextDisplayName = context.Type.Name.Replace("_", " ");
+                testCase.ContextDisplayName = GetContextDisplayName(context.Type);
+
                 testCase.SpecificationName = spec.FieldInfo.Name;
                 testCase.SpecificationDisplayName = spec.Name;
 
@@ -59,6 +60,18 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
                 yield return testCase;
             }
+        }
+
+        private string GetContextDisplayName(Type contextType)
+        {
+            var displayName = contextType.Name.Replace("_", " ");
+
+            if (contextType.IsNested)
+            {
+                return GetContextDisplayName(contextType.DeclaringType) + " " + displayName;
+            }
+
+            return displayName;
         }
 
         public override object InitializeLifetimeService()

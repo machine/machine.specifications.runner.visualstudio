@@ -68,7 +68,7 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                                 ClassName = typeName,
                                 ContextFullType = typeFullName,
                                 SpecificationName = fieldDefinition.Name,
-                                ContextDisplayName = typeName.Replace("_", " "),
+                                ContextDisplayName = GetContextDisplayName(type),
                                 SpecificationDisplayName = fieldDefinition.Name.Replace("_", " "),
                             };
 
@@ -81,6 +81,18 @@ namespace Machine.VSTestAdapter.Discovery.Cecil
                 }
             }
             return list.Select(x => x);
+        }
+
+        private string GetContextDisplayName(TypeDefinition typeDefinition)
+        {
+            var displayName = NormalizeCecilTypeName(typeDefinition.Name).Replace("_", " ");
+
+            if (typeDefinition.IsNested)
+            {
+                return GetContextDisplayName(typeDefinition.DeclaringType) + " " + displayName;
+            }
+
+            return displayName;
         }
 
         private IEnumerable<TypeDefinition> GetNestedTypes(Collection<TypeDefinition> types)

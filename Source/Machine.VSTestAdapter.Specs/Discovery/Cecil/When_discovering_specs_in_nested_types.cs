@@ -14,6 +14,8 @@ namespace Machine.VSTestAdapter.Specs.Discovery.Cecil
                                                                           "NestedSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
+            discoveredSpec.ContextDisplayName.ShouldEqual("Parent NestedSpec");
+
             discoveredSpec.LineNumber.ShouldEqual(14);
             discoveredSpec.CodeFilePath.EndsWith("NestedSpecSample.cs", StringComparison.Ordinal);
         };
