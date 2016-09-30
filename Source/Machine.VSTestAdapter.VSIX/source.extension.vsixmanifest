@@ -6,7 +6,7 @@
     <Description>Machine Specifications Test Adapter</Description>
     <MoreInfo>https://github.com/machine-visualstudio/machine.vstestadapter</MoreInfo>
     <License>License.txt</License>
-    <ReleaseNotes>https://github.com/machine-visualstudio/machine.vstestadapter/releases</ReleaseNotes>
+    <ReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</ReleaseNotes>
     <Icon>Machine.VSTestAdapter-64x64.png</Icon>
     <PreviewImage>Machine.VSTestAdapter-256x256.png</PreviewImage>
   </Metadata>
