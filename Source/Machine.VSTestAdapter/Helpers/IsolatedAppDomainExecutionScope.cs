@@ -48,7 +48,7 @@ namespace Machine.VSTestAdapter.Helpers
             return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
 
- 
+
         private static AppDomain CreateAppDomain(string assemblyPath, string appName)
         {
             CopyRequiredRuntimeDependencies(new[] {
@@ -100,13 +100,17 @@ namespace Machine.VSTestAdapter.Helpers
         {
             if (appDomain != null)
             {
-                string cacheDirectory = appDomain.SetupInformation.CachePath;
+                try {
+                    string cacheDirectory = appDomain.SetupInformation.CachePath;
 
-                AppDomain.Unload(appDomain);
-                appDomain = null;
+                    AppDomain.Unload(appDomain);
+                    appDomain = null;
 
-                if (Directory.Exists(cacheDirectory))
-                    Directory.Delete(cacheDirectory, true);
+                    if (Directory.Exists(cacheDirectory))
+                        Directory.Delete(cacheDirectory, true);
+                } catch {
+                    // TODO: Logging here
+                }
             }
         }
     }
