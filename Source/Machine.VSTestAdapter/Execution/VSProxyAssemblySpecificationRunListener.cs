@@ -9,7 +9,11 @@ using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter.Execution
 {
-    public class VSProxyAssemblySpecificationRunListener : MarshalByRefObject, ISpecificationRunListener
+    public class VSProxyAssemblySpecificationRunListener :
+#if !NETSTANDARD
+                                                            MarshalByRefObject,
+#endif
+                                                            ISpecificationRunListener
     {
         private readonly IFrameworkHandle frameworkHandle;
         private readonly string assemblyPath;
@@ -76,7 +80,7 @@ namespace Machine.VSTestAdapter.Execution
         }
 
 
-        #region Mapping
+#region Mapping
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification, Settings settings)
         {
             VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
@@ -126,10 +130,10 @@ namespace Machine.VSTestAdapter.Execution
             return testResult;
         }
 
-        #endregion
+#endregion
 
 
-        #region Stubs
+#region Stubs
         public void OnAssemblyEnd(AssemblyInfo assembly)
         {
         }
@@ -145,6 +149,6 @@ namespace Machine.VSTestAdapter.Execution
         public void OnRunStart()
         {
         }
-        #endregion
+#endregion
     }
 }

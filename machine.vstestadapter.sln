@@ -1,32 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{A4146871-B7AE-4141-821C-566ED5BC4B8E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{405D88EB-F3ED-4B4C-B758-4EA98692F96F}"
 	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
+		.editorconfig = .editorconfig
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		appveyor.yml = appveyor.yml
+		patch-vsix-version.ps1 = patch-vsix-version.ps1
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66DAC029-9AA2-4027-9CE6-B1818B7AB104}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter", "Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj", "{53236A16-453D-49C2-880D-87523ECE381F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.Specs", "Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Machine.VSTestAdapter.VSIX", "Source\Machine.VSTestAdapter.VSIX\Machine.VSTestAdapter.VSIX.csproj", "{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "build", "build", "{405D88EB-F3ED-4B4C-B758-4EA98692F96F}"
-	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SampleSpecs", "Source\SampleSpecs\SampleSpecs.csproj", "{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{66DAC029-9AA2-4027-9CE6-B1818B7AB104}"
-	ProjectSection(SolutionItems) = preProject
-		README.md = README.md
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,10 +38,6 @@ Global
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.Build.0 = Release|Any CPU
-		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{36354A22-5BDC-4314-AF72-5EBC4BBD2D4F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Release|Any CPU.ActiveCfg = Release|Any CPU

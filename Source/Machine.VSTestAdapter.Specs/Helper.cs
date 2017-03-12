@@ -6,16 +6,29 @@ namespace Machine.VSTestAdapter.Specs
 {
     public class Helper
     {
-        public static string GetTestDebugDirectory()
+        public static string GetTestDirectory()
         {
-            Uri assemblyURI = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            return Path.Combine(Path.GetDirectoryName(assemblyURI.LocalPath), @"..\..\..\testdata\");
-        }
+            string testsDirectory =
+#if NETSTANDARD
+                @"..\..\..\..\testdata\netcoreapp1.1";
 
-        public static string GetTestSourceDirectory()
-        {
-            Uri assemblyURI = new Uri(Assembly.GetExecutingAssembly().CodeBase);
-            return Path.Combine(Path.GetDirectoryName(assemblyURI.LocalPath), @"..\..\..\testdata");
+#else
+                @"..\..\..\..\testdata\net46";
+#endif
+
+            // appveyor hack which adds an "Any CPU" directory
+            if (!Directory.Exists(testsDirectory)) {
+                testsDirectory =
+
+#if NETSTANDARD
+                @"..\..\..\..\..\testdata\netcoreapp1.1";
+
+#else
+                @"..\..\..\..\..\testdata\net46";
+#endif
+            }
+
+            return Path.GetFullPath(testsDirectory);
         }
     }
 }

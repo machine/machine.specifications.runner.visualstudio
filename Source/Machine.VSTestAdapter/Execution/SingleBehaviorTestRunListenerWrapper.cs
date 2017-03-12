@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.Contracts;
 using Machine.Specifications;
 using Machine.Specifications.Runner;
 using Machine.VSTestAdapter.Helpers;

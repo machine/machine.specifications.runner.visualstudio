@@ -15,12 +15,18 @@ namespace Machine.VSTestAdapter.Execution
         {
             source = Path.GetFullPath(source);
 
-            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(source)) {
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri, settings);
+#if !NETSTANDARD
+            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(source)) {
+                TestExecutor executor = scope.CreateInstance();
+#else
+                TestExecutor executor = new TestExecutor();
+#endif
 
-                AppDomainExecutor executor = scope.CreateInstance();
+                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri, settings);
                 executor.RunAllTestsInAssembly(source, listener);
-            }
+#if !NETSTANDARD
+           }
+#endif
         }
 
         public void RunAssemblySpecifications(string assemblyPath,
@@ -31,14 +37,18 @@ namespace Machine.VSTestAdapter.Execution
         {
             assemblyPath = Path.GetFullPath(assemblyPath);
 
-            using (var scope = new IsolatedAppDomainExecutionScope<AppDomainExecutor>(assemblyPath))
-            {
+#if !NETSTANDARD
+            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(assemblyPath)) {
+                TestExecutor executor = scope.CreateInstance();
+#else
+                TestExecutor executor = new TestExecutor();
+#endif
                 VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, executorUri, settings);
 
-                AppDomainExecutor executor = scope.CreateInstance();
-
                 executor.RunTestsInAssembly(assemblyPath, specifications, listener);
-            }
+#if !NETSTANDARD
+           }
+#endif
         }
     }
 }

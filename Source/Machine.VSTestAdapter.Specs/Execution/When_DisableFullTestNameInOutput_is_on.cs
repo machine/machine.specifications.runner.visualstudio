@@ -33,7 +33,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
                     handle.RecordEnd(Param<TestCase>.Matches(testCase => testCase.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),
                                      Param<TestOutcome>.Matches(outcome => outcome == TestOutcome.Passed))
                 )
-                .Callback((TestCase testCase) => RecordEndTestCase = testCase);
+                .Callback((TestCase testCase, TestOutcome outcome) => RecordEndTestCase = testCase);
         };
 
         It should_display_both_the_context_name_and_specification_name_on_a_single_line = () => {

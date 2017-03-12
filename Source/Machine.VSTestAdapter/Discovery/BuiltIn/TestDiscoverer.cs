@@ -4,18 +4,22 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications.Explorers;
 using Machine.Specifications.Model;
+using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
 
-    public class TestDiscoverer : MarshalByRefObject
+    public class TestDiscoverer
+#if !NETSTANDARD
+                                : MarshalByRefObject
+#endif
     {
 
         public IEnumerable<MSpecTestCase> DiscoverTests(string assemblyPath)
         {
             AssemblyExplorer assemblyExplorer = new AssemblyExplorer();
 
-            Assembly assembly = Assembly.LoadFile(assemblyPath);
+            Assembly assembly = AssemblyHelper.Load(assemblyPath);
             IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
 
             return contexts.SelectMany(context => CreateTestCase(context, assemblyPath)).ToList();
@@ -39,7 +43,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 testCase.SpecificationDisplayName = spec.Name;
 
                 string fieldDeclaringType;
-                if (spec.FieldInfo.DeclaringType.IsGenericType && !spec.FieldInfo.DeclaringType.IsGenericTypeDefinition)
+                if (spec.FieldInfo.DeclaringType.GetTypeInfo().IsGenericType && !spec.FieldInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.GetGenericTypeDefinition().FullName;
                 else
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.FullName;
@@ -74,10 +78,12 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             return displayName;
         }
 
+#if !NETSTANDARD
         public override object InitializeLifetimeService()
         {
             return null;
         }
+#endif
     }
 
 }

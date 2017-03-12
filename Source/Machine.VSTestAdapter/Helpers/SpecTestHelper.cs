@@ -7,7 +7,7 @@ namespace Machine.VSTestAdapter.Helpers
 {
     public static class SpecTestHelper
     {
-        public static TestCase GetVSTestCaseFromMSpecTestCase(string source, MSpecTestCase mspecTestCase, bool disableFullTestNames, Uri testRunnerUri, Func<string, string, dynamic> traitCreator)
+        public static TestCase GetVSTestCaseFromMSpecTestCase(string source, MSpecTestCase mspecTestCase, bool disableFullTestNames, Uri testRunnerUri)
         {
             VisualStudioTestIdentifier vsTest = mspecTestCase.ToVisualStudioTestIdentifier();
 
@@ -18,29 +18,25 @@ namespace Machine.VSTestAdapter.Helpers
                 LineNumber = mspecTestCase.LineNumber
             };
 
-            if (MSpecTestAdapter.UseTraits)
+            Trait classTrait = new Trait(Strings.TRAIT_CLASS, mspecTestCase.ClassName);
+            Trait subjectTrait = new Trait(Strings.TRAIT_SUBJECT, string.IsNullOrEmpty(mspecTestCase.Subject) ? Strings.TRAIT_SUBJECT_NOSUBJECT : mspecTestCase.Subject);
+
+            testCase.Traits.Add(classTrait);
+            testCase.Traits.Add(subjectTrait);
+
+            if (mspecTestCase.Tags != null)
             {
-                dynamic dynTestCase = testCase;
-                dynamic classTrait = traitCreator(Strings.TRAIT_CLASS, mspecTestCase.ClassName);
-                dynamic subjectTrait = traitCreator(Strings.TRAIT_SUBJECT, string.IsNullOrEmpty(mspecTestCase.Subject) ? Strings.TRAIT_SUBJECT_NOSUBJECT : mspecTestCase.Subject);
-
-                dynTestCase.Traits.Add(classTrait);
-                dynTestCase.Traits.Add(subjectTrait);
-
-                if (mspecTestCase.Tags != null)
+                foreach (var tag in mspecTestCase.Tags)
                 {
-                    foreach (var tag in mspecTestCase.Tags)
+                    if (!string.IsNullOrEmpty(tag))
                     {
-                        if (!string.IsNullOrEmpty(tag))
-                        {
-                            dynamic tagTrait = traitCreator(Strings.TRAIT_TAG, tag);
-                            dynTestCase.Traits.Add(tagTrait);
-                        }
+                        Trait tagTrait = new Trait(Strings.TRAIT_TAG, tag);
+                        testCase.Traits.Add(tagTrait);
                     }
                 }
             }
 
-            Debug.WriteLine(string.Format("TestCase {0}", (object)testCase.FullyQualifiedName));
+            Debug.WriteLine($"TestCase {testCase.FullyQualifiedName}");
             return testCase;
         }
     }

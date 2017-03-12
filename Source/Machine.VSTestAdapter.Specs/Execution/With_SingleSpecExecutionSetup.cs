@@ -18,7 +18,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
 
         Establish context = () => {
             Executor = new SpecificationExecutor();    
-            AssemblyPath = Path.Combine(Helper.GetTestDebugDirectory(), "SampleSpecs.dll");
+            AssemblyPath = Path.Combine(Helper.GetTestDirectory(), "SampleSpecs.dll");
         };
 
         Because of = () => {

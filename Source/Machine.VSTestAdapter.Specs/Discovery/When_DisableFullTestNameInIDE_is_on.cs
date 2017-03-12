@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using SampleSpecs;
+using System.Reflection;
 
 namespace Machine.VSTestAdapter.Specs.Discovery
 {
@@ -28,7 +29,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery
 
 
         Because of = () => {
-            The<MSpecTestAdapter>().DiscoverTests(new[] { typeof(StandardSpec).Assembly.Location },
+            The<MSpecTestAdapter>().DiscoverTests(new[] { typeof(StandardSpec).GetTypeInfo().Assembly.Location },
                                   The<IDiscoveryContext>(),
                                   An<IMessageLogger>(),
                                   The<ITestCaseDiscoverySink>());

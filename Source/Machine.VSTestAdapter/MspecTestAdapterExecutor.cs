@@ -31,11 +31,13 @@ namespace Machine.VSTestAdapter
             {
                 try
                 {
-                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(currentAsssembly)),"Machine.Specifications.dll")))
+#if !NETSTANDARD
+                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(currentAsssembly)), "Machine.Specifications.dll")))
                     {
                         frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine.Specifications.dll not found for {0}", currentAsssembly));
                         continue;
                     }
+#endif
 
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
 

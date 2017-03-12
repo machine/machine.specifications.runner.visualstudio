@@ -13,25 +13,41 @@ using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter.Execution
 {
-    public class AppDomainExecutor : MarshalByRefObject
+    public class TestExecutor
+#if !NETSTANDARD
+        : MarshalByRefObject
+#endif
     {
+
+#if !NETSTANDARD
         public override object InitializeLifetimeService()
         {
             return null;
         }
+#endif
 
-        public AppDomainExecutor()
+        public TestExecutor()
         {
         }
 
         public void RunAllTestsInAssembly(string pathToAssembly, ISpecificationRunListener specificationRunListener)
         {
-            Assembly assemblyToRun = Assembly.LoadFrom(pathToAssembly);
+            Assembly assemblyToRun = AssemblyHelper.Load(pathToAssembly);
 
-            DefaultRunner mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
-
+            DefaultRunner mspecRunner = CreateRunner(assemblyToRun, specificationRunListener);
             mspecRunner.RunAssembly(assemblyToRun);
         }
+
+        private DefaultRunner CreateRunner(Assembly assembly,ISpecificationRunListener specificationRunListener)
+        {
+            var listener = new AggregateRunListener(new[] {
+                specificationRunListener,
+                new AssemblyLocationAwareRunListener(new[] { assembly })
+            });
+
+            return new DefaultRunner(listener, RunOptions.Default);
+        }
+
 
         public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener)
         {
@@ -40,8 +56,8 @@ namespace Machine.VSTestAdapter.Execution
        
             try
             {
-                assemblyToRun = Assembly.LoadFrom(pathToAssembly);
-                mspecRunner = new DefaultRunner(specificationRunListener, RunOptions.Default);
+                assemblyToRun = AssemblyHelper.Load(pathToAssembly);
+                mspecRunner = CreateRunner(assemblyToRun, specificationRunListener);
 
                 IEnumerable<Context> specificationContexts = new AssemblyExplorer().FindContextsIn(assemblyToRun) ?? Enumerable.Empty<Context>();
                 Dictionary<string, Context> contextMap = specificationContexts.ToDictionary(c => c.Type.FullName, StringComparer.Ordinal);
@@ -62,7 +78,7 @@ namespace Machine.VSTestAdapter.Execution
                         // MSpec doesn't expose any way to run an an "It" coming from a "[Behavior]", so we have to do some trickery
                         VisualStudioTestIdentifier listenFor = specification.ToVisualStudioTestIdentifier(context);
                         DefaultRunner behaviorRunner = new DefaultRunner(new SingleBehaviorTestRunListenerWrapper(specificationRunListener, listenFor), RunOptions.Default);
-                        behaviorRunner.RunMember(assemblyToRun, context.Type);
+                        behaviorRunner.RunMember(assemblyToRun, context.Type.GetTypeInfo());
                     } 
                     else 
                     {

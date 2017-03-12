@@ -1,7 +1,7 @@
 environment:
-  nuget_version: '2.1.0'
-  nuget_prerelease: false
-  vsix_version: '2.1.0'
+  nuget_version: '2.2.0-beta1'
+  nuget_prerelease: true
+ # vsix_version: '2.1.0'
   assembly_version: '2.1.0'
 
 version: '$(nuget_version)+{build}'
@@ -9,11 +9,8 @@ version: '$(nuget_version)+{build}'
 deploy:
   - provider: GitHub
     description: |
-      * Support for nested "and" style tests (thanks to molszews)
-      * Fix error when trying to run tests for an assembly that doesn't reference mspec (thanks to alnixon)
-      * The mspec dependency version has been relaxed - was < 0.10 and now is < 1.0.0, which means that you can now use MSpec 0.11
-
-      ![](https://cloud.githubusercontent.com/assets/2878612/18577095/5dfbc216-7be7-11e6-93aa-d00fdccca1c6.PNG)
+      * Support for .NET Core Test Projects (Visual Studio IDE, dotnet test and vstest.console). NOTE: Line numbers for tests are not working currently for .NET Core targets.
+   
 
     on:
       appveyor_repo_tag: true
@@ -28,6 +25,7 @@ deploy:
       secure: R+qirYPrTX9IzJHpRLL6KAV1Lo+vlAnInf6ShiIB2rAGIP28ceJxRAh1jirHE/uD
     on:
       appveyor_repo_tag: true
+
 
 clone_depth: 5
 
@@ -44,20 +42,24 @@ assembly_info:
   assembly_file_version: '$(assembly_version).{build}'
   assembly_informational_version: '$(nuget_version)'
 
-before_build:
+#before_build:
+#- cmd: >-
+#    powershell -f patch-vsix-version.ps1 -version "%VSIX_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
+
+image: Visual Studio 2017
+
+build_script:
 - cmd: >-
-    powershell -f patch-vsix-version.ps1 -version "%VSIX_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
+    dotnet restore
 
-    nuget restore
-build:
-  project: machine.vstestadapter.sln
-  publish_nuget: true
-  verbosity: minimal
+    dotnet build
 
-test:
-  assemblies: '**\*.Specs.dll'
+    dotnet test Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj
+
+    dotnet pack Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj -c Release /p:Version=%NUGET_VERSION%
+
+test: off
 
 artifacts:
-- path: '**\*.vsix'
 - path: Source\**\*.nupkg
 

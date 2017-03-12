@@ -1,19 +1,44 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
+#if !NETSTANDARD
 using Mono.Cecil;
 using Mono.Cecil.Cil;
+#endif
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
     public class SourceCodeLocationFinder
     {
+#if !NETSTANDARD
         private readonly Lazy<AssemblyDefinition> assemblyDefinition;
+#endif
 
         public SourceCodeLocationFinder(string assemblyFilePath)
         {
+#if !NETSTANDARD
             assemblyDefinition = new Lazy<AssemblyDefinition>(() => { return LoadAssembly(assemblyFilePath); });
+#endif
         }
 
+        public SourceCodeLocationInfo GetFieldLocation(string fullTypeName, string fieldName)
+        {
+#if !NETSTANDARD
+            TypeDefinition type = Assembly.MainModule.GetType(HandleNestedTypeName(fullTypeName));
+            if (type == null)
+                return null;
+
+            FieldDefinition field = type.Fields.FirstOrDefault(f => f.Name == fieldName);
+            if (field == null)
+                return null;
+
+            return GetFieldLocationCore(type, fieldName);
+#else
+            return null;
+#endif
+        }
+
+#if !NETSTANDARD
         private AssemblyDefinition LoadAssembly(string assemblyFilePath)
         {
             return AssemblyDefinition.ReadAssembly(assemblyFilePath, new ReaderParameters() {
@@ -25,18 +50,6 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             get { return assemblyDefinition.Value; }
         }
 
-        public SourceCodeLocationInfo GetFieldLocation(string fullTypeName, string fieldName)
-        {
-            TypeDefinition type = Assembly.MainModule.GetType(HandleNestedTypeName(fullTypeName));
-            if (type == null)
-                return null;
-
-            FieldDefinition field = type.Fields.FirstOrDefault(f => f.Name == fieldName);
-            if (field == null)
-                return null;
-
-            return GetFieldLocationCore(type, fieldName);
-        }
 
         private string HandleNestedTypeName(string type)
         {
@@ -62,7 +75,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 return null;
 
             Instruction instruction = constructorDefinition.Body.Instructions
-                .Where(x => x.Operand != null && 
+                .Where(x => x.Operand != null &&
                             x.Operand.GetType().IsAssignableFrom(typeof(FieldDefinition)) &&
                             ((MemberReference)x.Operand).Name == fieldFullName).SingleOrDefault();
 
@@ -72,7 +85,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
                 if (instruction.SequencePoint != null && instruction.SequencePoint.StartLine != PdbHiddenLine)
                 {
-                    return new SourceCodeLocationInfo() {
+                    return new SourceCodeLocationInfo()
+                    {
                         CodeFilePath = instruction.SequencePoint.Document.Url,
                         LineNumber = instruction.SequencePoint.StartLine
                     };
@@ -83,6 +97,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
             return null;
         }
+#endif
     }
 
     public class SourceCodeLocationInfo

@@ -8,6 +8,8 @@ using System.Threading;
 namespace Machine.VSTestAdapter.Helpers
 {
 
+#if !NETSTANDARD
+
     public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()
     {
         private AppDomain appDomain;
@@ -54,9 +56,9 @@ namespace Machine.VSTestAdapter.Helpers
             CopyRequiredRuntimeDependencies(new[] {
                 typeof(IsolatedAppDomainExecutionScope<>).Assembly,
                 typeof(Mono.Cecil.MemberReference).Assembly,
-                typeof(Mono.Cecil.Pdb.PdbReader).Assembly,
-                typeof(Mono.Cecil.Mdb.MdbReader).Assembly,
-                typeof(Mono.Cecil.Rocks.ILParser).Assembly,
+                typeof(Mono.Cecil.Pdb.PdbReaderProvider).Assembly,
+                typeof(Mono.Cecil.Mdb.MdbReaderProvider).Assembly,
+                typeof(Mono.Cecil.Rocks.IILVisitor).Assembly,
             }, Path.GetDirectoryName(assemblyPath));
 
             AppDomainSetup setup = new AppDomainSetup();
@@ -114,4 +116,5 @@ namespace Machine.VSTestAdapter.Helpers
             }
         }
     }
+#endif
 }
