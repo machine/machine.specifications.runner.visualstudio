@@ -16,7 +16,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery
 
         Establish context = () => {
             Discoverer = new TDiscoverer();
-            AssemblyPath = Path.Combine(Helper.GetTestDebugDirectory(), "SampleSpecs.dll");
+            AssemblyPath = Path.Combine(Helper.GetTestDirectory(), "SampleSpecs.dll");
         };
 
         Because of = () => {

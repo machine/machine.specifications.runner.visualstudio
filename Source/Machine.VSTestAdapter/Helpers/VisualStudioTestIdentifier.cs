@@ -3,7 +3,9 @@ using System.Globalization;
 
 namespace Machine.VSTestAdapter.Helpers
 {
+#if !NETSTANDARD
     [Serializable]
+#endif
     public class VisualStudioTestIdentifier
     {
         public VisualStudioTestIdentifier()

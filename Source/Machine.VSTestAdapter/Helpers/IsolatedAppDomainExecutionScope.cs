@@ -8,6 +8,8 @@ using System.Threading;
 namespace Machine.VSTestAdapter.Helpers
 {
 
+#if !NETSTANDARD
+
     public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()
     {
         private AppDomain appDomain;
@@ -48,15 +50,15 @@ namespace Machine.VSTestAdapter.Helpers
             return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
 
- 
+
         private static AppDomain CreateAppDomain(string assemblyPath, string appName)
         {
             CopyRequiredRuntimeDependencies(new[] {
                 typeof(IsolatedAppDomainExecutionScope<>).Assembly,
                 typeof(Mono.Cecil.MemberReference).Assembly,
-                typeof(Mono.Cecil.Pdb.PdbReader).Assembly,
-                typeof(Mono.Cecil.Mdb.MdbReader).Assembly,
-                typeof(Mono.Cecil.Rocks.ILParser).Assembly,
+                typeof(Mono.Cecil.Pdb.PdbReaderProvider).Assembly,
+                typeof(Mono.Cecil.Mdb.MdbReaderProvider).Assembly,
+                typeof(Mono.Cecil.Rocks.IILVisitor).Assembly,
             }, Path.GetDirectoryName(assemblyPath));
 
             AppDomainSetup setup = new AppDomainSetup();
@@ -100,14 +102,19 @@ namespace Machine.VSTestAdapter.Helpers
         {
             if (appDomain != null)
             {
-                string cacheDirectory = appDomain.SetupInformation.CachePath;
+                try {
+                    string cacheDirectory = appDomain.SetupInformation.CachePath;
 
-                AppDomain.Unload(appDomain);
-                appDomain = null;
+                    AppDomain.Unload(appDomain);
+                    appDomain = null;
 
-                if (Directory.Exists(cacheDirectory))
-                    Directory.Delete(cacheDirectory, true);
+                    if (Directory.Exists(cacheDirectory))
+                        Directory.Delete(cacheDirectory, true);
+                } catch {
+                    // TODO: Logging here
+                }
             }
         }
     }
+#endif
 }

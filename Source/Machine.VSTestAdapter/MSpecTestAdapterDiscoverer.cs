@@ -24,9 +24,6 @@ namespace Machine.VSTestAdapter
         public const string ExecutorUri = "executor://machine.vstestadapter";
         public const string VSObjectModelAssemblyName = "Microsoft.VisualStudio.TestPlatform.ObjectModel";
         private static Uri uri = new Uri(ExecutorUri);
-        public static bool UseTraits = false;
-
-        private Assembly vsObjectModel;
 
         public MSpecTestAdapter()
             : this(new BuiltInSpecificationDiscoverer(), new SpecificationExecutor())
@@ -38,23 +35,8 @@ namespace Machine.VSTestAdapter
 
         public MSpecTestAdapter(ISpecificationDiscoverer discoverer, ISpecificationExecutor executor)
         {
-            if (executor == null)
-                throw new ArgumentNullException(nameof(executor));
-            if (discoverer == null)
-                throw new ArgumentNullException(nameof(discoverer));
-
-            this.executor = executor;
-            this.discoverer = discoverer;
-            // check if a version of visual studio that supports traits is running
-            vsObjectModel = AppDomain.CurrentDomain.GetAssemblies().Where(x => x.FullName.StartsWith(VSObjectModelAssemblyName)).SingleOrDefault();
-            if (vsObjectModel != null)
-            {
-                FileVersionInfo fileInfo = FileVersionInfo.GetVersionInfo(vsObjectModel.Location);
-                if ((fileInfo.FileMajorPart == 11 && fileInfo.ProductBuildPart > 50727) || fileInfo.FileMajorPart >= 12)
-                {
-                    UseTraits = true;
-                }
-            }
+            this.executor = executor ?? throw new ArgumentNullException(nameof(executor));
+            this.discoverer = discoverer ?? throw new ArgumentNullException(nameof(discoverer));
         }
 
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
@@ -70,15 +52,17 @@ namespace Machine.VSTestAdapter
             {
                 try
                 {
+#if !NETSTANDARD
                     if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(assemblyPath)), "Machine.Specifications.dll")))
                         continue;
+#endif
 
                     sourcesWithSpecs++;
 
                     logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_LOOKINGIN, assemblyPath));
 
                     List<TestCase> specs = discoverer.DiscoverSpecs(assemblyPath)
-                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.uri, CreateTrait))
+                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.uri))
                         .ToList();
 
                     foreach (TestCase discoveredTest in specs)
@@ -98,11 +82,6 @@ namespace Machine.VSTestAdapter
 
             // indicate that we are finished discovering
             logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_COMPLETE, discoveredSpecCount, sources.Count(), sourcesWithSpecs));
-        }
-
-        private dynamic CreateTrait(string traitName, string traitValue)
-        {
-            return vsObjectModel.CreateInstance("Microsoft.VisualStudio.TestPlatform.ObjectModel.Trait", false, BindingFlags.CreateInstance, null, new object[] { traitName, traitValue }, null, null);
         }
     }
 

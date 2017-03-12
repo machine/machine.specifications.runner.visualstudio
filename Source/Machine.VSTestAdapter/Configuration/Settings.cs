@@ -25,8 +25,8 @@ namespace Machine.VSTestAdapter.Configuration
             if (mspecConfig == null)
                 return config;
 
-            config.DisableFullTestNameInOutput = "true".Equals(mspecConfig.Element("DisableFullTestNameInOutput")?.Value ?? "false", StringComparison.InvariantCultureIgnoreCase);
-            config.DisableFullTestNameInIDE = "true".Equals(mspecConfig.Element("DisableFullTestNameInIDE")?.Value ?? "false", StringComparison.InvariantCultureIgnoreCase);
+            config.DisableFullTestNameInOutput = "true".Equals(mspecConfig.Element("DisableFullTestNameInOutput")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
+            config.DisableFullTestNameInIDE = "true".Equals(mspecConfig.Element("DisableFullTestNameInIDE")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
 
             return config;
         }

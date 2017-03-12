@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
-using Machine.VSTestAdapter.Configuration;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using SampleSpecs;
+using System.Reflection;
 
 namespace Machine.VSTestAdapter.Specs.Discovery
 {
@@ -16,7 +13,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery
     {
 
         Because of = () => {
-            The<MSpecTestAdapter>().DiscoverTests(new[] { typeof(When_something).Assembly.Location },
+            The<MSpecTestAdapter>().DiscoverTests(new[] { typeof(When_something).GetTypeInfo().Assembly.Location },
                                                       An<IDiscoveryContext>(),
                                                       An<IMessageLogger>(),
                                                       The<ITestCaseDiscoverySink>());

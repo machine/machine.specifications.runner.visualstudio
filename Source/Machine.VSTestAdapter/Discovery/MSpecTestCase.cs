@@ -2,7 +2,9 @@
 
 namespace Machine.VSTestAdapter.Discovery
 {
+#if !NETSTANDARD
     [Serializable]
+#endif
     public class MSpecTestCase
     {
         public string Subject { get; set; }
