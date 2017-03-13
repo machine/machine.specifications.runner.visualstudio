@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp1.0;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Product>Machine.Specifications.Runner.VisualStudio</Product>
     <AssemblyTitle>Machine.Specifications.Runner.VisualStudio</AssemblyTitle>
@@ -14,13 +14,13 @@
     <PackageTags>mspec unit testing context specification bdd tdd tfs visualstudio vsts vso</PackageTags>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.0'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)" Condition="'$(TargetFramework)'=='netcoreapp1.0'" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)" Condition="'$(TargetFramework)'=='netcoreapp1.1'" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" Condition="'$(TargetFramework)'=='net46'" />
     <PackageReference Include="Mono.Cecil" Version="[0.9.6.1, 0.10)" Condition="'$(TargetFramework)'=='net46'" />
   </ItemGroup>
