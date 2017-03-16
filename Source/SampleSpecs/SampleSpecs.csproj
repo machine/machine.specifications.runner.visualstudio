@@ -10,4 +10,8 @@
     <PackageReference Include="Machine.Specifications.Should" Version="0.11.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.0.0" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj" />
+  </ItemGroup>
 </Project>
