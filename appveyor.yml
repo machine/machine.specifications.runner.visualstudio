@@ -1,6 +1,6 @@
 environment:
-  nuget_version: '2.2.2-beta2'
-  nuget_prerelease: true
+  nuget_version: '2.2.2'
+  nuget_prerelease: false
  # vsix_version: '2.1.0'
   assembly_version: '2.1.0'
 
@@ -9,8 +9,7 @@ version: '$(nuget_version)+{build}'
 deploy:
   - provider: GitHub
     description: |
-      * Support for .NET Core Test Projects (Visual Studio IDE, dotnet test and vstest.console). NOTE: Line numbers for tests are not working currently for .NET Core targets.
-   
+      * Fixed tests not being discovered when targeting .NET Core.
 
     on:
       appveyor_repo_tag: true
