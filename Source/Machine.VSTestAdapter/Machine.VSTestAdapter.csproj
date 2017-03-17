@@ -67,7 +67,6 @@
     </Content>
 
     <!-- .NET Framework -->
-
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
@@ -76,7 +75,7 @@
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
-    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\Machine.*.dll">
+    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\Machine.TestAdapter.dll">
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
