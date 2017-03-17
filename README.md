@@ -1,7 +1,9 @@
 Machine.VSTestAdapter
 =====================
 
-Test Adapter for Machine.Specifications (MSpec) compatible with Visual Studio 2015/2013/2012 and Visual Studio Team Services (Visual Studio Online).
+Test Adapter for Machine.Specifications (MSpec) compatible with the .NET Framework and .NET Core: dotnet test, Visual Studio IDE, TFS, Visual Studio Team Services
+
+For questions or issues: https://github.com/machine/machine.specifications/issues
 
 # Download
 
