@@ -53,8 +53,11 @@ namespace Machine.VSTestAdapter.Helpers
 
         private static AppDomain CreateAppDomain(string assemblyPath, string appName)
         {
-            // This is needed for the Visual Studio extension (.vsix), but not required for the nuget package, because
-            // the nuget package is injecting msbuild to copy the test adapter bits into the build output.
+            // This is needed in the following two scenarios, so that the target test dll and its dependencies are loaded correctly:
+            //
+            // 1. pre-.NET Standard (old) .csproj and Visual Studio IDE Test Explorer run
+            // 2. vstest.console.exe run against .dll which is not in the build output folder (e.g. packaged build artifact)
+            // 
             CopyRequiredRuntimeDependencies(new[] {
                 typeof(IsolatedAppDomainExecutionScope<>).Assembly,
                 typeof(Mono.Cecil.MemberReference).Assembly,

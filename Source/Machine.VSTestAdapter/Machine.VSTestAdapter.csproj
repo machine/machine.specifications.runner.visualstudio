@@ -75,7 +75,7 @@
       <PackagePath>build\$(_TargetDotNet)\</PackagePath>
     </Content>
 
-    <!-- .NET Framework - new .csproj -->
+    <!-- .NET Framework - support for the new .csproj and dotnet test tooling -->
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
@@ -89,7 +89,7 @@
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
 
-    <!-- .NET Framework - old .csproj -->
+    <!-- .NET Framework - support for the old .csproj and vstest.console/IDE tooling -->
     <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\*.dll">
       <Pack>true</Pack>
       <PackagePath>tools\</PackagePath>
