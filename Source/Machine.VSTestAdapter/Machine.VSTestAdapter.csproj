@@ -3,6 +3,7 @@
   <PropertyGroup>
     <_TargetDotNet>netcoreapp1.1</_TargetDotNet>
     <_TargetDotNetFramework>net46</_TargetDotNetFramework>
+
     <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
     
     <AssemblyName>Machine.TestAdapter</AssemblyName>
@@ -15,25 +16,27 @@
     <PackageReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</PackageReleaseNotes>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
     <PackageTags>mspec unit testing context specification bdd tdd tfs visualstudio vsts vso</PackageTags>
+    <IsTool>true</IsTool>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)">
+  <ItemGroup Condition="'$(TargetFramework)'==$(_TargetDotNet)">
+      <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)">
       <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
     </PackageReference>
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)" Condition="'$(TargetFramework)'==$(_TargetDotNet)">
+    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)">
       <PrivateAssets>All</PrivateAssets>
       <!-- Only a reference during build/dev time -->
     </PackageReference>
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" Condition="'$(TargetFramework)'=='$(_TargetDotNetFramework)'">
-      <PrivateAssets>All</PrivateAssets>
-      <!-- Only a reference during build/dev time -->
-    </PackageReference>
-    <PackageReference Include="Mono.Cecil" Version="[0.9.6.1, 0.10)" Condition="'$(TargetFramework)'=='$(_TargetDotNetFramework)'" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='$(_TargetDotNetFramework)'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" />
+    <PackageReference Include="Mono.Cecil" Version="[0.9.6.1, 0.10)" />
+    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -66,7 +69,7 @@
       <PackagePath>build\$(_TargetDotNet)\</PackagePath>
     </Content>
 
-    <!-- .NET Framework -->
+    <!-- .NET Framework - new .csproj -->
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
@@ -79,5 +82,12 @@
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
+
+    <!-- .NET Framework - old .csproj -->
+    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\*.dll">
+      <Pack>true</Pack>
+      <PackagePath>tools\</PackagePath>
+    </Content>
   </ItemGroup>
+  
 </Project>
