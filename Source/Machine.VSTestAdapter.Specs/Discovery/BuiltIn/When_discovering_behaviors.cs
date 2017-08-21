@@ -16,10 +16,8 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-#if !NETSTANDARD
             discoveredSpec.LineNumber.ShouldEqual(14);
             discoveredSpec.CodeFilePath.EndsWith("BehaviorSample.cs", StringComparison.Ordinal);
-#endif
         };
     }
 }

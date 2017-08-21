@@ -5,10 +5,6 @@
     <AssemblyName>Machine.VSTestAdapter.Specs</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
-    <DefineConstants>NETSTANDARD</DefineConstants>
-  </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="Machine.Fakes.Moq" Version="2.8.0" />
     <PackageReference Include="Machine.Specifications" Version="0.11.0" />

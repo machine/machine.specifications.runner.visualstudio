@@ -1,29 +1,23 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-#if !NETSTANDARD
 using Mono.Cecil;
 using Mono.Cecil.Cil;
-#endif
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
     public class SourceCodeLocationFinder
     {
-#if !NETSTANDARD
         private readonly Lazy<AssemblyDefinition> assemblyDefinition;
-#endif
 
         public SourceCodeLocationFinder(string assemblyFilePath)
         {
-#if !NETSTANDARD
             assemblyDefinition = new Lazy<AssemblyDefinition>(() => { return LoadAssembly(assemblyFilePath); });
-#endif
         }
 
         public SourceCodeLocationInfo GetFieldLocation(string fullTypeName, string fieldName)
         {
-#if !NETSTANDARD
             TypeDefinition type = Assembly.MainModule.GetType(HandleNestedTypeName(fullTypeName));
             if (type == null)
                 return null;
@@ -33,12 +27,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 return null;
 
             return GetFieldLocationCore(type, fieldName);
-#else
-            return null;
-#endif
         }
 
-#if !NETSTANDARD
         private AssemblyDefinition LoadAssembly(string assemblyFilePath)
         {
             return AssemblyDefinition.ReadAssembly(assemblyFilePath, new ReaderParameters() {
@@ -67,12 +57,15 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             if (!type.HasMethods)
                 return null;
 
-
             MethodDefinition constructorDefinition = type.Methods
                 .SingleOrDefault(x => x.IsConstructor && !x.Parameters.Any() && x.Name.EndsWith(".ctor", StringComparison.Ordinal));
 
             if (!constructorDefinition.HasBody)
                 return null;
+
+            if (constructorDefinition.DebugInformation == null)
+                return null;
+
 
             Instruction instruction = constructorDefinition.Body.Instructions
                 .Where(x => x.Operand != null &&
@@ -81,14 +74,14 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
             while (instruction != null)
             {
-                const int PdbHiddenLine = 0xFEEFEE;
+                SequencePoint sequencePoint = constructorDefinition.DebugInformation?.GetSequencePoint(instruction);
 
-                if (instruction.SequencePoint != null && instruction.SequencePoint.StartLine != PdbHiddenLine)
+                if (sequencePoint != null && !sequencePoint.IsHidden)
                 {
                     return new SourceCodeLocationInfo()
                     {
-                        CodeFilePath = instruction.SequencePoint.Document.Url,
-                        LineNumber = instruction.SequencePoint.StartLine
+                        CodeFilePath = sequencePoint.Document.Url,
+                        LineNumber = sequencePoint.StartLine
                     };
                 }
 
@@ -97,7 +90,6 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
             return null;
         }
-#endif
     }
 
     public class SourceCodeLocationInfo

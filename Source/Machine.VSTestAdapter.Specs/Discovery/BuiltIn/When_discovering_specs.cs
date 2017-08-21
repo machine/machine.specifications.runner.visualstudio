@@ -14,10 +14,8 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-#if !NETSTANDARD
             discoveredSpec.LineNumber.ShouldEqual(14);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
-#endif
         };
 
         It should_find_empty_spec = () => {
@@ -25,10 +23,8 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-#if !NETSTANDARD
             discoveredSpec.LineNumber.ShouldEqual(20);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
-#endif
         };
 
         It should_find_ignored_spec_but_will_not_find_line_number = () => {
@@ -36,10 +32,8 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-#if !NETSTANDARD
             discoveredSpec.LineNumber.ShouldEqual(0);
             discoveredSpec.CodeFilePath.ShouldBeNull();
-#endif
         };
     }
 }

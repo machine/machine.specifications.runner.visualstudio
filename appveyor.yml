@@ -1,5 +1,5 @@
 environment:
-  nuget_version: '2.2.3'
+  nuget_version: '2.3.0'
   nuget_prerelease: false
  # vsix_version: '2.1.0'
   assembly_version: '2.1.0'
@@ -9,7 +9,7 @@ version: '$(nuget_version)+{build}'
 deploy:
   - provider: GitHub
     description: |
-      * Fixed test discovery for "old-style" .csproj.
+      * Display line numbers and code file for .Net Core tests (#329)
 
     on:
       appveyor_repo_tag: true
