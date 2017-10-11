@@ -36,6 +36,9 @@ namespace Machine.VSTestAdapter.Helpers
                 }
             }
 
+            if (!string.IsNullOrEmpty(mspecTestCase.BehaviorFieldName))
+                testCase.Traits.Add(new Trait(Strings.TRAIT_BEHAVIOR, mspecTestCase.BehaviorFieldName));
+
             Debug.WriteLine($"TestCase {testCase.FullyQualifiedName}");
             return testCase;
         }

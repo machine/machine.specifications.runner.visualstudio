@@ -144,6 +144,9 @@
   <data name="RUNERROR" xml:space="preserve">
     <value>Machine Specifications Visual Studio Test Adapter - Fatal error while executing test.</value>
   </data>
+  <data name="TRAIT_BEHAVIOR" xml:space="preserve">
+    <value>BehaviorField</value>
+  </data>
   <data name="TRAIT_CLASS" xml:space="preserve">
     <value>ClassName</value>
   </data>

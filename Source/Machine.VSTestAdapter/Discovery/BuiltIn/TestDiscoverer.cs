@@ -55,6 +55,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                     testCase.LineNumber = locationInfo.LineNumber;
                 }
 
+                if (spec is BehaviorSpecification behaviorSpec)
+                    testCase.BehaviorFieldName = behaviorSpec.BehaviorFieldInfo.Name;
 
                 if (context.Tags != null)
                     testCase.Tags = context.Tags.Select(tag => tag.Name).ToArray();
