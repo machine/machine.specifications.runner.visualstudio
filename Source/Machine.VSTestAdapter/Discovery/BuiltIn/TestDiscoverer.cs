@@ -15,6 +15,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 #endif
     {
 
+        private readonly PropertyInfo behaviorProperty = typeof(BehaviorSpecification).GetProperty("BehaviorFieldInfo");
+
         public IEnumerable<MSpecTestCase> DiscoverTests(string assemblyPath)
         {
             AssemblyExplorer assemblyExplorer = new AssemblyExplorer();
@@ -56,7 +58,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 }
 
                 if (spec is BehaviorSpecification behaviorSpec)
-                    testCase.BehaviorFieldName = behaviorSpec.BehaviorFieldInfo.Name;
+                    testCase.BehaviorFieldName = GetBehaviorFieldName(behaviorSpec);
 
                 if (context.Tags != null)
                     testCase.Tags = context.Tags.Select(tag => tag.Name).ToArray();
@@ -66,6 +68,14 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
                 yield return testCase;
             }
+        }
+
+        private string GetBehaviorFieldName(BehaviorSpecification specification)
+        {
+            if (behaviorProperty?.GetValue(specification) is FieldInfo field)
+                return field.Name;
+
+            return string.Empty;
         }
 
         private string GetContextDisplayName(Type contextType)
