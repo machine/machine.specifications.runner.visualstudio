@@ -57,8 +57,8 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                     testCase.LineNumber = locationInfo.LineNumber;
                 }
 
-                if (spec.GetType().Name == "BehaviorSpecification")
-                    testCase.BehaviorFieldName = GetBehaviorFieldName(spec);
+                if (spec is BehaviorSpecification behaviorSpec)
+                    testCase.BehaviorFieldName = GetBehaviorFieldName(behaviorSpec);
 
                 if (context.Tags != null)
                     testCase.Tags = context.Tags.Select(tag => tag.Name).ToArray();
@@ -70,7 +70,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             }
         }
 
-        private string GetBehaviorFieldName(Specification specification)
+        private string GetBehaviorFieldName(BehaviorSpecification specification)
         {
             if (behaviorProperty?.GetValue(specification) is FieldInfo field)
                 return field.Name;
