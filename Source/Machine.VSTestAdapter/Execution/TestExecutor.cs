@@ -73,7 +73,7 @@ namespace Machine.VSTestAdapter.Execution
 
                     Specification specification = context.Specifications.SingleOrDefault(spec => spec.FieldInfo.Name.Equals(test.FieldName, StringComparison.Ordinal));
                     
-                    if (specification is BehaviorSpecification)
+                    if (specification?.GetType().Name == "BehaviorSpecification")
                     {
                         // MSpec doesn't expose any way to run an an "It" coming from a "[Behavior]", so we have to do some trickery
                         VisualStudioTestIdentifier listenFor = specification.ToVisualStudioTestIdentifier(context);
