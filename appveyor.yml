@@ -1,15 +1,15 @@
 environment:
-  nuget_version: '2.3.0'
-  nuget_prerelease: false
+  nuget_version: '2.4.0-beta.1'
+  nuget_prerelease: true
  # vsix_version: '2.1.0'
-  assembly_version: '2.1.0'
+  assembly_version: '2.4.0'
 
 version: '$(nuget_version)+{build}'
 
 deploy:
   - provider: GitHub
     description: |
-      * Display line numbers and code file for .Net Core tests (#329)
+      * Support behavior field names for dotnet core projects
 
     on:
       appveyor_repo_tag: true
