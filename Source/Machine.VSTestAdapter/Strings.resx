@@ -147,6 +147,9 @@
   <data name="TRAIT_BEHAVIOR" xml:space="preserve">
     <value>BehaviorField</value>
   </data>
+  <data name="TRAIT_BEHAVIOR_TYPE" xml:space="preserve">
+    <value>BehaviorType</value>
+  </data>
   <data name="TRAIT_CLASS" xml:space="preserve">
     <value>ClassName</value>
   </data>

@@ -1,8 +1,8 @@
 environment:
-  nuget_version: '2.4.0'
+  nuget_version: '2.5.0'
   nuget_prerelease: false
  # vsix_version: '2.1.0'
-  assembly_version: '2.4.0'
+  assembly_version: '2.5.0'
 
 version: '$(nuget_version)+{build}'
 

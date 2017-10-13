@@ -152,6 +152,15 @@ namespace Machine.VSTestAdapter {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to BehaviorType.
+        /// </summary>
+        internal static string TRAIT_BEHAVIOR_TYPE {
+            get {
+                return ResourceManager.GetString("TRAIT_BEHAVIOR_TYPE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to ClassName.
         /// </summary>
         internal static string TRAIT_CLASS {

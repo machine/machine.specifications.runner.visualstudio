@@ -58,7 +58,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 }
 
                 if (spec is BehaviorSpecification behaviorSpec)
-                    testCase.BehaviorFieldName = GetBehaviorFieldName(behaviorSpec);
+                    PopulateBehaviorField(testCase, behaviorSpec);
 
                 if (context.Tags != null)
                     testCase.Tags = context.Tags.Select(tag => tag.Name).ToArray();
@@ -70,12 +70,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             }
         }
 
-        private string GetBehaviorFieldName(BehaviorSpecification specification)
+        private void PopulateBehaviorField(MSpecTestCase testCase, BehaviorSpecification specification)
         {
             if (behaviorProperty?.GetValue(specification) is FieldInfo field)
-                return field.Name;
-
-            return string.Empty;
+            {
+                testCase.BehaviorFieldName = field.Name;
+                testCase.BehaviorFieldType = field.FieldType.GenericTypeArguments.FirstOrDefault()?.FullName;
+            }
         }
 
         private string GetContextDisplayName(Type contextType)
