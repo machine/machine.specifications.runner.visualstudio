@@ -63,9 +63,10 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             if (!constructorDefinition.HasBody)
                 return null;
 
+#if NETCOREAPP1_1
             if (constructorDefinition.DebugInformation == null)
                 return null;
-
+#endif
 
             Instruction instruction = constructorDefinition.Body.Instructions
                 .Where(x => x.Operand != null &&
@@ -74,9 +75,12 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
             while (instruction != null)
             {
+#if NETCOREAPP1_1
                 SequencePoint sequencePoint = constructorDefinition.DebugInformation?.GetSequencePoint(instruction);
-
-                if (sequencePoint != null && !sequencePoint.IsHidden)
+#else
+                SequencePoint sequencePoint = instruction.SequencePoint;
+#endif
+                if (sequencePoint != null && !IsHidden(sequencePoint))
                 {
                     return new SourceCodeLocationInfo()
                     {
@@ -89,6 +93,17 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             }
 
             return null;
+        }
+
+        private bool IsHidden(SequencePoint sequencePoint)
+        {
+            const int lineNumberIndicatingHiddenLine = 16707566;
+
+#if NETCOREAPP1_1
+            return sequencePoint.IsHidden;
+#else
+            return sequencePoint.StartLine == lineNumberIndicatingHiddenLine;
+#endif
         }
     }
 

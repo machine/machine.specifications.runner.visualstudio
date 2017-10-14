@@ -17,17 +17,15 @@
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
     <PackageTags>mspec unit testing context specification bdd tdd tfs visualstudio vsts vso</PackageTags>
     <IsTool>true</IsTool>
+    <PackageIconUrl>http://github.com/machine/machine.vstestadapter/raw/master/Misc/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)"/>
-  </ItemGroup>
-
   <ItemGroup Condition="'$(TargetFramework)'==$(_TargetDotNet)">
+    <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)">
       <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
     </PackageReference>
@@ -38,6 +36,7 @@
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)'=='$(_TargetDotNetFramework)'">
+    <PackageReference Include="Mono.Cecil" Version="0.9.6.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)">
       <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
     </PackageReference>
