@@ -24,15 +24,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             Assembly assembly = AssemblyHelper.Load(assemblyPath);
             IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
 
-            return contexts.SelectMany(context => CreateTestCase(context, assemblyPath)).ToList();
-        }
-
-        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, string assemblyPath)
-        {
-
             SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath);
 
+            return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToList();
+        }
 
+        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, SourceCodeLocationFinder locationFinder)
+        {
             foreach (Specification spec in context.Specifications.ToList())
             {
                 MSpecTestCase testCase = new MSpecTestCase();
