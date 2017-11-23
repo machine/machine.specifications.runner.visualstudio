@@ -1,15 +1,15 @@
 environment:
-  nuget_version: '2.5.1'
+  nuget_version: '2.5.2'
   nuget_prerelease: false
  # vsix_version: '2.1.0'
-  assembly_version: '2.5.1'
+  assembly_version: '2.5.2'
 
 version: '$(nuget_version)+{build}'
 
 deploy:
   - provider: GitHub
     description: |
-      * Support behavior field names for dotnet core projects
+      * Fixed slow test discovvery for large solutions (#74 - @bjuris)
 
     on:
       appveyor_repo_tag: true
