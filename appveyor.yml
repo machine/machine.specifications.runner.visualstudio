@@ -1,15 +1,35 @@
 environment:
-  nuget_version: '2.5.2'
-  nuget_prerelease: false
- # vsix_version: '2.1.0'
-  assembly_version: '2.5.2'
+  nuget_version: '2.6.0-beta1'
+  assembly_version: '2.6.0'
+  nuget_prerelease: true
 
 version: '$(nuget_version)+{build}'
+
+pull_requests:
+  do_not_increment_build_number: true
+
+configuration: Release
+image: Visual Studio 2017
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '$(nuget_version)'
+  assembly_version: '$(assembly_version)'
+
+before_build: dotnet restore
+
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal  
+
+test_script: dotnet test -c %CONFIGURATION% Source\Machine.VSTestAdapter.Specs
 
 deploy:
   - provider: GitHub
     description: |
-      * Fixed slow test discovvery for large solutions (#74 - @bjuris)
+      * Fix to support for VS 2017 15.5.x
 
     on:
       appveyor_repo_tag: true
@@ -24,41 +44,3 @@ deploy:
       secure: R+qirYPrTX9IzJHpRLL6KAV1Lo+vlAnInf6ShiIB2rAGIP28ceJxRAh1jirHE/uD
     on:
       appveyor_repo_tag: true
-
-
-clone_depth: 5
-
-pull_requests:
-  do_not_increment_build_number: true
-
-configuration: Release
-platform: Any CPU
-
-#assembly_info:
-#  patch: true
-#  file: Source\**\AssemblyInfo.*
-#  assembly_version: '$(assembly_version).{build}'
-#  assembly_file_version: '$(assembly_version).{build}'
-#  assembly_informational_version: '$(nuget_version)'
-
-#before_build:
-#- cmd: >-
-#    powershell -f patch-vsix-version.ps1 -version "%VSIX_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
-
-image: Visual Studio 2017
-
-build_script:
-- cmd: >-
-    dotnet restore
-
-    dotnet build
-
-    dotnet test Source\Machine.VSTestAdapter.Specs\Machine.VSTestAdapter.Specs.csproj
-
-    dotnet pack Source\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj -c Release /p:Version=%NUGET_VERSION%
-
-test: off
-
-artifacts:
-- path: Source\**\*.nupkg
-

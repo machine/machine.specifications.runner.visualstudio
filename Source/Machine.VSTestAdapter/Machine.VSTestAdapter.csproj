@@ -5,18 +5,20 @@
     <_TargetDotNetFramework>net46</_TargetDotNetFramework>
 
     <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
-    
+    <!-- Needed in order to later manually include the libs in the build directory instead of lib -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Product>Machine.Specifications.Runner.VisualStudio</Product>
     <AssemblyTitle>Machine.Specifications.Runner.VisualStudio</AssemblyTitle>
     <PackageId>Machine.Specifications.Runner.VisualStudio </PackageId>
     <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Authors>https://github.com/machine/machine.vstestadapter</Authors>
     <PackageProjectUrl>https://github.com/machine/machine.vstestadapter</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</PackageReleaseNotes>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
     <PackageTags>mspec unit testing context specification bdd tdd tfs visualstudio vsts vso</PackageTags>
-    <IsTool>true</IsTool>
     <PackageIconUrl>http://github.com/machine/machine.vstestadapter/raw/master/Misc/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
   </PropertyGroup>
 
@@ -61,10 +63,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <!-- .NET Core -->
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
       <Pack>true</Pack>
@@ -88,12 +86,5 @@
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
-
-    <!-- .NET Framework - support for the old .csproj and vstest.console/IDE tooling -->
-    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\*.dll">
-      <Pack>true</Pack>
-      <PackagePath>tools\</PackagePath>
-    </Content>
   </ItemGroup>
-  
 </Project>

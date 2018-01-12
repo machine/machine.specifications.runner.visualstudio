@@ -3,6 +3,7 @@
     <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
     <AssemblyName>SampleSpecs</AssemblyName>
     <OutputPath>..\testdata\</OutputPath>
+    <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
