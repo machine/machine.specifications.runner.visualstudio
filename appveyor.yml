@@ -1,7 +1,6 @@
 environment:
   nuget_version: '2.5.2'
   nuget_prerelease: false
- # vsix_version: '2.1.0'
   assembly_version: '2.5.2'
 
 version: '$(nuget_version)+{build}'
@@ -33,17 +32,6 @@ pull_requests:
 
 configuration: Release
 platform: Any CPU
-
-#assembly_info:
-#  patch: true
-#  file: Source\**\AssemblyInfo.*
-#  assembly_version: '$(assembly_version).{build}'
-#  assembly_file_version: '$(assembly_version).{build}'
-#  assembly_informational_version: '$(nuget_version)'
-
-#before_build:
-#- cmd: >-
-#    powershell -f patch-vsix-version.ps1 -version "%VSIX_VERSION%.%APPVEYOR_BUILD_NUMBER%" -manifestFile "Source\Machine.VSTestAdapter.VSIX\source.extension.vsixmanifest"
 
 image: Visual Studio 2017
 
