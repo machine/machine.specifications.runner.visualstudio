@@ -1,7 +1,6 @@
 environment:
-  nuget_version: '2.5.2'
-  nuget_prerelease: false
-  assembly_version: '2.5.2'
+  nuget_version: '2.6.0-beta1'
+  assembly_version: '2.6.0'
 
 version: '$(nuget_version)+{build}'
 
