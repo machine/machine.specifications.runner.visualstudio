@@ -88,12 +88,5 @@
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
-
-    <!-- .NET Framework - support for the old .csproj and vstest.console/IDE tooling -->
-    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\*.dll">
-      <Pack>true</Pack>
-      <PackagePath>tools\</PackagePath>
-    </Content>
   </ItemGroup>
-  
 </Project>
