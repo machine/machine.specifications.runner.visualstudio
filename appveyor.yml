@@ -1,8 +1,30 @@
 environment:
   nuget_version: '2.6.0-beta1'
   assembly_version: '2.6.0'
+  nuget_prerelease: true
 
 version: '$(nuget_version)+{build}'
+
+pull_requests:
+  do_not_increment_build_number: true
+
+configuration: Release
+image: Visual Studio 2017
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '$(nuget_version)'
+  assembly_version: '$(assembly_version)'
+
+before_build: dotnet restore
+
+build:
+  publish_nuget: true
+  publish_nuget_symbols: true
+  verbosity: minimal  
+
+test_script: dotnet test -c %CONFIGURATION% Source\Machine.VSTestAdapter.Specs
 
 deploy:
   - provider: GitHub
@@ -22,27 +44,3 @@ deploy:
       secure: R+qirYPrTX9IzJHpRLL6KAV1Lo+vlAnInf6ShiIB2rAGIP28ceJxRAh1jirHE/uD
     on:
       appveyor_repo_tag: true
-
-pull_requests:
-  do_not_increment_build_number: true
-
-configuration: Release
-
-image: Visual Studio 2017
-
-dotnet_csproj:
-  patch: true
-  file: '**\*.csproj'
-  version: '$(nuget_version)'
-  assembly_version: '$(assembly_version)'
-
-build:
-  publish_nuget: true
-  publish_nuget_symbols: true
-  verbosity: minimal  
-
-test_script: dotnet test -c %CONFIGURATION% Source\Machine.VSTestAdapter.Specs
-
-artifacts:
-- path: Source\**\*.nupkg
-
