@@ -11,6 +11,7 @@
     <AssemblyTitle>Machine.Specifications.Runner.VisualStudio</AssemblyTitle>
     <PackageId>Machine.Specifications.Runner.VisualStudio </PackageId>
     <Version>1.0.0</Version>
+    <AssemblyVersion>1.0.0.0</AssemblyVersion>
     <Authors>https://github.com/machine/machine.vstestadapter</Authors>
     <PackageProjectUrl>https://github.com/machine/machine.vstestadapter</PackageProjectUrl>
     <PackageReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</PackageReleaseNotes>
@@ -58,10 +59,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
 
   <ItemGroup>
