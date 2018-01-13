@@ -1,5 +1,5 @@
 environment:
-  nuget_version: '2.6.0-beta1'
+  nuget_version: '2.6.0-beta2'
   assembly_version: '2.6.0'
   nuget_prerelease: true
 
@@ -30,6 +30,7 @@ deploy:
   - provider: GitHub
     description: |
       * Fix to support for VS 2017 15.5.x
+      * Visual Studio 2015 is no longer supported
 
     on:
       appveyor_repo_tag: true
