@@ -1,7 +1,6 @@
 environment:
   nuget_version: '2.6.0'
   assembly_version: '2.6.0'
-  nuget_prerelease: true
 
 version: '$(nuget_version)+{build}'
 
@@ -33,7 +32,6 @@ deploy:
 
     on:
       appveyor_repo_tag: true
-    prerelease: $(nuget_prerelease)
 
     release: v$(nuget_version)
     auth_token:
