@@ -97,11 +97,11 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
         private bool IsHidden(SequencePoint sequencePoint)
         {
-            const int lineNumberIndicatingHiddenLine = 0xfeefee;
 
 #if NETCOREAPP1_1
             return sequencePoint.IsHidden;
 #else
+            const int lineNumberIndicatingHiddenLine = 0xfeefee;
             return sequencePoint.StartLine == lineNumberIndicatingHiddenLine;
 #endif
         }
