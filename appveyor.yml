@@ -30,7 +30,6 @@ deploy:
   - provider: GitHub
     description: |
       * Fix to support for VS 2017 15.5.x
-      * Visual Studio 2015 is no longer supported
 
     on:
       appveyor_repo_tag: true
