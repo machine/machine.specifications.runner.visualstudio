@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <_TargetDotNet>netcoreapp1.1</_TargetDotNet>
+    <_TargetDotNetCore>netcoreapp1.1</_TargetDotNetCore>
     <_TargetDotNetFramework>net46</_TargetDotNetFramework>
 
     <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
@@ -26,7 +26,7 @@
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)'==$(_TargetDotNet)">
+  <ItemGroup Condition="'$(TargetFramework)'==$(_TargetDotNetCore)">
     <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)">
       <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
@@ -66,15 +66,19 @@
     <!-- .NET Core -->
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
       <Pack>true</Pack>
-      <PackagePath>build\$(_TargetDotNet)\</PackagePath>
+      <PackagePath>build\$(_TargetDotNetCore)\</PackagePath>
     </Content>
-    <Content Include="bin\$(Configuration)\$(_TargetDotNet)\*.dll">
+    <Content Include="bin\$(Configuration)\$(_TargetDotNetCore)\*.dll">
       <Pack>true</Pack>
-      <PackagePath>build\$(_TargetDotNet)\</PackagePath>
+      <PackagePath>build\$(_TargetDotNetCore)\</PackagePath>
     </Content>
 
     <!-- .NET Framework - support for the new .csproj and dotnet test tooling -->
     <Content Include="Machine.Specifications.Runner.VisualStudio.props">
+      <Pack>true</Pack>
+      <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
+    </Content>
+    <Content Include="bin\$(Configuration)\$(_TargetDotNetFramework)\Machine.Specifications.dll">
       <Pack>true</Pack>
       <PackagePath>build\$(_TargetDotNetFramework)\</PackagePath>
     </Content>
