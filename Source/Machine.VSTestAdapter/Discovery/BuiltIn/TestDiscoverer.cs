@@ -24,9 +24,10 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             Assembly assembly = AssemblyHelper.Load(assemblyPath);
             IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
 
-            SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath);
-
-            return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToList();
+            using (SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath))
+            {
+                return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToList();
+            }
         }
 
         private IEnumerable<MSpecTestCase> CreateTestCase(Context context, SourceCodeLocationFinder locationFinder)

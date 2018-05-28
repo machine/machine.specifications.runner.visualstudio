@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Mono.Cecil;
@@ -7,7 +6,7 @@ using Mono.Cecil.Cil;
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
-    public class SourceCodeLocationFinder
+    public class SourceCodeLocationFinder : IDisposable
     {
         private readonly Lazy<AssemblyDefinition> assemblyDefinition;
 
@@ -36,10 +35,14 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             });
         }
 
+        public void Dispose()
+        {
+            Assembly?.Dispose();
+        }
+
         private AssemblyDefinition Assembly {
             get { return assemblyDefinition.Value; }
         }
-
 
         private string HandleNestedTypeName(string type)
         {
@@ -63,23 +66,18 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             if (!constructorDefinition.HasBody)
                 return null;
 
-#if NETCOREAPP1_1
             if (constructorDefinition.DebugInformation == null)
                 return null;
-#endif
 
             Instruction instruction = constructorDefinition.Body.Instructions
-                .Where(x => x.Operand != null &&
+                .SingleOrDefault(x => x.Operand != null &&
                             x.Operand.GetType().IsAssignableFrom(typeof(FieldDefinition)) &&
-                            ((MemberReference)x.Operand).Name == fieldFullName).SingleOrDefault();
+                            ((MemberReference)x.Operand).Name == fieldFullName);
 
             while (instruction != null)
             {
-#if NETCOREAPP1_1
                 SequencePoint sequencePoint = constructorDefinition.DebugInformation?.GetSequencePoint(instruction);
-#else
-                SequencePoint sequencePoint = instruction.SequencePoint;
-#endif
+
                 if (sequencePoint != null && !IsHidden(sequencePoint))
                 {
                     return new SourceCodeLocationInfo()
@@ -97,13 +95,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
         private bool IsHidden(SequencePoint sequencePoint)
         {
-
-#if NETCOREAPP1_1
             return sequencePoint.IsHidden;
-#else
-            const int lineNumberIndicatingHiddenLine = 0xfeefee;
-            return sequencePoint.StartLine == lineNumberIndicatingHiddenLine;
-#endif
         }
     }
 
