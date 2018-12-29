@@ -1,6 +1,6 @@
 environment:
-  nuget_version: '2.7.0'
-  assembly_version: '2.7.0'
+  nuget_version: '2.8.0'
+  assembly_version: '2.8.0'
 
 version: '$(nuget_version)+{build}'
 

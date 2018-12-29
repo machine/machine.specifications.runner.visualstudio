@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <_TargetDotNetCore>netcoreapp1.1</_TargetDotNetCore>
+    <_TargetDotNetCore>netcoreapp2.1</_TargetDotNetCore>
     <_TargetDotNetFramework>net46</_TargetDotNetFramework>
 
-    <TargetFrameworks>netcoreapp1.1;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
     <!-- Needed in order to later manually include the libs in the build directory instead of lib -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
 
@@ -22,7 +22,7 @@
     <PackageIconUrl>http://github.com/machine/machine.vstestadapter/raw/master/Misc/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp1.1'">
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
