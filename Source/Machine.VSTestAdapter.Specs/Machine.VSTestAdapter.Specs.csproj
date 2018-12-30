@@ -19,8 +19,4 @@
     <ProjectReference Include="..\Machine.VSTestAdapter\Machine.VSTestAdapter.csproj" />
     <ProjectReference Include="..\SampleSpecs\SampleSpecs.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
 </Project>

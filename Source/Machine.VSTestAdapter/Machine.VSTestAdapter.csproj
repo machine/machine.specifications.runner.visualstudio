@@ -28,22 +28,15 @@
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
-    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)">
-      <PrivateAssets>All</PrivateAssets>
-      <!-- Only a reference during build/dev time -->
-    </PackageReference>
+    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'==$(_TargetDotNetCore)">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)">
-      <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
-    </PackageReference>
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)" PrivateAssets="All" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)'=='$(_TargetDotNetFramework)'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)">
-      <PrivateAssets>All</PrivateAssets> <!-- Only a reference during build/dev time -->
-    </PackageReference>
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
