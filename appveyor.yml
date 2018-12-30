@@ -1,44 +1,32 @@
-environment:
-  nuget_version: '2.8.0'
-  assembly_version: '2.8.0'
-
-version: '$(nuget_version)+{build}'
-
-pull_requests:
-  do_not_increment_build_number: true
+image: Visual Studio 2017
 
 configuration: Release
-image: Visual Studio 2017
+
+install:
+  - choco install gitversion.portable -pre -y
 
 dotnet_csproj:
   patch: true
   file: '**\*.csproj'
-  version: '$(nuget_version)'
-  assembly_version: '$(assembly_version)'
+  version: $(GitVersion_NuGetVersion)
+  package_version: $(GitVersion_NuGetVersion)
+  assembly_version: $(GitVersion_MajorMinorPatch)
+  file_version: $(GitVersion_MajorMinorPatch)
+  informational_version: $(GitVersion_MajorMinorPatch)
 
-before_build: dotnet restore
+pull_requests:
+  do_not_increment_build_number: true
+
+before_build:
+  - cmd: dotnet restore
+  - ps: gitversion /l console /output buildserver
 
 build:
   publish_nuget: true
-  publish_nuget_symbols: true
-  verbosity: minimal  
-
-test_script: dotnet test -c %CONFIGURATION% Source\Machine.VSTestAdapter.Specs
 
 deploy:
-  - provider: GitHub
-    description: |
-      * Fix for out ot memory exceptions and tests not showing up
-
-    on:
-      appveyor_repo_tag: true
-
-    release: v$(nuget_version)
-    auth_token:
-      secure: VrF5TrpBRN0ims9nJC1LG32O6ga5hsRuGNSufEbatAiIWZ1z68iiCYKZtqnAaT9y
-
   - provider: NuGet
     api_key:
-      secure: R+qirYPrTX9IzJHpRLL6KAV1Lo+vlAnInf6ShiIB2rAGIP28ceJxRAh1jirHE/uD
+      secure: TL0dRg5VvDEghNB05X4nTEOECXqoNiuhVIhCFYrFg3pcaK8jNybRuruK8+S8KdJN
     on:
       appveyor_repo_tag: true
