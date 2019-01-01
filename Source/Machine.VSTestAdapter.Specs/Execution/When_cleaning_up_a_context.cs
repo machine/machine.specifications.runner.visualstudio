@@ -16,7 +16,8 @@ namespace Machine.VSTestAdapter.Specs.Execution
                 new VisualStudioTestIdentifier("SampleSpecs.CleanupSpec", "should_have_no_cleanups")
             };
 
-        It should_tell_visual_studio_it_passed = () => {
+        It should_tell_visual_studio_it_passed = () => 
+        {
             The<IFrameworkHandle>()
                 .WasToldTo(x => x.RecordEnd(
                     Param<TestCase>.Matches(y => SpecificationsToRun.Contains(y.ToVisualStudioTestIdentifier())), 
