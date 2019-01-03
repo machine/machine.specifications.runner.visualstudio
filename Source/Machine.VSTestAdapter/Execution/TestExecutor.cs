@@ -58,11 +58,11 @@ namespace Machine.VSTestAdapter.Execution
 
                 mspecRunner.StartRun(assemblyToRun);
 
-                foreach (var group in specsByContext)
+                foreach (var specs in specsByContext)
                 {
-                    var fields = group.Select(x => x.FieldName);
+                    var fields = specs.Select(x => x.FieldName);
 
-                    mspecRunner.RunType(assemblyToRun, assemblyToRun.GetType(group.Key), fields.ToArray());
+                    mspecRunner.RunType(assemblyToRun, assemblyToRun.GetType(specs.Key), fields.ToArray());
                 }
             }
             catch (Exception e)
