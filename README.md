@@ -14,8 +14,6 @@ Simply install the NuGet package and you will automatically be able to use the b
 * vstest.console
 * Visual Studio Online
 
-More docs here: https://github.com/machine/machine.vstestadapter/wiki
-
 # Release Notes
 
 Release notes are available here: https://github.com/machine/machine.vstestadapter/releases
