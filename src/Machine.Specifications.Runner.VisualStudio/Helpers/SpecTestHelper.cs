@@ -18,8 +18,8 @@ namespace Machine.VSTestAdapter.Helpers
                 LineNumber = mspecTestCase.LineNumber
             };
 
-            Trait classTrait = new Trait(Strings.TRAIT_CLASS, mspecTestCase.ClassName);
-            Trait subjectTrait = new Trait(Strings.TRAIT_SUBJECT, string.IsNullOrEmpty(mspecTestCase.Subject) ? Strings.TRAIT_SUBJECT_NOSUBJECT : mspecTestCase.Subject);
+            Trait classTrait = new Trait("ClassName", mspecTestCase.ClassName);
+            Trait subjectTrait = new Trait("Subject", string.IsNullOrEmpty(mspecTestCase.Subject) ? "No Subject" : mspecTestCase.Subject);
 
             testCase.Traits.Add(classTrait);
             testCase.Traits.Add(subjectTrait);
@@ -30,17 +30,17 @@ namespace Machine.VSTestAdapter.Helpers
                 {
                     if (!string.IsNullOrEmpty(tag))
                     {
-                        Trait tagTrait = new Trait(Strings.TRAIT_TAG, tag);
+                        Trait tagTrait = new Trait("Tag", tag);
                         testCase.Traits.Add(tagTrait);
                     }
                 }
             }
 
             if (!string.IsNullOrEmpty(mspecTestCase.BehaviorFieldName))
-                testCase.Traits.Add(new Trait(Strings.TRAIT_BEHAVIOR, mspecTestCase.BehaviorFieldName));
+                testCase.Traits.Add(new Trait("BehaviorField", mspecTestCase.BehaviorFieldName));
 
             if (!string.IsNullOrEmpty(mspecTestCase.BehaviorFieldType))
-                testCase.Traits.Add(new Trait(Strings.TRAIT_BEHAVIOR_TYPE, mspecTestCase.BehaviorFieldType));
+                testCase.Traits.Add(new Trait("BehaviorType", mspecTestCase.BehaviorFieldType));
 
             Debug.WriteLine($"TestCase {testCase.FullyQualifiedName}");
             return testCase;

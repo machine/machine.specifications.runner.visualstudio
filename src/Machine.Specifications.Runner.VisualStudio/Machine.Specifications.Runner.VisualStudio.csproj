@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Version>0.1.0</Version>
+    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
+    <AssemblyName>Machine.TestAdapter</AssemblyName>
+    <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
+    <Authors>Machine Specifications</Authors>
+    <PackageTags>mspec;unit;testing;context;specification;bdd;tdd;tfs;visualstudio;vsts;vso</PackageTags>
+    <PackageReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</PackageReleaseNotes>
+    <PackageIconUrl>http://github.com/machine/media/raw/master/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
+    <PackageProjectUrl>https://github.com/machine/machine.vstestadapter</PackageProjectUrl>
+    <PackageLicenseUrl>http://github.com/machine/machine.vstestadapter/blob/master/License.txt</PackageLicenseUrl>
+
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
+    <DefineConstants>NETSTANDARD</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
+    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,16)" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(TargetFramework)'=='net46'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Machine.Specifications.Runner.VisualStudio.props" Pack="true" PackagePath="build\netcoreapp2.1\" />
+    <None Include="bin\$(Configuration)\netcoreapp2.1\*.dll" Pack="true" PackagePath="build\netcoreapp2.1\" Visible="false" />
+
+    <None Include="Machine.Specifications.Runner.VisualStudio.props" Pack="true" PackagePath="build\net46\" />
+    <None Include="bin\$(Configuration)\net46\Machine.Specifications.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
+    <None Include="bin\$(Configuration)\net46\Mono.*.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
+    <None Include="bin\$(Configuration)\net46\Machine.TestAdapter.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
+  </ItemGroup>
+
+</Project>

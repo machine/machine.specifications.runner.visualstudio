@@ -48,7 +48,7 @@ namespace Machine.VSTestAdapter.Execution
                 this.currentRunStats = null;
             }
 
-            this.frameworkHandle.SendMessage(TestMessageLevel.Error, Strings.RUNERROR + Environment.NewLine + exception.ToString());
+            this.frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception.ToString());
         }
 
         public void OnSpecificationStart(SpecificationInfo specification)
