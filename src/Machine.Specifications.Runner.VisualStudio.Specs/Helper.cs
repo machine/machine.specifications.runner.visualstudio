@@ -8,27 +8,7 @@ namespace Machine.VSTestAdapter.Specs
     {
         public static string GetTestDirectory()
         {
-            string testsDirectory =
-#if NETSTANDARD
-                @"..\..\..\..\testdata\netcoreapp1.1";
-
-#else
-                @"..\..\..\..\testdata\net46";
-#endif
-
-            // appveyor hack which adds an "Any CPU" directory
-            if (!Directory.Exists(testsDirectory)) {
-                testsDirectory =
-
-#if NETSTANDARD
-                @"..\..\..\..\..\testdata\netcoreapp1.1";
-
-#else
-                @"..\..\..\..\..\testdata\net46";
-#endif
-            }
-
-            return Path.GetFullPath(testsDirectory);
+            return Path.GetDirectoryName(typeof(Helper).Assembly.Location);
         }
     }
 }
