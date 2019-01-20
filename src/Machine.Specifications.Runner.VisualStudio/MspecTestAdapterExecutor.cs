@@ -23,7 +23,7 @@ namespace Machine.VSTestAdapter
         {
             //Debugger.Launch();
 
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
 
             Settings settings = GetSettings(runContext);
 
@@ -39,13 +39,13 @@ namespace Machine.VSTestAdapter
                     }
 #endif
 
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
 
                     this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
                 }
                 catch (Exception ex)
                 {
-                    frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
+                    frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
                 }
             }
 
@@ -57,7 +57,7 @@ namespace Machine.VSTestAdapter
         {
             //Debugger.Launch();
 
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, Strings.EXECUTOR_STARTING);
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
 
             int executedSpecCount = 0;
 
@@ -69,7 +69,7 @@ namespace Machine.VSTestAdapter
 
                 foreach (IGrouping<string, TestCase> grouping in tests.GroupBy(x => x.Source)) {
                     currentAsssembly = grouping.Key;
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format(Strings.EXECUTOR_EXECUTINGIN, currentAsssembly));
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
 
                     List<VisualStudioTestIdentifier> testsToRun = grouping.Select(test => test.ToVisualStudioTestIdentifier()).ToList();
 
@@ -77,10 +77,10 @@ namespace Machine.VSTestAdapter
                     executedSpecCount += grouping.Count();
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format(Strings.EXECUTOR_COMPLETE, executedSpecCount, tests.GroupBy(x => x.Source).Count()));
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Execution Complete - {0} specifications in {1} assemblies.", executedSpecCount, tests.GroupBy(x => x.Source).Count()));
             } catch (Exception ex)
             {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format(Strings.EXECUTOR_ERROR, currentAsssembly, ex.Message));
+                frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
             }
             finally
             {

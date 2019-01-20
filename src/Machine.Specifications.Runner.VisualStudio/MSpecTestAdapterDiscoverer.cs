@@ -42,7 +42,7 @@ namespace Machine.VSTestAdapter
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
             // indicate start of discovery
-            logger.SendMessage(TestMessageLevel.Informational, Strings.DISCOVERER_STARTING);
+            logger.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Discovering Specifications.");
             int discoveredSpecCount = 0;
             int sourcesWithSpecs = 0;
 
@@ -59,7 +59,7 @@ namespace Machine.VSTestAdapter
 
                     sourcesWithSpecs++;
 
-                    logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_LOOKINGIN, assemblyPath));
+                    logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovering...looking in {0}", assemblyPath));
 
                     List<TestCase> specs = discoverer.DiscoverSpecs(assemblyPath)
                         .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.uri))
@@ -76,12 +76,12 @@ namespace Machine.VSTestAdapter
                 }
                 catch (Exception discoverException)
                 {
-                    logger.SendMessage(TestMessageLevel.Error, string.Format(Strings.DISCOVERER_ERROR, assemblyPath, discoverException.Message));
+                    logger.SendMessage(TestMessageLevel.Error, string.Format("Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {0} - {1}", assemblyPath, discoverException.Message));
                 }
             }
 
             // indicate that we are finished discovering
-            logger.SendMessage(TestMessageLevel.Informational, string.Format(Strings.DISCOVERER_COMPLETE, discoveredSpecCount, sources.Count(), sourcesWithSpecs));
+            logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned.", discoveredSpecCount, sources.Count(), sourcesWithSpecs));
         }
     }
 
