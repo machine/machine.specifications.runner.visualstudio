@@ -3,6 +3,7 @@
   <PropertyGroup>
     <Version>0.1.0</Version>
     <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
+    <PackageId>Machine.Specifications.Runner.VisualStudio</PackageId>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
     <Authors>Machine Specifications</Authors>
@@ -32,14 +33,24 @@
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,16.0.0)" PrivateAssets="All" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="Machine.Specifications.Runner.VisualStudio.props" Pack="true" PackagePath="build\netcoreapp2.1\" />
-    <None Include="bin\$(Configuration)\netcoreapp2.1\*.dll" Pack="true" PackagePath="build\netcoreapp2.1\" Visible="false" />
+  <PropertyGroup>
+    <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetCorePackageItems;NetFrameworkPackageItems</TargetsForTfmSpecificContentInPackage>
+  </PropertyGroup>
 
-    <None Include="Machine.Specifications.Runner.VisualStudio.props" Pack="true" PackagePath="build\net46\" />
-    <None Include="bin\$(Configuration)\net46\Machine.Specifications.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
-    <None Include="bin\$(Configuration)\net46\Mono.*.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
-    <None Include="bin\$(Configuration)\net46\Machine.TestAdapter.dll" Pack="true" PackagePath="build\net46\" Visible="false" />
-  </ItemGroup>
+  <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\*.dll" PackagePath="build\$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' == 'net46'">
+    <ItemGroup>
+      <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.dll" PackagePath="build\$(TargetFramework)\" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.TestAdapter.dll" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Mono.*.dll" PackagePath="build\$(TargetFramework)" />
+    </ItemGroup>
+  </Target>
 
 </Project>
