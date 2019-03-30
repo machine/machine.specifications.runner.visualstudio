@@ -8,9 +8,9 @@
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
     <Authors>Machine Specifications</Authors>
     <PackageTags>mspec;unit;testing;context;specification;bdd;tdd;tfs;visualstudio;vsts;vso</PackageTags>
-    <PackageReleaseNotes>https://github.com/machine/machine.vstestadapter/releases</PackageReleaseNotes>
+    <PackageReleaseNotes>https://github.com/machine/machine.specifications.runner.visualstudio/releases</PackageReleaseNotes>
     <PackageIconUrl>http://github.com/machine/media/raw/master/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
-    <PackageProjectUrl>https://github.com/machine/machine.vstestadapter</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/machine/machine.specifications.runner.visualstudio</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
     <IncludeBuildOutput>false</IncludeBuildOutput>
