@@ -1,4 +1,4 @@
-Machine.VSTestAdapter
+Machine.Specifications.Runner.VisualStudio
 =====================
 
 Test Adapter for Machine.Specifications (MSpec) compatible with the .NET Framework and .NET Core: dotnet test, Visual Studio IDE, TFS, Visual Studio Team Services
@@ -16,4 +16,4 @@ Simply install the NuGet package and you will automatically be able to use the b
 
 # Release Notes
 
-Release notes are available here: https://github.com/machine/machine.vstestadapter/releases
+Release notes are available here: https://github.com/machine/machine.specifications.runner.visualstudio/releases
