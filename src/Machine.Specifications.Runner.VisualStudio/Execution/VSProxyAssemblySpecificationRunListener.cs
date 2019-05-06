@@ -112,6 +112,7 @@ namespace Machine.VSTestAdapter.Execution
             TestResult testResult = new TestResult(testCase) {
                 ComputerName = Environment.MachineName,
                 Outcome = MapSpecificationResultToTestOutcome(result),
+                DisplayName = testCase.DisplayName
             };
 
             if (result.Exception != null) 
