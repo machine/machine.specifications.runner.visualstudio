@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Version>0.1.0</Version>
-    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
+    <Version>0.2.0</Version>
+    <TargetFrameworks>netcoreapp2.1;net46;net452</TargetFrameworks>
     <PackageId>Machine.Specifications.Runner.VisualStudio</PackageId>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
@@ -22,19 +22,24 @@
 
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
-    <PackageReference Include="Machine.Specifications" Version="[0.11.0, 1.0.0]" PrivateAssets="All" />
+    <PackageReference Include="Machine.Specifications" Version="1.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,17.0.0)" PrivateAssets="All" />
   </ItemGroup>
-  
+
   <ItemGroup Condition="'$(TargetFramework)'=='net46'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,17.0.0)" PrivateAssets="All" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0,12.0]" PrivateAssets="All" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetCorePackageItems;NetFrameworkPackageItems</TargetsForTfmSpecificContentInPackage>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
@@ -44,7 +49,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' == 'net46'">
+  <Target Name="NetFrameworkPackageItems" Condition="('$(TargetFramework)'=='net46') or ('$(TargetFramework)'=='net452')">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
       <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.dll" PackagePath="build\$(TargetFramework)\" />
