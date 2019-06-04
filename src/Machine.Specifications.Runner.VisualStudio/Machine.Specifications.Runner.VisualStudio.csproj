@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Version>0.1.0</Version>
-    <TargetFrameworks>netcoreapp2.1;net46</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
     <PackageId>Machine.Specifications.Runner.VisualStudio</PackageId>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
@@ -28,9 +28,8 @@
   <ItemGroup Condition="'$(TargetFramework)'=='netcoreapp2.1'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[15.0.0,17.0.0)" PrivateAssets="All" />
   </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)'=='net46'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0.0,17.0.0)" PrivateAssets="All" />
+  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[11.0,12.0]" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -44,7 +43,7 @@
     </ItemGroup>
   </Target>
 
-  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' == 'net46'">
+  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)'=='net452'">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
       <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.dll" PackagePath="build\$(TargetFramework)\" />
