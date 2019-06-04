@@ -10,24 +10,24 @@ namespace SampleSpecs
 
     public class CustomActAssertDelegateSpec
     {
-        private static string a;
-        private static string b;
+        static string a;
+        static string b;
+        static int resultA;
+        static int resultB;
 
-        private static int resultA;
-        private static int resultB;
-
-        private Establish context = () =>
+        Establish context = () =>
         {
             a = "foo";
             b = "foo";
         };
 
-        private WhenDoing of = () =>
+        WhenDoing of = () =>
         {
             resultA = a.GetHashCode();
             resultB = b.GetHashCode();
         };
          
-        private They should_have_the_same_hash_code = () => resultA.ShouldEqual(resultB);
+        They should_have_the_same_hash_code = () =>
+            resultA.ShouldEqual(resultB);
     }
 }

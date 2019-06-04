@@ -1,89 +1,84 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Diagnostics;
-using System.IO;
-using Machine.VSTestAdapter.Execution;
-using Machine.VSTestAdapter.Helpers;
-using Machine.VSTestAdapter.Configuration;
 
-namespace Machine.VSTestAdapter
+namespace Machine.Specifications.Runner.VisualStudio
 {
     public partial class MSpecTestAdapter : ITestExecutor
     {
         public void Cancel()
         {
-            // Not supported
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
-
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
 
-            Settings settings = GetSettings(runContext);
+            var settings = GetSettings(runContext);
 
-            foreach (string currentAsssembly in sources.Distinct())
+            foreach (var assembly in sources.Distinct())
             {
                 try
                 {
 #if !NETSTANDARD
-                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(currentAsssembly)), "Machine.Specifications.dll")))
+                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(assembly)), "Machine.Specifications.dll")))
                     {
-                        frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine.Specifications.dll not found for {0}", currentAsssembly));
+                        frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine.Specifications.dll not found for {assembly}");
                         continue;
                     }
 #endif
 
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing tests in {assembly}");
 
-                    this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
+                    executor.RunAssembly(assembly, settings, uri, frameworkHandle);
                 }
                 catch (Exception ex)
                 {
-                    frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
+                    frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {assembly} - {ex.Message}");
                 }
             }
 
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Complete on {0} assemblies ", sources.Count()));
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Complete on {sources.Count()} assemblies ");
             
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
-
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
 
-            int executedSpecCount = 0;
+            var executedSpecCount = 0;
 
-            Settings settings = GetSettings(runContext);
+            var settings = GetSettings(runContext);
 
-            string currentAsssembly = string.Empty;
+            var assembly = string.Empty;
+
             try
             {
 
-                foreach (IGrouping<string, TestCase> grouping in tests.GroupBy(x => x.Source)) {
-                    currentAsssembly = grouping.Key;
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
+                foreach (var grouping in tests.GroupBy(x => x.Source))
+                {
+                    assembly = grouping.Key;
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing tests in {assembly}");
 
-                    List<VisualStudioTestIdentifier> testsToRun = grouping.Select(test => test.ToVisualStudioTestIdentifier()).ToList();
+                    var testsToRun = grouping
+                        .Select(test => test.ToVisualStudioTestIdentifier())
+                        .ToArray();
 
-                    this.executor.RunAssemblySpecifications(currentAsssembly, testsToRun, settings, uri, frameworkHandle);
+                    executor.RunAssemblySpecifications(assembly, testsToRun, settings, uri, frameworkHandle);
                     executedSpecCount += grouping.Count();
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Execution Complete - {0} specifications in {1} assemblies.", executedSpecCount, tests.GroupBy(x => x.Source).Count()));
-            } catch (Exception ex)
-            {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Execution Complete - {executedSpecCount} specifications in {tests.GroupBy(x => x.Source).Count()} assemblies.");
             }
-            finally
+            catch (Exception ex)
             {
+                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {assembly} - {ex.Message}");
             }
         }
 

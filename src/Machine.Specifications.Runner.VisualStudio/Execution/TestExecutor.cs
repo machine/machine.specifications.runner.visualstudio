@@ -1,44 +1,31 @@
-﻿using Machine.Specifications.Runner;
-using Machine.Specifications.Runner.Impl;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.Impl;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class TestExecutor
 #if !NETSTANDARD
         : MarshalByRefObject
 #endif
     {
-
-#if !NETSTANDARD
-        public override object InitializeLifetimeService()
-        {
-            return null;
-        }
-#endif
-
-        public TestExecutor()
-        {
-        }
-
         public void RunAllTestsInAssembly(string pathToAssembly, ISpecificationRunListener specificationRunListener)
         {
-            Assembly assemblyToRun = AssemblyHelper.Load(pathToAssembly);
+            var assemblyToRun = AssemblyHelper.Load(pathToAssembly);
 
-            DefaultRunner mspecRunner = CreateRunner(assemblyToRun, specificationRunListener);
+            var mspecRunner = CreateRunner(assemblyToRun, specificationRunListener);
             mspecRunner.RunAssembly(assemblyToRun);
         }
 
         private DefaultRunner CreateRunner(Assembly assembly,ISpecificationRunListener specificationRunListener)
         {
-            var listener = new AggregateRunListener(new[] {
+            var listener = new AggregateRunListener(new[]
+            {
                 specificationRunListener,
-                new AssemblyLocationAwareRunListener(new[] { assembly })
+                new AssemblyLocationAwareRunListener(new[] {assembly})
             });
 
             return new DefaultRunner(listener, RunOptions.Default);
@@ -75,5 +62,12 @@ namespace Machine.VSTestAdapter.Execution
                     mspecRunner.EndRun(assemblyToRun);
             }
         }
+
+#if !NETSTANDARD
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+#endif
     }
 }

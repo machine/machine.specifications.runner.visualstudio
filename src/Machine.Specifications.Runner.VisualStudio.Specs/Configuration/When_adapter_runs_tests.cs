@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Linq;
 using Machine.Fakes;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Configuration;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Execution;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Discovery;
+using Machine.Specifications.Runner.VisualStudio.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Specs.Configuration
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Configuration
 {
     public class When_adapter_runs_tests : WithFakes
     {
-        static string ConfigurationXml = @"<RunSettings>
+        static string configuration_xml = @"<RunSettings>
   <RunConfiguration>
     <MaxCpuCount>0</MaxCpuCount>
   </RunConfiguration>
@@ -21,34 +19,34 @@ namespace Machine.VSTestAdapter.Specs.Configuration
   </MSpec>
 </RunSettings>";
 
-        static MSpecTestAdapter Adapter;
+        static MSpecTestAdapter adapter;
 
-        Establish establish = () => {
-            The<IRunSettings>().WhenToldTo(runSettings => runSettings.SettingsXml).Return(ConfigurationXml);
-            The<IRunContext>().WhenToldTo(context => context.RunSettings).Return(The<IRunSettings>());
+        Establish context = () =>
+        {
+            The<IRunSettings>()
+                .WhenToldTo(x => x.SettingsXml)
+                .Return(configuration_xml);
 
-            Adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
+            The<IRunContext>()
+                .WhenToldTo(x => x.RunSettings)
+                .Return(The<IRunSettings>());
+
+            adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
         };
 
+        Because of = () =>
+            adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
 
-        Because of = () => {
-            Adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
-        };
+        It should_pick_up_DisableFullTestNameInIDE = () =>
+            FakeApi.WasToldTo(The<ISpecificationExecutor>(), d => d.RunAssembly("dll",
+                    Param<Settings>.Matches(x => x.DisableFullTestNameInIDE),
+                    Param<Uri>.IsAnything,
+                    Param<IFrameworkHandle>.IsAnything));
 
-
-        It should_pick_up_DisableFullTestNameInIDE = () => {
-            The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
-                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInIDE == true),
-                                                                       Param<Uri>.IsAnything,
-                                                                       Param<IFrameworkHandle>.IsAnything));
-        };
-
-        It should_pick_up_DisableFullTestNameInOutput = () => {
-            The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
-                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInOutput == true),
-                                                                       Param<Uri>.IsAnything,
-                                                                       Param<IFrameworkHandle>.IsAnything));
-        };
-        
+        It should_pick_up_DisableFullTestNameInOutput = () =>
+            FakeApi.WasToldTo(The<ISpecificationExecutor>(), x => x.RunAssembly("dll",
+                    Param<Settings>.Matches(s => s.DisableFullTestNameInOutput),
+                    Param<Uri>.IsAnything,
+                    Param<IFrameworkHandle>.IsAnything));
     }
 }

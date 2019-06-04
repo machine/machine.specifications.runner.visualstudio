@@ -1,23 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Discovery.BuiltIn
+namespace Machine.Specifications.Runner.VisualStudio.Discovery.BuiltIn
 {
     public class BuiltInSpecificationDiscoverer : ISpecificationDiscoverer
     {
         public IEnumerable<MSpecTestCase> DiscoverSpecs(string assemblyFilePath)
         {
-
 #if !NETSTANDARD
-            using (IsolatedAppDomainExecutionScope<TestDiscoverer> scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath)) {
-                TestDiscoverer discoverer = scope.CreateInstance();
+            using (var scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath)) {
+                var discoverer = scope.CreateInstance();
 #else
-                TestDiscoverer discoverer = new TestDiscoverer();
+                var discoverer = new TestDiscoverer();
 #endif
-                return discoverer.DiscoverTests(assemblyFilePath).ToList();
+                return discoverer.DiscoverTests(assemblyFilePath).ToArray();
 
 #if !NETSTANDARD
             }

@@ -1,31 +1,24 @@
-﻿using Machine.Specifications;
-using Machine.Specifications.Runner;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class AssemblyLocationAwareRunListener : ISpecificationRunListener
     {
-        private readonly IEnumerable<Assembly> _assemblies;
+        private readonly Assembly[] assemblies;
 
-        public AssemblyLocationAwareRunListener(IEnumerable<Assembly> assemblies)
+        public AssemblyLocationAwareRunListener(Assembly[] assemblies)
         {
-            if (assemblies == null)
-                throw new ArgumentNullException(nameof(assemblies));
-
-            _assemblies = assemblies;
+            this.assemblies = assemblies ?? throw new ArgumentNullException(nameof(assemblies));
         }
 
         public void OnAssemblyStart(AssemblyInfo assembly)
         {
-            Assembly loadedAssebmly = _assemblies.FirstOrDefault(a => a.GetName().Name.Equals(assembly.Name, StringComparison.OrdinalIgnoreCase));
+            var loadedAssembly = assemblies.FirstOrDefault(x => x.GetName().Name.Equals(assembly.Name, StringComparison.OrdinalIgnoreCase));
 
-            Directory.SetCurrentDirectory(Path.GetDirectoryName(loadedAssebmly.Location));
+            Directory.SetCurrentDirectory(Path.GetDirectoryName(loadedAssembly.Location));
         }
 
         public void OnAssemblyEnd(AssemblyInfo assembly)

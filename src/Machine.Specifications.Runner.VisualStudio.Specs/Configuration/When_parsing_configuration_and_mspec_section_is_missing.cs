@@ -1,23 +1,17 @@
-﻿using System;
-using System.Linq;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Configuration;
+﻿using Machine.Specifications.Runner.VisualStudio.Configuration;
 
-namespace Machine.VSTestAdapter.Specs.Configuration
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Configuration
 {
     [Subject(typeof(Settings), "Configuration")]
     public class When_parsing_configuration_and_mspec_section_is_missing
     {
-        static Settings Settings;
-        static string ConfigurationXml = "<RunSettings></RunSettings>";
+        static Settings settings;
+        static string configuration_xml = "<RunSettings></RunSettings>";
 
-        Because of = () => {
-            Settings = Settings.Parse(ConfigurationXml);
-        };
+        Because of = () =>
+            settings = Settings.Parse(configuration_xml);
 
-        It should_default_to_DisplayFullTestName_off = () => {
-            Settings.DisableFullTestNameInOutput.ShouldBeFalse();
-        };
-        
+        It should_default_to_DisplayFullTestName_off = () =>
+            ShouldExtensionMethods.ShouldBeFalse(settings.DisableFullTestNameInOutput);
     }
 }

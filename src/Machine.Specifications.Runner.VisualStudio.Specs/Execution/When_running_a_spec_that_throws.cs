@@ -1,30 +1,26 @@
-﻿using System;
-using System.Linq;
-using Machine.Fakes;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Helpers;
+﻿using Machine.Fakes;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Specs.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
 {
-      public class When_running_a_spec_that_throws : With_SingleSpecExecutionSetup
+    public class When_running_a_spec_that_throws : With_SingleSpecExecutionSetup
     {
-        Establish context = () => {
+        Establish context = () =>
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "unhandled_exception");
-        };
 
-        It should_tell_visual_studio_it_failed = () => {
+        It should_tell_visual_studio_it_failed = () =>
+        {
             The<IFrameworkHandle>()
-                .WasToldTo(handle => 
-                    handle.RecordEnd(Param<TestCase>.Matches(testCase => testCase.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),
-                                     Param<TestOutcome>.Matches(outcome => outcome == TestOutcome.Failed))
-                ).OnlyOnce();
+                .WasToldTo(x => x.RecordEnd(
+                    Param<TestCase>.Matches(t => t.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),
+                    Param<TestOutcome>.Matches(t => t == TestOutcome.Failed)))
+                .OnlyOnce();
 
             The<IFrameworkHandle>()
-                .WasToldTo(handle => 
-                    handle.RecordResult(Param<TestResult>.Matches(result => result.Outcome == TestOutcome.Failed))
-                ).OnlyOnce();
+                .WasToldTo(x => x.RecordResult(Param<TestResult>.Matches(t => t.Outcome == TestOutcome.Failed)))
+                .OnlyOnce();
         };
     }
 }

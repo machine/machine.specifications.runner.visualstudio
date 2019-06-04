@@ -1,32 +1,32 @@
-﻿using Machine.Specifications;
-using System;
+﻿using System;
 using System.Linq;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Discovery.BuiltIn;
+using Machine.Specifications.Runner.VisualStudio.Discovery.BuiltIn;
 
-namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
 {
-
-      
-
     public class When_discovering_specs_using_behaviors : With_DiscoverySetup<BuiltInSpecificationDiscoverer>
     {
-        It should_pick_up_the_behavior = () => {
-            MSpecTestCase discoveredSpec = Results.SingleOrDefault(x => "sample_behavior_test".Equals(x.SpecificationName, StringComparison.Ordinal) && 
-                                                                          "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            discoveredSpec.ShouldNotBeNull();
+        It should_pick_up_the_behavior = () =>
+        {
+            var discoveredSpec = Results.SingleOrDefault(x =>
+                "sample_behavior_test".Equals(x.SpecificationName, StringComparison.Ordinal) &&
+                "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+
+            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 14);
             discoveredSpec.CodeFilePath.EndsWith("BehaviorSample.cs", StringComparison.Ordinal);
         };
 
-        It should_pick_up_the_behavior_field_type_and_name = () => {
-            MSpecTestCase discoveredSpec = Results.SingleOrDefault(x => "sample_behavior_test".Equals(x.SpecificationName, StringComparison.Ordinal) &&
-                                                                        "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            discoveredSpec.ShouldNotBeNull();
+        It should_pick_up_the_behavior_field_type_and_name = () =>
+        {
+            var discoveredSpec = Results.SingleOrDefault(x =>
+                "sample_behavior_test".Equals(x.SpecificationName, StringComparison.Ordinal) &&
+                "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
+            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
 
-            discoveredSpec.BehaviorFieldName.ShouldEqual("some_behavior");
-            discoveredSpec.BehaviorFieldType.ShouldEqual("SampleSpecs.SampleBehavior");
+            ShouldExtensionMethods.ShouldEqual(discoveredSpec.BehaviorFieldName, "some_behavior");
+            ShouldExtensionMethods.ShouldEqual(discoveredSpec.BehaviorFieldType, "SampleSpecs.SampleBehavior");
         };
     }
 }

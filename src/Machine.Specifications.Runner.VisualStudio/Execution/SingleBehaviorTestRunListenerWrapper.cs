@@ -1,9 +1,7 @@
 ﻿using System;
-using Machine.Specifications;
-using Machine.Specifications.Runner;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     /// <summary>
     /// The purpose of this class is to ignore everything, but a single specification's notifications.
@@ -18,15 +16,9 @@ namespace Machine.VSTestAdapter.Execution
 
         public SingleBehaviorTestRunListenerWrapper(ISpecificationRunListener runListener, VisualStudioTestIdentifier listenFor)
         {
-            if (listenFor == null)
-                throw new ArgumentNullException(nameof(listenFor));
-            if (runListener == null)
-                throw new ArgumentNullException(nameof(runListener));
-
-            this.runListener = runListener;
-            this.listenFor = listenFor;
+            this.runListener = runListener ?? throw new ArgumentNullException(nameof(runListener));
+            this.listenFor = listenFor ?? throw new ArgumentNullException(nameof(listenFor));
         }
-
 
         public void OnContextEnd(ContextInfo context)
         {

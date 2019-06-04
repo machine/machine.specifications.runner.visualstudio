@@ -1,8 +1,6 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
+﻿using System.IO;
 
-namespace Machine.VSTestAdapter.Specs
+namespace Machine.Specifications.Runner.VisualStudio.Specs
 {
     public class Helper
     {

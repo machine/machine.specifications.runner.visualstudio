@@ -1,13 +1,11 @@
-﻿using Machine.Specifications;
-using Machine.Specifications.Runner;
-using System;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+﻿using System;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using Machine.VSTestAdapter.Helpers;
-using Machine.VSTestAdapter.Configuration;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class VSProxyAssemblySpecificationRunListener :
 #if !NETSTANDARD
@@ -25,48 +23,39 @@ namespace Machine.VSTestAdapter.Execution
 
         public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri, Settings settings)
         {
-            if (settings == null)
-                throw new ArgumentNullException(nameof(settings));
-            if (executorUri == null)
-                throw new ArgumentNullException(nameof(executorUri));
-            if (assemblyPath == null)
-                throw new ArgumentNullException(nameof(assemblyPath));
-            if (frameworkHandle == null)
-                throw new ArgumentNullException(nameof(frameworkHandle));
-
-            this.frameworkHandle = frameworkHandle;
-            this.assemblyPath = assemblyPath;
-            this.executorUri = executorUri;
-            this.settings = settings;
+            this.frameworkHandle = frameworkHandle ?? throw new ArgumentNullException(nameof(frameworkHandle));
+            this.assemblyPath = assemblyPath ?? throw new ArgumentNullException(nameof(assemblyPath));
+            this.executorUri = executorUri ?? throw new ArgumentNullException(nameof(executorUri));
+            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
         public void OnFatalError(ExceptionResult exception)
         {
-            if (this.currentRunStats != null)
+            if (currentRunStats != null)
             {
-                this.currentRunStats.Stop();
-                this.currentRunStats = null;
+                currentRunStats.Stop();
+                currentRunStats = null;
             }
 
-            this.frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception.ToString());
+            frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception);
         }
 
         public void OnSpecificationStart(SpecificationInfo specification)
         {
-            TestCase testCase = ConvertSpecificationToTestCase(specification, this.settings);
-            this.frameworkHandle.RecordStart(testCase);
-            this.currentRunStats = new RunStats();
+            var testCase = ConvertSpecificationToTestCase(specification, settings);
+
+            frameworkHandle.RecordStart(testCase);
+            currentRunStats = new RunStats();
         }
 
         public void OnSpecificationEnd(SpecificationInfo specification, Result result)
         {
-            if (this.currentRunStats != null)
-                this.currentRunStats.Stop();
+            currentRunStats?.Stop();
 
-            TestCase testCase = ConvertSpecificationToTestCase(specification, this.settings);
+            var testCase = ConvertSpecificationToTestCase(specification, settings);
 
-            this.frameworkHandle.RecordEnd(testCase, MapSpecificationResultToTestOutcome(result));
-            this.frameworkHandle.RecordResult(ConverResultToTestResult(testCase, result, this.currentRunStats));
+            frameworkHandle.RecordEnd(testCase, MapSpecificationResultToTestOutcome(result));
+            frameworkHandle.RecordResult(ConvertResultToTestResult(testCase, result, currentRunStats));
         }
 
         public void OnContextStart(ContextInfo context)
@@ -79,14 +68,15 @@ namespace Machine.VSTestAdapter.Execution
             currentContext = null;
         }
 
-
-#region Mapping
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification, Settings settings)
         {
-            VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
+            var vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
 
-            return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
-                DisplayName = settings.DisableFullTestNameInOutput ? specification.Name : $"{this.currentContext?.TypeName}.{specification.FieldName}",
+            return new TestCase(vsTestId.FullyQualifiedName, executorUri, assemblyPath)
+            {
+                DisplayName = settings.DisableFullTestNameInOutput
+                    ? specification.Name
+                    : $"{currentContext?.TypeName}.{specification.FieldName}"
             };
         }
 
@@ -107,9 +97,10 @@ namespace Machine.VSTestAdapter.Execution
             }
         }
 
-        private static TestResult ConverResultToTestResult(TestCase testCase, Result result, RunStats runStats)
+        private static TestResult ConvertResultToTestResult(TestCase testCase, Result result, RunStats runStats)
         {
-            TestResult testResult = new TestResult(testCase) {
+            var testResult = new TestResult(testCase)
+            {
                 ComputerName = Environment.MachineName,
                 Outcome = MapSpecificationResultToTestOutcome(result),
                 DisplayName = testCase.DisplayName
@@ -131,10 +122,6 @@ namespace Machine.VSTestAdapter.Execution
             return testResult;
         }
 
-#endregion
-
-
-#region Stubs
         public void OnAssemblyEnd(AssemblyInfo assembly)
         {
         }
@@ -150,6 +137,5 @@ namespace Machine.VSTestAdapter.Execution
         public void OnRunStart()
         {
         }
-#endregion
     }
 }

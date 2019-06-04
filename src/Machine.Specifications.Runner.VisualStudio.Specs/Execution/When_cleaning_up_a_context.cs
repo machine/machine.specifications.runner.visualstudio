@@ -1,11 +1,10 @@
 ﻿using System.Linq;
 using Machine.Fakes;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Specs.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
 {
     public class When_cleaning_up_a_context : With_MultipleSpecExecutionSetup
     {
@@ -25,7 +24,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
                 .Twice();
 
             The<IFrameworkHandle>()
-                .WasToldTo(x =>x.RecordResult(Param<TestResult>.Matches(y => y.Outcome == TestOutcome.Passed)))
+                .WasToldTo(x => x.RecordResult(Param<TestResult>.Matches(y => y.Outcome == TestOutcome.Passed)))
                 .Twice();
         };
     }

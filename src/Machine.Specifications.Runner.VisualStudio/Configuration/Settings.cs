@@ -1,34 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Machine.VSTestAdapter.Configuration
+namespace Machine.Specifications.Runner.VisualStudio.Configuration
 {
     public class Settings
     {
         public bool DisableFullTestNameInIDE { get; set; }
+
         public bool DisableFullTestNameInOutput { get; set; }
 
         public static Settings Parse(string xml)
         {
-            Settings config = new Settings();
+            var settings = new Settings();
 
-            XElement mspecConfig = null;
-            try {
-                mspecConfig = XDocument.Parse(xml).XPathSelectElement("RunSettings/MSpec");
-            } catch { }
+            try
+            {
+                var config = XDocument.Parse(xml).XPathSelectElement("RunSettings/MSpec");
 
-            if (mspecConfig == null)
-                return config;
+                settings.DisableFullTestNameInOutput = "true".Equals(config.Element("DisableFullTestNameInOutput")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
+                settings.DisableFullTestNameInIDE = "true".Equals(config.Element("DisableFullTestNameInIDE")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
 
-            config.DisableFullTestNameInOutput = "true".Equals(mspecConfig.Element("DisableFullTestNameInOutput")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
-            config.DisableFullTestNameInIDE = "true".Equals(mspecConfig.Element("DisableFullTestNameInIDE")?.Value ?? "false", StringComparison.OrdinalIgnoreCase);
-
-            return config;
+                return settings;
+            }
+            catch
+            {
+                return settings;
+            }
         }
     }
 }

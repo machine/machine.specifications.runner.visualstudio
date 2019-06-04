@@ -4,52 +4,53 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications.Explorers;
 using Machine.Specifications.Model;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Discovery.BuiltIn
+namespace Machine.Specifications.Runner.VisualStudio.Discovery.BuiltIn
 {
 
     public class TestDiscoverer
 #if !NETSTANDARD
-                                : MarshalByRefObject
+        : MarshalByRefObject
 #endif
     {
-
         private readonly PropertyInfo behaviorProperty = typeof(BehaviorSpecification).GetProperty("BehaviorFieldInfo");
 
         public IEnumerable<MSpecTestCase> DiscoverTests(string assemblyPath)
         {
-            AssemblyExplorer assemblyExplorer = new AssemblyExplorer();
+            var assemblyExplorer = new AssemblyExplorer();
 
-            Assembly assembly = AssemblyHelper.Load(assemblyPath);
-            IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
+            var assembly = AssemblyHelper.Load(assemblyPath);
+            var contexts = assemblyExplorer.FindContextsIn(assembly);
 
-            using (SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath))
+            using (var locationFinder = new SourceCodeLocationFinder(assemblyPath))
             {
-                return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToList();
+                return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToArray();
             }
         }
 
         private IEnumerable<MSpecTestCase> CreateTestCase(Context context, SourceCodeLocationFinder locationFinder)
         {
-            foreach (Specification spec in context.Specifications.ToList())
+            foreach (var spec in context.Specifications.ToList())
             {
-                MSpecTestCase testCase = new MSpecTestCase();
-
-                testCase.ClassName = context.Type.Name;
-                testCase.ContextFullType = context.Type.FullName;
-                testCase.ContextDisplayName = GetContextDisplayName(context.Type);
-
-                testCase.SpecificationName = spec.FieldInfo.Name;
-                testCase.SpecificationDisplayName = spec.Name;
+                var testCase = new MSpecTestCase
+                {
+                    ClassName = context.Type.Name,
+                    ContextFullType = context.Type.FullName,
+                    ContextDisplayName = GetContextDisplayName(context.Type),
+                    SpecificationName = spec.FieldInfo.Name,
+                    SpecificationDisplayName = spec.Name
+                };
 
                 string fieldDeclaringType;
+
                 if (spec.FieldInfo.DeclaringType.GetTypeInfo().IsGenericType && !spec.FieldInfo.DeclaringType.GetTypeInfo().IsGenericTypeDefinition)
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.GetGenericTypeDefinition().FullName;
                 else
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.FullName;
                     
-                SourceCodeLocationInfo locationInfo = locationFinder.GetFieldLocation(fieldDeclaringType, spec.FieldInfo.Name);
+                var locationInfo = locationFinder.GetFieldLocation(fieldDeclaringType, spec.FieldInfo.Name);
+
                 if (locationInfo != null)
                 {
                     testCase.CodeFilePath = locationInfo.CodeFilePath;
@@ -83,9 +84,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             var displayName = contextType.Name.Replace("_", " ");
 
             if (contextType.IsNested)
-            {
                 return GetContextDisplayName(contextType.DeclaringType) + " " + displayName;
-            }
 
             return displayName;
         }
@@ -97,5 +96,4 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
         }
 #endif
     }
-
 }

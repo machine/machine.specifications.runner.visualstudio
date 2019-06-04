@@ -18,4 +18,5 @@
     <ProjectReference Include="..\Machine.Specifications.Runner.VisualStudio\Machine.Specifications.Runner.VisualStudio.csproj" />
     <ProjectReference Include="..\SampleSpecs\SampleSpecs.csproj" />
   </ItemGroup>
+
 </Project>

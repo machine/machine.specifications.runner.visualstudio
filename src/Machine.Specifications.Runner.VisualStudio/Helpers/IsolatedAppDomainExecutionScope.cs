@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 
-namespace Machine.VSTestAdapter.Helpers
+namespace Machine.Specifications.Runner.VisualStudio.Helpers
 {
-
 #if !NETSTANDARD
-
-    public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()
+    public class IsolatedAppDomainExecutionScope<T> : IDisposable
+        where T : MarshalByRefObject, new()
     {
         private AppDomain appDomain;
         private string appName = typeof(IsolatedAppDomainExecutionScope<>).Assembly.GetName().Name;
@@ -26,28 +24,40 @@ namespace Machine.VSTestAdapter.Helpers
 
         public T CreateInstance()
         {
-            if (appDomain == null) {
+            if (appDomain == null)
+            {
                 // Because we need to copy files around - we create a global cross-process mutex here to avoid multi-process race conditions
                 // in the case where both of those are true:
                 //  1. VSTest is told to run tests in parallel, so it spawns multiple processes
                 //  2. There are multiple test assemblies in the same directory
-                using (Mutex mutex = new Mutex(false, String.Format("{0}_{1}", this.appName, Path.GetDirectoryName(this.assemblyPath).Replace(Path.DirectorySeparatorChar, '_')))) {
-                    try {
+                using (var mutex = new Mutex(false, $"{appName}_{Path.GetDirectoryName(assemblyPath).Replace(Path.DirectorySeparatorChar, '_')}"))
+                {
+                    try
+                    {
                         mutex.WaitOne(TimeSpan.FromMinutes(1));
-                    } catch (AbandonedMutexException) { }
+                    }
+                    catch (AbandonedMutexException)
+                    {
+                    }
 
-                    try {
-                        appDomain = CreateAppDomain(assemblyPath, this.appName);
-                    } finally {
-                        try {
+                    try
+                    {
+                        appDomain = CreateAppDomain(assemblyPath, appName);
+                    }
+                    finally
+                    {
+                        try
+                        {
                             mutex.ReleaseMutex();
-                        } catch {
+                        }
+                        catch
+                        {
                         }
                     }
                 }
             }
 
-            return (T)appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
+            return (T) appDomain.CreateInstanceAndUnwrap(typeof(T).Assembly.FullName, typeof(T).FullName);
         }
 
 
@@ -66,21 +76,25 @@ namespace Machine.VSTestAdapter.Helpers
                 typeof(Mono.Cecil.Rocks.IILVisitor).Assembly,
             }, Path.GetDirectoryName(assemblyPath));
 
-            AppDomainSetup setup = new AppDomainSetup();
-            setup.ApplicationName = appName;
-            setup.ShadowCopyFiles = "true";
-            setup.ApplicationBase = setup.PrivateBinPath = Path.GetDirectoryName(assemblyPath);
-            setup.CachePath = Path.Combine(Path.GetTempPath(), appName, Guid.NewGuid().ToString());
-            setup.ConfigurationFile = Path.Combine(Path.GetDirectoryName(assemblyPath), (Path.GetFileName(assemblyPath) + ".config"));
+            var setup = new AppDomainSetup
+            {
+                ApplicationName = appName,
+                ShadowCopyFiles = "true",
+                ApplicationBase = Path.GetDirectoryName(assemblyPath),
+                PrivateBinPath = Path.GetDirectoryName(assemblyPath),
+                CachePath = Path.Combine(Path.GetTempPath(), appName, Guid.NewGuid().ToString()),
+                ConfigurationFile = Path.Combine(Path.GetDirectoryName(assemblyPath), Path.GetFileName(assemblyPath) + ".config")
+            };
 
             return AppDomain.CreateDomain($"{appName}.dll", null, setup);
         }
 
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
         {
-            foreach (Assembly assembly in assemblies) {
-                string sourceAssemblyFile = assembly.Location;
-                string destinationAssemblyFile = Path.Combine(destination, Path.GetFileName(sourceAssemblyFile));
+            foreach (var assembly in assemblies)
+            {
+                var sourceAssemblyFile = assembly.Location;
+                var destinationAssemblyFile = Path.Combine(destination, Path.GetFileName(sourceAssemblyFile));
 
                 // file doesn't exist or is older
                 if (!File.Exists(destinationAssemblyFile) || File.GetLastWriteTimeUtc(sourceAssemblyFile) > File.GetLastWriteTimeUtc(destinationAssemblyFile))
@@ -90,16 +104,16 @@ namespace Machine.VSTestAdapter.Helpers
 
         private static void CopyWithoutLockingSourceFile(string sourceFile, string destinationFile)
         {
-            const int BUFFER_SIZE = 10 * 1024;
+            const int bufferSize = 10 * 1024;
 
-            using (FileStream inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, BUFFER_SIZE))
-            using (FileStream outputFile = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, BUFFER_SIZE)) {
-                byte[] buffer = new byte[BUFFER_SIZE];
+            using (var inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize))
+            using (var outputFile = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, bufferSize))
+            {
+                var buffer = new byte[bufferSize];
                 int bytes;
 
-                while ((bytes = inputFile.Read(buffer, 0, buffer.Length)) > 0) {
+                while ((bytes = inputFile.Read(buffer, 0, buffer.Length)) > 0)
                     outputFile.Write(buffer, 0, bytes);
-                }
             }
         }
 
@@ -107,16 +121,18 @@ namespace Machine.VSTestAdapter.Helpers
         {
             if (appDomain != null)
             {
-                try {
-                    string cacheDirectory = appDomain.SetupInformation.CachePath;
+                try
+                {
+                    var cacheDirectory = appDomain.SetupInformation.CachePath;
 
                     AppDomain.Unload(appDomain);
                     appDomain = null;
 
                     if (Directory.Exists(cacheDirectory))
                         Directory.Delete(cacheDirectory, true);
-                } catch {
-                    // TODO: Logging here
+                }
+                catch
+                {
                 }
             }
         }

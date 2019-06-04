@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Linq;
+using System.Reflection;
 using Machine.Fakes;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using SampleSpecs;
-using System.Reflection;
 
-namespace Machine.VSTestAdapter.Specs.Discovery
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery
 {
     public class When_DisableFullTestNameInIDE_is_on : WithFakes
     {
-        static string ConfigurationXml = @"<RunSettings>
+        static string configuration_xml = @"<RunSettings>
   <RunConfiguration>
     <MaxCpuCount>0</MaxCpuCount>
   </RunConfiguration>
@@ -22,26 +20,32 @@ namespace Machine.VSTestAdapter.Specs.Discovery
   </MSpec>
 </RunSettings>";
 
-        Establish establish = () => {
-            The<IRunSettings>().WhenToldTo(runSettings => runSettings.SettingsXml).Return(ConfigurationXml);
-            The<IDiscoveryContext>().WhenToldTo(context => context.RunSettings).Return(The<IRunSettings>());
+        Establish context = () =>
+        {
+            The<IRunSettings>()
+                .WhenToldTo(x => x.SettingsXml)
+                .Return(configuration_xml);
+
+            The<IDiscoveryContext>()
+                .WhenToldTo(x => x.RunSettings)
+                .Return(The<IRunSettings>());
         };
 
 
-        Because of = () => {
-            The<MSpecTestAdapter>().DiscoverTests(new[] { typeof(StandardSpec).GetTypeInfo().Assembly.Location },
-                                  The<IDiscoveryContext>(),
-                                  An<IMessageLogger>(),
-                                  The<ITestCaseDiscoverySink>());
-        };
+        Because of = () =>
+            The<MSpecTestAdapter>().DiscoverTests(new[] {typeof(StandardSpec).GetTypeInfo().Assembly.Location},
+                The<IDiscoveryContext>(),
+                An<IMessageLogger>(),
+                The<ITestCaseDiscoverySink>());
 
-
-        It should_use_test_name_as_display_name = () => {
+        It should_use_test_name_as_display_name = () =>
+        {
             var specId = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "should_pass");
 
             The<ITestCaseDiscoverySink>()
-                .WasToldTo(d => d.SendTestCase(Param<TestCase>.Matches(t => t.ToVisualStudioTestIdentifier().Equals(specId) && 
-                                                                       t.DisplayName.Equals("should pass", StringComparison.Ordinal))))
+                .WasToldTo(x => x.SendTestCase(Param<TestCase>.Matches(t =>
+                    t.ToVisualStudioTestIdentifier().Equals(specId) &&
+                    t.DisplayName.Equals("should pass", StringComparison.Ordinal))))
                 .OnlyOnce();
         };        
     }

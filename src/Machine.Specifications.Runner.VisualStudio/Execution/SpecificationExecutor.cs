@@ -1,13 +1,10 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
-using System.Linq;
-using Machine.VSTestAdapter.Helpers;
-using Machine.VSTestAdapter.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class SpecificationExecutor : ISpecificationExecutor
     {
@@ -16,38 +13,41 @@ namespace Machine.VSTestAdapter.Execution
             source = Path.GetFullPath(source);
 
 #if !NETSTANDARD
-            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(source)) {
-                TestExecutor executor = scope.CreateInstance();
+            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(source))
+            {
+                var executor = scope.CreateInstance();
 #else
-                TestExecutor executor = new TestExecutor();
+                var executor = new TestExecutor();
 #endif
 
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri, settings);
+                var listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri, settings);
                 executor.RunAllTestsInAssembly(source, listener);
 #if !NETSTANDARD
-           }
+            }
 #endif
         }
 
-        public void RunAssemblySpecifications(string assemblyPath,
-                                              IEnumerable<VisualStudioTestIdentifier> specifications,
-                                              Settings settings,
-                                              Uri executorUri,
-                                              IFrameworkHandle frameworkHandle)
+        public void RunAssemblySpecifications(
+            string assemblyPath,
+            VisualStudioTestIdentifier[] specifications,
+            Settings settings,
+            Uri executorUri,
+            IFrameworkHandle frameworkHandle)
         {
             assemblyPath = Path.GetFullPath(assemblyPath);
 
 #if !NETSTANDARD
-            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(assemblyPath)) {
-                TestExecutor executor = scope.CreateInstance();
+            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(assemblyPath))
+            {
+                var executor = scope.CreateInstance();
 #else
-                TestExecutor executor = new TestExecutor();
+                var executor = new TestExecutor();
 #endif
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, executorUri, settings);
+                var listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, executorUri, settings);
 
                 executor.RunTestsInAssembly(assemblyPath, specifications, listener);
 #if !NETSTANDARD
-           }
+            }
 #endif
         }
     }

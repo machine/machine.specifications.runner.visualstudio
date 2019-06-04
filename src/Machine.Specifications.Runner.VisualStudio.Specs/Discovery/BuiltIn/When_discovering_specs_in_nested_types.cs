@@ -1,22 +1,21 @@
-﻿using Machine.Specifications;
-using System;
+﻿using System;
 using System.Linq;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Discovery.BuiltIn;
+using Machine.Specifications.Runner.VisualStudio.Discovery.BuiltIn;
 
-namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
 {
-
     public class When_discovering_specs_in_nested_types : With_DiscoverySetup<BuiltInSpecificationDiscoverer>
     {
-        It should_discover_the_sample_behavior = () => {
-            MSpecTestCase discoveredSpec = Results.SingleOrDefault(x => "should_remember_that_true_is_true".Equals(x.SpecificationName, StringComparison.Ordinal) && 
-                                                                          "NestedSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            discoveredSpec.ShouldNotBeNull();
+        It should_discover_the_sample_behavior = () =>
+        {
+            var discoveredSpec = Results.SingleOrDefault(x =>
+                "should_remember_that_true_is_true".Equals(x.SpecificationName, StringComparison.Ordinal) &&
+                "NestedSpec".Equals(x.ClassName, StringComparison.Ordinal));
+            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
 
-            discoveredSpec.ContextDisplayName.ShouldEqual("Parent NestedSpec");
+            ShouldExtensionMethods.ShouldEqual<object>(discoveredSpec.ContextDisplayName, "Parent NestedSpec");
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 14);
             discoveredSpec.CodeFilePath.EndsWith("NestedSpecSample.cs", StringComparison.Ordinal);
         };
     }
