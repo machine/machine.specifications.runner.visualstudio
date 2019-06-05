@@ -11,11 +11,11 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
             var discoveredSpec = Results.SingleOrDefault(x =>
                 "should_remember_that_true_is_true".Equals(x.SpecificationName, StringComparison.Ordinal) &&
                 "NestedSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+            discoveredSpec.ShouldNotBeNull();
 
-            ShouldExtensionMethods.ShouldEqual<object>(discoveredSpec.ContextDisplayName, "Parent NestedSpec");
+            discoveredSpec.ContextDisplayName.ShouldEqual("Parent NestedSpec");
 
-            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 14);
+            discoveredSpec.LineNumber.ShouldEqual(9);
             discoveredSpec.CodeFilePath.EndsWith("NestedSpecSample.cs", StringComparison.Ordinal);
         };
     }

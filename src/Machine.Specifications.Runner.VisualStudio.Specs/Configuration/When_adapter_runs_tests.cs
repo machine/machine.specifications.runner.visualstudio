@@ -38,13 +38,15 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Configuration
             adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
 
         It should_pick_up_DisableFullTestNameInIDE = () =>
-            FakeApi.WasToldTo(The<ISpecificationExecutor>(), d => d.RunAssembly("dll",
+            The<ISpecificationExecutor>()
+                .WasToldTo(d => d.RunAssembly("dll",
                     Param<Settings>.Matches(x => x.DisableFullTestNameInIDE),
                     Param<Uri>.IsAnything,
                     Param<IFrameworkHandle>.IsAnything));
 
         It should_pick_up_DisableFullTestNameInOutput = () =>
-            FakeApi.WasToldTo(The<ISpecificationExecutor>(), x => x.RunAssembly("dll",
+            The<ISpecificationExecutor>()
+                .WasToldTo(x => x.RunAssembly("dll",
                     Param<Settings>.Matches(s => s.DisableFullTestNameInOutput),
                     Param<Uri>.IsAnything,
                     Param<IFrameworkHandle>.IsAnything));

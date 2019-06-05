@@ -11,9 +11,9 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
             var discoveredSpec = Results.SingleOrDefault(x =>
                 "should_pass".Equals(x.SpecificationName, StringComparison.Ordinal) &&
                 "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+            discoveredSpec.ShouldNotBeNull();
 
-            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 14);
+            discoveredSpec.LineNumber.ShouldEqual(10);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
 
@@ -22,9 +22,9 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
             var discoveredSpec = Results.SingleOrDefault(x =>
                 "should_be_ignored".Equals(x.SpecificationName, StringComparison.Ordinal) &&
                 "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+            discoveredSpec.ShouldNotBeNull();
 
-            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 20);
+            discoveredSpec.LineNumber.ShouldEqual(14);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
 
@@ -33,10 +33,10 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
             var discoveredSpec = Results.SingleOrDefault(x =>
                 "not_implemented".Equals(x.SpecificationName, StringComparison.Ordinal) &&
                 "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+            discoveredSpec.ShouldNotBeNull();
 
-            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 0);
-            ShouldExtensionMethods.ShouldBeNull(discoveredSpec.CodeFilePath);
+            discoveredSpec.LineNumber.ShouldEqual(0);
+            discoveredSpec.CodeFilePath.ShouldBeNull();
         };
     }
 }

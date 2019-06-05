@@ -14,7 +14,8 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs
 
         Establish context = () =>
         {
-            FakeApi.WhenToldTo(The<ISpecificationExecutor>(), d => d.RunAssembly(Param<string>.IsAnything, Param<Settings>.IsNotNull, Param<Uri>.IsAnything, Param<IFrameworkHandle>.IsAnything))
+            The<ISpecificationExecutor>()
+                .WhenToldTo(x => x.RunAssembly(Param<string>.IsAnything, Param<Settings>.IsNotNull, Param<Uri>.IsAnything, Param<IFrameworkHandle>.IsAnything))
                 .Throw(new InvalidOperationException());
 
             adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());

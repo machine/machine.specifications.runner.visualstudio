@@ -11,9 +11,9 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery.BuiltIn
             var discoveredSpec = Results.SingleOrDefault(x =>
                 "should_have_the_same_hash_code".Equals(x.SpecificationName, StringComparison.Ordinal) &&
                 "CustomActAssertDelegateSpec".Equals(x.ClassName, StringComparison.Ordinal));
-            ShouldExtensionMethods.ShouldNotBeNull(discoveredSpec);
+            discoveredSpec.ShouldNotBeNull();
 
-            ShouldExtensionMethods.ShouldEqual(discoveredSpec.LineNumber, 31);
+            discoveredSpec.LineNumber.ShouldEqual(30);
             discoveredSpec.CodeFilePath.EndsWith("CustomActAssertDelegateSpec.cs", StringComparison.Ordinal);
         };
     }

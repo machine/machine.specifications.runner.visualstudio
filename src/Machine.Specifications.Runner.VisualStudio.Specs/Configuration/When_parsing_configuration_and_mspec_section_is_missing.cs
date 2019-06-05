@@ -12,6 +12,6 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Configuration
             settings = Settings.Parse(configuration_xml);
 
         It should_default_to_DisplayFullTestName_off = () =>
-            ShouldExtensionMethods.ShouldBeFalse(settings.DisableFullTestNameInOutput);
+            settings.DisableFullTestNameInOutput.ShouldBeFalse();
     }
 }
