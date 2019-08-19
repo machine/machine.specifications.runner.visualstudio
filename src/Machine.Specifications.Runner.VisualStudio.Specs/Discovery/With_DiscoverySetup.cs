@@ -9,7 +9,6 @@ namespace Machine.VSTestAdapter.Specs.Discovery
     public abstract class With_DiscoverySetup<TDiscoverer>
         where TDiscoverer : ISpecificationDiscoverer, new()
     {
-        static string AssemblyPath;
         static ISpecificationDiscoverer Discoverer;
         static CompileContext compiler;
         static Assembly assembly;
@@ -26,7 +25,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery
         };
 
         Because of = () =>
-            Results = Discoverer.DiscoverSpecs(AssemblyPath);
+            Results = Discoverer.DiscoverSpecs(assembly.Location);
 
         Cleanup after = () =>
             compiler.Dispose();

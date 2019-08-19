@@ -23,17 +23,14 @@ namespace Machine.VSTestAdapter.Specs.Discovery
 
         static CompileContext compiler;
         static Assembly assembly;
-
+        
         Establish context = () =>
         {
             compiler = new CompileContext();
 
             var assemblyPath = compiler.Compile(SampleFixture.Code);
             assembly = Assembly.LoadFile(assemblyPath);
-        };
 
-        Establish establish = () =>
-        {
             The<IRunSettings>()
                 .WhenToldTo(runSettings => runSettings.SettingsXml)
                 .Return(ConfigurationXml);

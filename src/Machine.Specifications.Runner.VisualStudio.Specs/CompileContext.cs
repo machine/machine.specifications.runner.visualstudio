@@ -10,7 +10,7 @@ using Microsoft.CSharp;
 
 namespace Machine.VSTestAdapter.Specs
 {
-public class CompileContext : IDisposable
+    public class CompileContext : IDisposable
     {
         private readonly string _directory = Path.GetDirectoryName(typeof(CompileContext).Assembly.Location);
 
@@ -20,23 +20,25 @@ public class CompileContext : IDisposable
 
 #if NETCOREAPP
             var result = Microsoft.CodeAnalysis.CSharp.CSharpCompilation.Create(Path.GetFileName(filename))
-                .WithOptions(new Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                .WithOptions(
+                    new Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddReferences(
                     MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
                     MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location),
-                    MetadataReference.CreateFromFile(Assembly.Load("System.Runtime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a").Location),
+                    MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location),
                     MetadataReference.CreateFromFile(typeof(Establish).Assembly.Location),
-                    MetadataReference.CreateFromFile(typeof(Console).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(ShouldExtensionMethods).Assembly.Location))
                 .AddSyntaxTrees(Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(code))
-                .Emit(filename);
+                .Emit(filename, Path.ChangeExtension(filename, "pdb"));
 
             if (!result.Success)
                 throw new InvalidOperationException();
 #else
             var parameters = new CompilerParameters
             {
-                OutputAssembly = filename
+                OutputAssembly = filename,
+                IncludeDebugInformation = true,
+                TempFiles = new TempFileCollection("%temp%\\dir")
             };
 
             parameters.ReferencedAssemblies.AddRange(new []
@@ -52,6 +54,8 @@ public class CompileContext : IDisposable
 
             if (results.Errors.Count > 0)
                 throw new InvalidOperationException();
+
+            results.TempFiles.Delete();
 #endif
             return filename;
         }
@@ -59,6 +63,7 @@ public class CompileContext : IDisposable
         public void Dispose()
         {
             var files = Directory.GetFiles(_directory, "*.dll")
+                .Concat(Directory.GetFiles(_directory, "*.pdb"))
                 .Where(x => Guid.TryParse(Path.GetFileNameWithoutExtension(x), out _));
 
             foreach (var file in files)

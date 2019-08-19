@@ -90,7 +90,9 @@ namespace SampleSpecs
             1.ShouldEqual(2);
 
         It unhandled_exception = () =>
+        {
             throw new NotImplementedException();
+        };
 
         It not_implemented;
     }
