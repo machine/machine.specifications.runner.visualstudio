@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29209.62
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{405D88EB-F3ED-4B4C-B758-4EA98692F96F}"
 	ProjectSection(SolutionItems) = preProject
@@ -14,6 +14,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine.Specifications.Runner.VisualStudio", "src\Machine.Specifications.Runner.VisualStudio\Machine.Specifications.Runner.VisualStudio.csproj", "{53236A16-453D-49C2-880D-87523ECE381F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine.Specifications.Runner.VisualStudio.Specs", "src\Machine.Specifications.Runner.VisualStudio.Specs\Machine.Specifications.Runner.VisualStudio.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleSpecs", "src\SampleSpecs\SampleSpecs.csproj", "{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +31,10 @@ Global
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64E9F680-210D-4A69-BF87-13BA3E0FD3B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

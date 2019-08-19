@@ -1,4 +1,6 @@
-﻿using Machine.Fakes;
+﻿using System;
+using System.Linq;
+using Machine.Fakes;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -8,8 +10,9 @@ namespace Machine.VSTestAdapter.Specs.Execution
 {
     public class When_running_a_spec_that_passes : With_SingleSpecExecutionSetup
     {
-        Establish context = () =>
+        Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "should_pass");
+        };
 
         It should_tell_visual_studio_it_passed = () => {
             The<IFrameworkHandle>()

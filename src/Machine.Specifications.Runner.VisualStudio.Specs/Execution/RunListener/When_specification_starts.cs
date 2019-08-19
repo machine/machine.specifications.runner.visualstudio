@@ -10,6 +10,9 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 {
+    
+
+
     [Subject(typeof(VSProxyAssemblySpecificationRunListener))]
     public class When_specification_starts : WithFakes
     {

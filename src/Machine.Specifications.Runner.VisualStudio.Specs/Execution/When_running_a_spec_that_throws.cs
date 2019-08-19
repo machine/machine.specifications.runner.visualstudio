@@ -8,23 +8,21 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-    public class When_running_a_spec_that_throws : With_SingleSpecExecutionSetup
+      public class When_running_a_spec_that_throws : With_SingleSpecExecutionSetup
     {
-        Establish context = () =>
+        Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.StandardSpec", "unhandled_exception");
+        };
 
-        It should_tell_visual_studio_it_failed = () =>
-        {
+        It should_tell_visual_studio_it_failed = () => {
             The<IFrameworkHandle>()
-                .WasToldTo(handle =>
-                    handle.RecordEnd(
-                        Param<TestCase>.Matches(testCase =>
-                            testCase.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),
-                        Param<TestOutcome>.Matches(outcome => outcome == TestOutcome.Failed))
+                .WasToldTo(handle => 
+                    handle.RecordEnd(Param<TestCase>.Matches(testCase => testCase.ToVisualStudioTestIdentifier().Equals(SpecificationToRun)),
+                                     Param<TestOutcome>.Matches(outcome => outcome == TestOutcome.Failed))
                 ).OnlyOnce();
 
             The<IFrameworkHandle>()
-                .WasToldTo(handle =>
+                .WasToldTo(handle => 
                     handle.RecordResult(Param<TestResult>.Matches(result => result.Outcome == TestOutcome.Failed))
                 ).OnlyOnce();
         };

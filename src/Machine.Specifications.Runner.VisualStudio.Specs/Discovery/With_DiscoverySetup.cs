@@ -1,34 +1,26 @@
-﻿using System.Collections.Generic;
-using System.Reflection;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Specs.Fixtures;
 
 namespace Machine.VSTestAdapter.Specs.Discovery
 {
-    public abstract class With_DiscoverySetup<TDiscoverer>
-        where TDiscoverer : ISpecificationDiscoverer, new()
+
+    public abstract class With_DiscoverySetup<TDiscoverer> where TDiscoverer : ISpecificationDiscoverer, new()
     {
-        static string AssemblyPath;
-        static ISpecificationDiscoverer Discoverer;
-        static CompileContext compiler;
-        static Assembly assembly;
-
+        protected static string AssemblyPath;
         protected static IEnumerable<MSpecTestCase> Results;
+        protected static ISpecificationDiscoverer Discoverer;
 
-        Establish context = () =>
-        {
-            compiler = new CompileContext();
+        Establish context = () => {
             Discoverer = new TDiscoverer();
-
-            var assemblyPath = compiler.Compile(SampleFixture.Code);
-            assembly = Assembly.LoadFile(assemblyPath);
+            AssemblyPath = Path.Combine(Helper.GetTestDirectory(), "SampleSpecs.dll");
         };
 
-        Because of = () =>
+        Because of = () => {
             Results = Discoverer.DiscoverSpecs(AssemblyPath);
-
-        Cleanup after = () =>
-            compiler.Dispose();
+        };
     }
 }

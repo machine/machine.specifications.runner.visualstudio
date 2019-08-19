@@ -1,4 +1,9 @@
-﻿using Machine.Fakes;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Machine.Fakes;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Helpers;

@@ -10,6 +10,7 @@ namespace Machine.VSTestAdapter.Specs.Execution
 {
     public class When_running_a_spec_with_custom_act_assert_delegates_passes : With_SingleSpecExecutionSetup
     {
+
         Establish context = () => {
             SpecificationToRun = new VisualStudioTestIdentifier("SampleSpecs.CustomActAssertDelegateSpec", "should_have_the_same_hash_code");
         };

@@ -1,4 +1,6 @@
-﻿using Machine.Specifications;
+﻿using System;
+using System.Linq;
+using Machine.Specifications;
 using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter.Specs.Configuration
@@ -9,10 +11,13 @@ namespace Machine.VSTestAdapter.Specs.Configuration
         static Settings Settings;
         static string ConfigurationXml = "<RunSettings></RunSettings>";
 
-        Because of = () =>
+        Because of = () => {
             Settings = Settings.Parse(ConfigurationXml);
+        };
 
-        It should_default_to_DisplayFullTestName_off = () =>
+        It should_default_to_DisplayFullTestName_off = () => {
             Settings.DisableFullTestNameInOutput.ShouldBeFalse();
+        };
+        
     }
 }
