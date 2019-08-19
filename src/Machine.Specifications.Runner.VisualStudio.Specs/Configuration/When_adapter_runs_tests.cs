@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Machine.Fakes;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Configuration;
@@ -21,34 +20,36 @@ namespace Machine.VSTestAdapter.Specs.Configuration
   </MSpec>
 </RunSettings>";
 
-        static MSpecTestAdapter Adapter;
+        static MSpecTestAdapter adapter;
 
-        Establish establish = () => {
-            The<IRunSettings>().WhenToldTo(runSettings => runSettings.SettingsXml).Return(ConfigurationXml);
-            The<IRunContext>().WhenToldTo(context => context.RunSettings).Return(The<IRunSettings>());
+        Establish establish = () =>
+        {
+            The<IRunSettings>()
+                .WhenToldTo(runSettings => runSettings.SettingsXml)
+                .Return(ConfigurationXml);
 
-            Adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
+            The<IRunContext>()
+                .WhenToldTo(context => context.RunSettings)
+                .Return(The<IRunSettings>());
+
+            adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
         };
 
+        Because of = () =>
+            adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
 
-        Because of = () => {
-            Adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
-        };
+        It should_pick_up_DisableFullTestNameInIDE = () =>
+            The<ISpecificationExecutor>()
+                .WasToldTo(d => d.RunAssembly("dll",
+                    Param<Settings>.Matches(s => s.DisableFullTestNameInIDE),
+                    Param<Uri>.IsAnything,
+                    Param<IFrameworkHandle>.IsAnything));
 
-
-        It should_pick_up_DisableFullTestNameInIDE = () => {
-            The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
-                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInIDE == true),
-                                                                       Param<Uri>.IsAnything,
-                                                                       Param<IFrameworkHandle>.IsAnything));
-        };
-
-        It should_pick_up_DisableFullTestNameInOutput = () => {
-            The<ISpecificationExecutor>().WasToldTo(d => d.RunAssembly("dll",
-                                                                       Param<Settings>.Matches(s => s.DisableFullTestNameInOutput == true),
-                                                                       Param<Uri>.IsAnything,
-                                                                       Param<IFrameworkHandle>.IsAnything));
-        };
-        
+        It should_pick_up_DisableFullTestNameInOutput = () =>
+            The<ISpecificationExecutor>()
+                .WasToldTo(d => d.RunAssembly("dll",
+                    Param<Settings>.Matches(s => s.DisableFullTestNameInOutput),
+                    Param<Uri>.IsAnything,
+                    Param<IFrameworkHandle>.IsAnything));
     }
 }

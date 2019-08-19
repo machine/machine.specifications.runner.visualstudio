@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Machine.Fakes;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Discovery;
@@ -12,7 +8,6 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter.Specs
 {
-
     public class When_there_is_an_unhandled_error_during_test_discovery : WithFakes
     {
         static MSpecTestAdapter Adapter;
@@ -27,11 +22,9 @@ namespace Machine.VSTestAdapter.Specs
             Adapter = new MSpecTestAdapter(The<ISpecificationDiscoverer>(), An<ISpecificationExecutor>());
         };
 
-
         Because of = () => {
             Adapter.DiscoverTests(new[] { "bla" }, An<IDiscoveryContext>(), The<IMessageLogger>(), An<ITestCaseDiscoverySink>());
         };
-
 
         It should_send_an_error_notification_to_visual_studio = () => {
             The<IMessageLogger>()
@@ -39,6 +32,4 @@ namespace Machine.VSTestAdapter.Specs
                 .OnlyOnce();
         };
     }
-
-      
 }
