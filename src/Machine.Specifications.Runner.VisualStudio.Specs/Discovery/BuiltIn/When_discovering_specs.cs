@@ -6,7 +6,6 @@ using Machine.VSTestAdapter.Discovery.BuiltIn;
 
 namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
 {
-
     public class When_discovering_specs : With_DiscoverySetup<BuiltInSpecificationDiscoverer>
     {
         It should_find_spec = () => {

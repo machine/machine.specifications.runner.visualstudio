@@ -6,9 +6,6 @@ using Machine.VSTestAdapter.Discovery.BuiltIn;
 
 namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
 {
-
-      
-
     public class When_discovering_specs_using_behaviors : With_DiscoverySetup<BuiltInSpecificationDiscoverer>
     {
         It should_pick_up_the_behavior = () => {

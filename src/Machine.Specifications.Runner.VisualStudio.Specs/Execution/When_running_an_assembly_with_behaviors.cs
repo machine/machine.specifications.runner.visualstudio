@@ -8,7 +8,6 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Execution
 {
-
     public class When_running_an_assembly_with_behaviors : With_AssemblyExecutionSetup
     {
         static VisualStudioTestIdentifier SpecificationExpectedToRun;
