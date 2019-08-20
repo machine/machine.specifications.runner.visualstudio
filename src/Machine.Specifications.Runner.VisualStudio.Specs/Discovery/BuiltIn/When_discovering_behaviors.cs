@@ -6,9 +6,6 @@ using Machine.VSTestAdapter.Discovery.BuiltIn;
 
 namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
 {
-
-      
-
     public class When_discovering_specs_using_behaviors : With_DiscoverySetup<BuiltInSpecificationDiscoverer>
     {
         It should_pick_up_the_behavior = () => {
@@ -16,7 +13,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            discoveredSpec.LineNumber.ShouldEqual(10);
             discoveredSpec.CodeFilePath.EndsWith("BehaviorSample.cs", StringComparison.Ordinal);
         };
 

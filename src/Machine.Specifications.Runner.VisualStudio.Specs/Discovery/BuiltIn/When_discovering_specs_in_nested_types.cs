@@ -16,7 +16,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
 
             discoveredSpec.ContextDisplayName.ShouldEqual("Parent NestedSpec");
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            discoveredSpec.LineNumber.ShouldEqual(70);
             discoveredSpec.CodeFilePath.EndsWith("NestedSpecSample.cs", StringComparison.Ordinal);
         };
     }

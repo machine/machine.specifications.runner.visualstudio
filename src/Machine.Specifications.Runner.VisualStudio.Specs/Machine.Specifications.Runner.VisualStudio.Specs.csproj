@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net472</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -10,12 +10,13 @@
     <PackageReference Include="Machine.Specifications" Version="1.0.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="1.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.2.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" Condition="'$(TargetFramework)'=='netcoreapp2.1'" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" Condition="'$(TargetFramework)'=='net452'" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" Condition="'$(TargetFramework)'=='net472'" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Machine.Specifications.Runner.VisualStudio\Machine.Specifications.Runner.VisualStudio.csproj" />
-    <ProjectReference Include="..\SampleSpecs\SampleSpecs.csproj" />
   </ItemGroup>
+
 </Project>

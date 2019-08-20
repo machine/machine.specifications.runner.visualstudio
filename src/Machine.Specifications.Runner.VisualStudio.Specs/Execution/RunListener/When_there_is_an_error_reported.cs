@@ -14,7 +14,6 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter.Specs.Execution.RunListener
 {
-
     [Subject(typeof(VSProxyAssemblySpecificationRunListener))]
     public class When_there_is_an_error_reported : WithFakes
     {
