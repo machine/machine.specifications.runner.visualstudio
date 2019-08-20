@@ -1,12 +1,9 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis;
-using Microsoft.CSharp;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace Machine.VSTestAdapter.Specs
 {
@@ -18,45 +15,22 @@ namespace Machine.VSTestAdapter.Specs
         {
             var filename = Path.Combine(_directory, Guid.NewGuid() + ".dll");
 
-#if NETCOREAPP
-            var result = Microsoft.CodeAnalysis.CSharp.CSharpCompilation.Create(Path.GetFileName(filename))
+            var result = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(filename))
                 .WithOptions(
-                    new Microsoft.CodeAnalysis.CSharp.CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
+                    new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary))
                 .AddReferences(
                     MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
-                    MetadataReference.CreateFromFile(Assembly.Load("netstandard, Version=2.0.0.0").Location),
-                    MetadataReference.CreateFromFile(Assembly.Load("System.Runtime").Location),
+#if NETCOREAPP
+                    GetReference("System.Runtime"),
+#endif
                     MetadataReference.CreateFromFile(typeof(Establish).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(ShouldExtensionMethods).Assembly.Location))
-                .AddSyntaxTrees(Microsoft.CodeAnalysis.CSharp.CSharpSyntaxTree.ParseText(code))
+                .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code))
                 .Emit(filename, Path.ChangeExtension(filename, "pdb"));
 
             if (!result.Success)
                 throw new InvalidOperationException();
-#else
-            var parameters = new CompilerParameters
-            {
-                OutputAssembly = filename,
-                IncludeDebugInformation = true,
-                TempFiles = new TempFileCollection("%temp%\\dir")
-            };
-
-            parameters.ReferencedAssemblies.AddRange(new []
-            {
-                "Machine.Specifications.dll",
-                "Machine.Specifications.Should.dll"
-            });
-
-            var options = new Dictionary<string, string> {{"CompilerVersion", "v4.0"}};
-
-            var provider = new CSharpCodeProvider(options);
-            var results = provider.CompileAssemblyFromSource(parameters, code);
-
-            if (results.Errors.Count > 0)
-                throw new InvalidOperationException();
-
-            results.TempFiles.Delete();
-#endif
+     
             return filename;
         }
 
@@ -71,6 +45,20 @@ namespace Machine.VSTestAdapter.Specs
                 SafeDelete(file);
             }
         }
+
+#if NETCOREAPP
+        private MetadataReference GetReference(string name)
+        {
+            var references = AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")
+                .ToString()
+                .Split(Path.PathSeparator);
+
+            return references
+                .Where(x => Path.GetFileNameWithoutExtension(x) == name)
+                .Select(x => MetadataReference.CreateFromFile(x))
+                .First();
+        }
+#endif
 
         private void SafeDelete(string filename)
         {

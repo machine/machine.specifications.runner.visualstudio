@@ -14,7 +14,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            discoveredSpec.LineNumber.ShouldEqual(79);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
 
@@ -24,7 +24,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "StandardSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.LineNumber.ShouldEqual(20);
+            discoveredSpec.LineNumber.ShouldEqual(83);
             discoveredSpec.CodeFilePath.EndsWith("StandardSpec.cs", StringComparison.Ordinal);
         };
 

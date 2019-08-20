@@ -14,7 +14,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "CustomActAssertDelegateSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.LineNumber.ShouldEqual(31);
+            discoveredSpec.LineNumber.ShouldEqual(63);
             discoveredSpec.CodeFilePath.EndsWith("CustomActAssertDelegateSpec.cs", StringComparison.Ordinal);
         };
     }

@@ -13,7 +13,7 @@ namespace Machine.VSTestAdapter.Specs.Discovery.BuiltIn
                                                                           "BehaviorSampleSpec".Equals(x.ClassName, StringComparison.Ordinal));
             discoveredSpec.ShouldNotBeNull();
 
-            discoveredSpec.LineNumber.ShouldEqual(14);
+            discoveredSpec.LineNumber.ShouldEqual(10);
             discoveredSpec.CodeFilePath.EndsWith("BehaviorSample.cs", StringComparison.Ordinal);
         };
 
