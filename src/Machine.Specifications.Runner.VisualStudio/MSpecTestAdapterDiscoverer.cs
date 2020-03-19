@@ -1,54 +1,40 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Helpers;
-using Machine.VSTestAdapter.Discovery.BuiltIn;
-using Machine.VSTestAdapter.Execution;
-using Machine.VSTestAdapter.Configuration;
+#if !NETSTANDARD
 using System.IO;
+#endif
+using System.Linq;
+using Machine.VSTestAdapter.Configuration;
+using Machine.VSTestAdapter.Discovery;
+using Machine.VSTestAdapter.Discovery.BuiltIn;
+using Machine.VSTestAdapter.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter
 {
-    [FileExtension(".exe")]
-    [FileExtension(".dll")]
-    [ExtensionUri("executor://machine.vstestadapter")]
-    [DefaultExecutorUri("executor://machine.vstestadapter")]
-    public partial class MSpecTestAdapter : ITestDiscoverer
+    public class MSpecTestAdapterDiscoverer
     {
-        public const string ExecutorUri = "executor://machine.vstestadapter";
-        public const string VSObjectModelAssemblyName = "Microsoft.VisualStudio.TestPlatform.ObjectModel";
-        private static Uri uri = new Uri(ExecutorUri);
-
-        public MSpecTestAdapter()
-            : this(new BuiltInSpecificationDiscoverer(), new SpecificationExecutor())
-        {
-        }
-
         readonly ISpecificationDiscoverer discoverer;
-        readonly ISpecificationExecutor executor;
 
-        public MSpecTestAdapter(ISpecificationDiscoverer discoverer, ISpecificationExecutor executor)
+        public MSpecTestAdapterDiscoverer()
+            : this(new BuiltInSpecificationDiscoverer())
         {
-            this.executor = executor ?? throw new ArgumentNullException(nameof(executor));
-            this.discoverer = discoverer ?? throw new ArgumentNullException(nameof(discoverer));
         }
 
-        public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
+        public MSpecTestAdapterDiscoverer(ISpecificationDiscoverer discoverer)
         {
-            // indicate start of discovery
-            logger.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Discovering Specifications.");
-            int discoveredSpecCount = 0;
-            int sourcesWithSpecs = 0;
+            this.discoverer = discoverer;
+        }
 
-            Settings settings = GetSettings(discoveryContext);
-            
-            foreach (string assemblyPath in sources.Distinct())
+        public void DiscoverTests(IEnumerable<string> sources, Settings settings, IMessageLogger logger, Action<TestCase> discoverySinkAction)
+        {
+            logger.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Discovering Specifications.");
+            var discoveredSpecCount = 0;
+            var sourcesWithSpecs = 0;
+
+            var sourcesArray = sources.Distinct().ToArray();
+            foreach (var assemblyPath in sourcesArray)
             {
                 try
                 {
@@ -59,30 +45,25 @@ namespace Machine.VSTestAdapter
 
                     sourcesWithSpecs++;
 
-                    logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovering...looking in {0}", assemblyPath));
+                    logger.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Discovering...looking in {assemblyPath}");
 
-                    List<TestCase> specs = discoverer.DiscoverSpecs(assemblyPath)
-                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.uri))
+                    var specs = discoverer.DiscoverSpecs(assemblyPath)
+                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.Uri))
                         .ToList();
 
-                    foreach (TestCase discoveredTest in specs)
+                    foreach (var discoveredTest in specs)
                     {
                         discoveredSpecCount++;
-                        if (discoverySink != null)
-                        {
-                            discoverySink.SendTestCase(discoveredTest);
-                        }
+                        discoverySinkAction(discoveredTest);
                     }
                 }
                 catch (Exception discoverException)
                 {
-                    logger.SendMessage(TestMessageLevel.Error, string.Format("Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {0} - {1}", assemblyPath, discoverException.Message));
+                    logger.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {assemblyPath} - {discoverException.Message}");
                 }
             }
 
-            // indicate that we are finished discovering
-            logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned.", discoveredSpecCount, sources.Count(), sourcesWithSpecs));
+            logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned.", discoveredSpecCount, sourcesArray.Count(), sourcesWithSpecs));
         }
     }
-
 }

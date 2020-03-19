@@ -32,7 +32,7 @@ namespace Machine.VSTestAdapter.Specs.Configuration
                 .WhenToldTo(context => context.RunSettings)
                 .Return(The<IRunSettings>());
 
-            adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
+            adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
         };
 
         Because of = () =>

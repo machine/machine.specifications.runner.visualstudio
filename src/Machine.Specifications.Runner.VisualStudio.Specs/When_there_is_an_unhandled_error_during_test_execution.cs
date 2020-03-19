@@ -20,11 +20,11 @@ namespace Machine.VSTestAdapter.Specs
                     Param<Uri>.IsAnything, Param<IFrameworkHandle>.IsAnything))
                 .Throw(new InvalidOperationException());
 
-            Adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>());
+            Adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
         };
 
         Because of = () => { Adapter.RunTests(new[] {"bla"}, An<IRunContext>(), The<IFrameworkHandle>()); };
-        
+
         It should_send_an_error_notification_to_visual_studio = () =>
         {
             The<IFrameworkHandle>()
