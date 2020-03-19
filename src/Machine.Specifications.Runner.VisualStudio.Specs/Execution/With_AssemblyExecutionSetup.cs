@@ -11,21 +11,21 @@ namespace Machine.VSTestAdapter.Specs.Execution
 {
     public abstract class With_AssemblyExecutionSetup : WithFakes
     {
-        static ISpecificationExecutor Executor;
+        static MSpecTestAdapter Executor;
         static CompileContext compiler;
         static Assembly assembly;
 
         Establish context = () =>
         {
             compiler = new CompileContext();
-            Executor = new SpecificationExecutor();
+            Executor = new MSpecTestAdapter();
 
             var assemblyPath = compiler.Compile(SampleFixture.Code);
             assembly = Assembly.LoadFile(assemblyPath);
         };
 
         Because of = () =>
-            Executor.RunAssembly(assembly.Location, An<Settings>(), new Uri("bla://executor"), The<IFrameworkHandle>());
+            Executor.RunTests(new[] { assembly.Location }, An<IRunContext>(), The<IFrameworkHandle>());
 
         Cleanup after = () =>
             compiler.Dispose();

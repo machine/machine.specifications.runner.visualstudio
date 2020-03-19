@@ -4,6 +4,8 @@ using Machine.Specifications;
 using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Execution;
+using Machine.VSTestAdapter.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
 namespace Machine.VSTestAdapter.Specs.Configuration
@@ -20,7 +22,8 @@ namespace Machine.VSTestAdapter.Specs.Configuration
   </MSpec>
 </RunSettings>";
 
-        static MSpecTestAdapter adapter;
+        static MSpecTestAdapterExecutor adapter;
+        static MSpecTestAdapterDiscoverer discoverer;
 
         Establish establish = () =>
         {
@@ -32,24 +35,27 @@ namespace Machine.VSTestAdapter.Specs.Configuration
                 .WhenToldTo(context => context.RunSettings)
                 .Return(The<IRunSettings>());
 
-            adapter = new MSpecTestAdapter(An<ISpecificationDiscoverer>(), The<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
+            discoverer = new MSpecTestAdapterDiscoverer(An<ISpecificationDiscoverer>());
+            adapter = new MSpecTestAdapterExecutor(The<ISpecificationExecutor>(), discoverer, An<ISpecificationFilterProvider>());
         };
 
-        Because of = () =>
-            adapter.RunTests(new[] { "dll" }, The<IRunContext>(), An<IFrameworkHandle>());
+        Because of = () => adapter.RunTests(new[] { new TestCase("a", MSpecTestAdapter.Uri, "dll") }, The<IRunContext>(), An<IFrameworkHandle>());
 
         It should_pick_up_DisableFullTestNameInIDE = () =>
             The<ISpecificationExecutor>()
-                .WasToldTo(d => d.RunAssembly("dll",
+                .WasToldTo(d => d.RunAssemblySpecifications("dll",
+                    Param<VisualStudioTestIdentifier[]>.IsAnything,
                     Param<Settings>.Matches(s => s.DisableFullTestNameInIDE),
                     Param<Uri>.IsAnything,
                     Param<IFrameworkHandle>.IsAnything));
 
         It should_pick_up_DisableFullTestNameInOutput = () =>
             The<ISpecificationExecutor>()
-                .WasToldTo(d => d.RunAssembly("dll",
+                .WasToldTo(d => d.RunAssemblySpecifications("dll",
+                    Param<VisualStudioTestIdentifier[]>.IsAnything,
                     Param<Settings>.Matches(s => s.DisableFullTestNameInOutput),
                     Param<Uri>.IsAnything,
                     Param<IFrameworkHandle>.IsAnything));
+
     }
 }

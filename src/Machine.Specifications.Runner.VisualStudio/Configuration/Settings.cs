@@ -18,9 +18,17 @@ namespace Machine.VSTestAdapter.Configuration
             Settings config = new Settings();
 
             XElement mspecConfig = null;
-            try {
-                mspecConfig = XDocument.Parse(xml).XPathSelectElement("RunSettings/MSpec");
-            } catch { }
+            try
+            {
+                if(!string.IsNullOrEmpty(xml))
+                {
+                    mspecConfig = XDocument.Parse(xml).XPathSelectElement("RunSettings/MSpec");
+                }
+            }
+            catch
+            {
+                // ignored
+            }
 
             if (mspecConfig == null)
                 return config;

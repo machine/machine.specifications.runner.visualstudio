@@ -50,19 +50,24 @@ namespace Machine.VSTestAdapter.Execution
                 return null;
             });
 
+            if (filterExpression == null)
+            {
+                return testCases;
+            }
+
+            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filter property set '{filterExpression.TestCaseFilterValue}'");
+
             var filteredTests = testCases
-                .Where(testCase => filterExpression
-                    .MatchTestCase(testCase, propertyName =>
+                .Where(testCase => filterExpression.MatchTestCase(testCase, propertyName =>
                     {
                         var value = GetPropertyValue(propertyName, testCase);
-                        handle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter -Filter property '{propertyName}' for test '{testCase.Id}' returned '{value}'");
                         return value;
                     }));
 
             return filteredTests;
         }
 
-        object GetPropertyValue(string propertyName, TestCase testCase)
+        object GetPropertyValue(string propertyName, TestObject testCase)
         {
             if (testCaseProperties.TryGetValue(propertyName, out var testProperty))
             {
@@ -92,7 +97,7 @@ namespace Machine.VSTestAdapter.Execution
 
         static string[] TraitContains(TestObject testCase, string traitName)
         {
-            return testCase.Traits
+            return testCase?.Traits?
                 .Where(x => x.Name == traitName)
                 .Select(x => x.Value)
                 .ToArray();

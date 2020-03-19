@@ -25,8 +25,6 @@ namespace Machine.VSTestAdapter
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
-
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Source Specifications.");
             var testsToRun = new List<TestCase>();
             DiscoverTests(sources, runContext, frameworkHandle, testsToRun);
@@ -36,9 +34,8 @@ namespace Machine.VSTestAdapter
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
-
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Test Specifications.");
+            var totalSpecCount = 0;
             var executedSpecCount = 0;
             var settings = Settings.Parse(runContext.RunSettings?.SettingsXml);
             var currentAssembly = string.Empty;
@@ -48,24 +45,25 @@ namespace Machine.VSTestAdapter
                 var testCases = tests.ToArray();
                 foreach (var grouping in testCases.GroupBy(x => x.Source))
                 {
-                    currentAssembly = grouping.Key;
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing test cases in {currentAssembly}");
+                    totalSpecCount += grouping.Count();
+
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing test cases in {grouping.Key}");
 
                     var filteredTests = specificationFilterProvider.FilteredTests(grouping.AsEnumerable(), runContext, frameworkHandle);
 
                     var testsToRun = filteredTests
                         .Select(test => test.ToVisualStudioTestIdentifier())
-                        .ToList();
+                        .ToArray();
 
-                    executor.RunAssemblySpecifications(currentAssembly, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
-                    executedSpecCount += grouping.Count();
+                    executor.RunAssemblySpecifications(grouping.Key, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
+                    executedSpecCount += testsToRun.Length;
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Execution Complete - {executedSpecCount} specifications in {testCases.GroupBy(x => x.Source).Count()} assemblies.");
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Execution Complete - {executedSpecCount} of {totalSpecCount} specifications in {testCases.GroupBy(x => x.Source).Count()} assemblies.");
             }
             catch (Exception ex)
             {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {currentAssembly} - {ex.Message}");
+                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {currentAssembly} - {ex}");
             }
         }
 

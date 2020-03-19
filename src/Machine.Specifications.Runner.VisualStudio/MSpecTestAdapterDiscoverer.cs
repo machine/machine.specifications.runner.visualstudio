@@ -9,6 +9,7 @@ using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
 using Machine.VSTestAdapter.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter
@@ -25,6 +26,12 @@ namespace Machine.VSTestAdapter
         public MSpecTestAdapterDiscoverer(ISpecificationDiscoverer discoverer)
         {
             this.discoverer = discoverer;
+        }
+
+        public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
+        {
+            Settings settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
+            DiscoverTests(sources, settings, logger, discoverySink.SendTestCase);
         }
 
         public void DiscoverTests(IEnumerable<string> sources, Settings settings, IMessageLogger logger, Action<TestCase> discoverySinkAction)
@@ -59,7 +66,7 @@ namespace Machine.VSTestAdapter
                 }
                 catch (Exception discoverException)
                 {
-                    logger.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {assemblyPath} - {discoverException.Message}");
+                    logger.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {assemblyPath} - {discoverException}");
                 }
             }
 

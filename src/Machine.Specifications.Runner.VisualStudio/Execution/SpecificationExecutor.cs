@@ -11,26 +11,8 @@ namespace Machine.VSTestAdapter.Execution
 {
     public class SpecificationExecutor : ISpecificationExecutor
     {
-        public void RunAssembly(string source, Settings settings, Uri executorUri, IFrameworkHandle frameworkHandle)
-        {
-            source = Path.GetFullPath(source);
-
-#if !NETSTANDARD
-            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(source)) {
-                TestExecutor executor = scope.CreateInstance();
-#else
-                TestExecutor executor = new TestExecutor();
-#endif
-
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(source, frameworkHandle, executorUri, settings);
-                executor.RunAllTestsInAssembly(source, listener);
-#if !NETSTANDARD
-           }
-#endif
-        }
-
         public void RunAssemblySpecifications(string assemblyPath,
-                                              IEnumerable<VisualStudioTestIdentifier> specifications,
+                                              VisualStudioTestIdentifier[] specifications,
                                               Settings settings,
                                               Uri executorUri,
                                               IFrameworkHandle frameworkHandle)

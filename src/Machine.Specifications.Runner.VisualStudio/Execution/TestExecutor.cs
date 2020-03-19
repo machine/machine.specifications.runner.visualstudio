@@ -22,18 +22,6 @@ namespace Machine.VSTestAdapter.Execution
         }
 #endif
 
-        public TestExecutor()
-        {
-        }
-
-        public void RunAllTestsInAssembly(string pathToAssembly, ISpecificationRunListener specificationRunListener)
-        {
-            Assembly assemblyToRun = AssemblyHelper.Load(pathToAssembly);
-
-            DefaultRunner mspecRunner = CreateRunner(assemblyToRun, specificationRunListener);
-            mspecRunner.RunAssembly(assemblyToRun);
-        }
-
         private DefaultRunner CreateRunner(Assembly assembly,ISpecificationRunListener specificationRunListener)
         {
             var listener = new AggregateRunListener(new[] {
@@ -48,7 +36,7 @@ namespace Machine.VSTestAdapter.Execution
         {
             DefaultRunner mspecRunner = null;
             Assembly assemblyToRun = null;
-       
+
             try
             {
                 assemblyToRun = AssemblyHelper.Load(pathToAssembly);

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Machine.VSTestAdapter.Configuration;
 using Machine.VSTestAdapter.Discovery;
 using Machine.VSTestAdapter.Discovery.BuiltIn;
 using Machine.VSTestAdapter.Execution;
@@ -19,8 +18,8 @@ namespace Machine.VSTestAdapter
         const string ExecutorUri = "executor://machine.vstestadapter";
         public static readonly Uri Uri = new Uri(ExecutorUri);
 
-        readonly MSpecTestAdapterDiscoverer testDiscoverer;
-        readonly MSpecTestAdapterExecutor mSpecTestAdapterExecutor;
+        readonly MSpecTestAdapterDiscoverer testAdapterDiscoverer;
+        readonly MSpecTestAdapterExecutor testAdapterExecutor;
 
         public MSpecTestAdapter()
             : this(new BuiltInSpecificationDiscoverer(), new SpecificationExecutor(), new SpecificationFilterProvider())
@@ -29,24 +28,26 @@ namespace Machine.VSTestAdapter
 
         public MSpecTestAdapter(ISpecificationDiscoverer discoverer, ISpecificationExecutor executor, ISpecificationFilterProvider specificationFilterProvider)
         {
-            testDiscoverer = new MSpecTestAdapterDiscoverer(discoverer);
-            mSpecTestAdapterExecutor = new MSpecTestAdapterExecutor(executor, testDiscoverer, specificationFilterProvider);
+            testAdapterDiscoverer = new MSpecTestAdapterDiscoverer(discoverer);
+            testAdapterExecutor = new MSpecTestAdapterExecutor(executor, testAdapterDiscoverer, specificationFilterProvider);
         }
 
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
-            Settings settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
-            testDiscoverer.DiscoverTests(sources, settings, logger, discoverySink.SendTestCase);
+            //Debugger.Launch();
+            testAdapterDiscoverer.DiscoverTests(sources, discoveryContext, logger, discoverySink);
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            mSpecTestAdapterExecutor.RunTests(tests, runContext, frameworkHandle);
+            //Debugger.Launch();
+            testAdapterExecutor.RunTests(tests, runContext, frameworkHandle);
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            mSpecTestAdapterExecutor.RunTests(sources, runContext, frameworkHandle);
+            //Debugger.Launch();
+            testAdapterExecutor.RunTests(sources, runContext, frameworkHandle);
         }
 
         public void Cancel()
