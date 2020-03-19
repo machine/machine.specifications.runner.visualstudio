@@ -12,9 +12,9 @@ namespace Machine.VSTestAdapter.Execution
     public class SpecificationExecutor : ISpecificationExecutor
     {
         public void RunAssemblySpecifications(string assemblyPath,
-                                              VisualStudioTestIdentifier[] specifications,
+                                              IEnumerable<VisualStudioTestIdentifier> specifications,
                                               Settings settings,
-                                              Uri executorUri,
+                                              Uri adapterUri,
                                               IFrameworkHandle frameworkHandle)
         {
             assemblyPath = Path.GetFullPath(assemblyPath);
@@ -25,7 +25,7 @@ namespace Machine.VSTestAdapter.Execution
 #else
                 TestExecutor executor = new TestExecutor();
 #endif
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, executorUri, settings);
+                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, adapterUri, settings);
 
                 executor.RunTestsInAssembly(assemblyPath, specifications, listener);
 #if !NETSTANDARD
