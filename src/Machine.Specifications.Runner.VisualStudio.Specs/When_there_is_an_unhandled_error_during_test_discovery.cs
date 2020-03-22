@@ -19,7 +19,7 @@ namespace Machine.VSTestAdapter.Specs
                     throw new InvalidOperationException();
                 });
 
-            Adapter = new MSpecTestAdapter(The<ISpecificationDiscoverer>(), An<ISpecificationExecutor>());
+            Adapter = new MSpecTestAdapter(The<ISpecificationDiscoverer>(), An<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
         };
 
         Because of = () => {

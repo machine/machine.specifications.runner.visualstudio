@@ -4,92 +4,73 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Diagnostics;
-using System.IO;
 using Machine.VSTestAdapter.Execution;
 using Machine.VSTestAdapter.Helpers;
 using Machine.VSTestAdapter.Configuration;
 
 namespace Machine.VSTestAdapter
 {
-    public partial class MSpecTestAdapter : ITestExecutor
+    public class MSpecTestAdapterExecutor
     {
-        public void Cancel()
+        readonly ISpecificationExecutor executor;
+        readonly MSpecTestAdapterDiscoverer discover;
+        readonly ISpecificationFilterProvider specificationFilterProvider;
+
+        public MSpecTestAdapterExecutor(ISpecificationExecutor executor, MSpecTestAdapterDiscoverer discover, ISpecificationFilterProvider specificationFilterProvider)
         {
-            // Not supported
+            this.executor = executor;
+            this.discover = discover;
+            this.specificationFilterProvider = specificationFilterProvider;
         }
 
         public void RunTests(IEnumerable<string> sources, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
-
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
-
-            Settings settings = GetSettings(runContext);
-
-            foreach (string currentAsssembly in sources.Distinct())
-            {
-                try
-                {
-#if !NETSTANDARD
-                    if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(currentAsssembly)), "Machine.Specifications.dll")))
-                    {
-                        frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine.Specifications.dll not found for {0}", currentAsssembly));
-                        continue;
-                    }
-#endif
-
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
-
-                    this.executor.RunAssembly(currentAsssembly, settings, uri, frameworkHandle);
-                }
-                catch (Exception ex)
-                {
-                    frameworkHandle.SendMessage(TestMessageLevel.Error, String.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
-                }
-            }
-
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Complete on {0} assemblies ", sources.Count()));
-            
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Source Specifications.");
+            var testsToRun = new List<TestCase>();
+            DiscoverTests(sources, runContext, frameworkHandle, testsToRun);
+            RunTests(testsToRun, runContext, frameworkHandle);
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Source Specifications Complete.");
         }
 
         public void RunTests(IEnumerable<TestCase> tests, IRunContext runContext, IFrameworkHandle frameworkHandle)
         {
-            //Debugger.Launch();
+            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Test Specifications.");
+            var totalSpecCount = 0;
+            var executedSpecCount = 0;
+            var settings = Settings.Parse(runContext.RunSettings?.SettingsXml);
+            var currentAssembly = string.Empty;
 
-            frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Specifications.");
-
-            int executedSpecCount = 0;
-
-            Settings settings = GetSettings(runContext);
-
-            string currentAsssembly = string.Empty;
             try
             {
+                var testCases = tests.ToArray();
+                foreach (var grouping in testCases.GroupBy(x => x.Source))
+                {
+                    totalSpecCount += grouping.Count();
 
-                foreach (IGrouping<string, TestCase> grouping in tests.GroupBy(x => x.Source)) {
-                    currentAsssembly = grouping.Key;
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Executing tests in {0}", currentAsssembly));
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing test cases in {grouping.Key}");
 
-                    List<VisualStudioTestIdentifier> testsToRun = grouping.Select(test => test.ToVisualStudioTestIdentifier()).ToList();
+                    var filteredTests = specificationFilterProvider.FilteredTests(grouping.AsEnumerable(), runContext, frameworkHandle);
 
-                    this.executor.RunAssemblySpecifications(currentAsssembly, testsToRun, settings, uri, frameworkHandle);
-                    executedSpecCount += grouping.Count();
+                    var testsToRun = filteredTests
+                        .Select(test => test.ToVisualStudioTestIdentifier())
+                        .ToArray();
+
+                    executor.RunAssemblySpecifications(grouping.Key, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
+                    executedSpecCount += testsToRun.Length;
                 }
 
-                frameworkHandle.SendMessage(TestMessageLevel.Informational, String.Format("Machine Specifications Visual Studio Test Adapter - Execution Complete - {0} specifications in {1} assemblies.", executedSpecCount, tests.GroupBy(x => x.Source).Count()));
-            } catch (Exception ex)
-            {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, string.Format("Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {0} - {1}", currentAsssembly, ex.Message));
+                frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Execution Complete - {executedSpecCount} of {totalSpecCount} specifications in {testCases.GroupBy(x => x.Source).Count()} assemblies.");
             }
-            finally
+            catch (Exception ex)
             {
+                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {currentAssembly} - {ex}");
             }
         }
 
-        private static Settings GetSettings(IDiscoveryContext runContext)
+        void DiscoverTests(IEnumerable<string> sources, IRunContext discoveryContext, IMessageLogger logger, List<TestCase> testsToRun)
         {
-            return Settings.Parse(runContext?.RunSettings?.SettingsXml);
+            Settings settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
+            discover.DiscoverTests(sources, settings, logger, testsToRun.Add);
         }
     }
 }
