@@ -15,6 +15,13 @@ namespace Machine.VSTestAdapter.Execution
 #endif
                                                             ISpecificationRunListener
     {
+#if !NETSTANDARD
+        [System.Security.SecurityCritical]
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+#endif
         private readonly IFrameworkHandle frameworkHandle;
         private readonly string assemblyPath;
         private readonly Uri executorUri;

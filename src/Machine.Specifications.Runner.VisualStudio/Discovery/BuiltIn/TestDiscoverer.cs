@@ -14,7 +14,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                                 : MarshalByRefObject
 #endif
     {
-
+#if !NETSTANDARD
+        [System.Security.SecurityCritical]
+        public override object InitializeLifetimeService()
+        {
+            return null;
+        }
+#endif
         private readonly PropertyInfo behaviorProperty = typeof(BehaviorSpecification).GetProperty("BehaviorFieldInfo");
 
         public IEnumerable<MSpecTestCase> DiscoverTests(string assemblyPath)
@@ -48,7 +54,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.GetGenericTypeDefinition().FullName;
                 else
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.FullName;
-                    
+
                 SourceCodeLocationInfo locationInfo = locationFinder.GetFieldLocation(fieldDeclaringType, spec.FieldInfo.Name);
                 if (locationInfo != null)
                 {
@@ -89,13 +95,6 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
 
             return displayName;
         }
-
-#if !NETSTANDARD
-        public override object InitializeLifetimeService()
-        {
-            return null;
-        }
-#endif
     }
 
 }

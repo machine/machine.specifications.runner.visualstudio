@@ -14,8 +14,8 @@ namespace Machine.VSTestAdapter.Execution
         : MarshalByRefObject
 #endif
     {
-
 #if !NETSTANDARD
+        [System.Security.SecurityCritical]
         public override object InitializeLifetimeService()
         {
             return null;
@@ -59,8 +59,16 @@ namespace Machine.VSTestAdapter.Execution
             }
             finally
             {
-                if (mspecRunner != null && assemblyToRun != null)
-                    mspecRunner.EndRun(assemblyToRun);
+                try
+                {
+                    if (mspecRunner != null && assemblyToRun != null)
+                        mspecRunner.EndRun(assemblyToRun);
+                }
+                catch (Exception exception)
+                {
+                    // TODO Logging
+                    Console.WriteLine(exception);
+                }
             }
         }
     }
