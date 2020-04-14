@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Machine.Specifications.Model;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -34,9 +35,9 @@ namespace Machine.VSTestAdapter.Execution
                 .ToArray();
         }
 
-
         public IEnumerable<TestCase> FilteredTests(IEnumerable<TestCase> testCases, IRunContext runContext, IFrameworkHandle handle)
         {
+            var sw = Stopwatch.StartNew();
             var filterExpression = runContext.GetTestCaseFilter(supportedProperties, propertyName =>
             {
                 if (testCaseProperties.TryGetValue(propertyName, out var testProperty))
@@ -50,12 +51,12 @@ namespace Machine.VSTestAdapter.Execution
                 return null;
             });
 
+            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filter property set '{filterExpression?.TestCaseFilterValue}' ({sw.Elapsed})");
+
             if (filterExpression == null)
             {
                 return testCases;
             }
-
-            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filter property set '{filterExpression.TestCaseFilterValue}'");
 
             var filteredTests = testCases
                 .Where(testCase => filterExpression.MatchTestCase(testCase, propertyName =>
@@ -63,6 +64,9 @@ namespace Machine.VSTestAdapter.Execution
                         var value = GetPropertyValue(propertyName, testCase);
                         return value;
                     }));
+
+            sw.Stop();
+            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filtering done ({sw.Elapsed})");
 
             return filteredTests;
         }

@@ -45,15 +45,16 @@ namespace Machine.VSTestAdapter
                 var testCases = tests.ToArray();
                 foreach (var grouping in testCases.GroupBy(x => x.Source))
                 {
+                    currentAssembly = grouping.Key;
                     totalSpecCount += grouping.Count();
-
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing test cases in {grouping.Key}");
 
                     var filteredTests = specificationFilterProvider.FilteredTests(grouping.AsEnumerable(), runContext, frameworkHandle);
 
                     var testsToRun = filteredTests
                         .Select(test => test.ToVisualStudioTestIdentifier())
                         .ToArray();
+
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing {testsToRun.Length} tests in '{currentAssembly}'");
 
                     executor.RunAssemblySpecifications(grouping.Key, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
                     executedSpecCount += testsToRun.Length;
@@ -63,7 +64,7 @@ namespace Machine.VSTestAdapter
             }
             catch (Exception ex)
             {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly {currentAssembly} - {ex}");
+                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly '{currentAssembly}' - {ex}");
             }
         }
 
