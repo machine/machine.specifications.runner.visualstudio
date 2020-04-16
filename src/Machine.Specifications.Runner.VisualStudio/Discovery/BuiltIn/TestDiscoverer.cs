@@ -8,7 +8,6 @@ using Machine.VSTestAdapter.Helpers;
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
-
     public class TestDiscoverer
 #if !NETSTANDARD
                                 : MarshalByRefObject

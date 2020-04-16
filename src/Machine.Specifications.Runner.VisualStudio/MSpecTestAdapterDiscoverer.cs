@@ -66,11 +66,11 @@ namespace Machine.VSTestAdapter
                 }
                 catch (Exception discoverException)
                 {
-                    logger.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {assemblyPath} - {discoverException}");
+                    logger.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while discovering specifications in assembly {assemblyPath}." + Environment.NewLine + discoverException);
                 }
             }
 
-            logger.SendMessage(TestMessageLevel.Informational, string.Format("Machine Specifications Visual Studio Test Adapter - Discovery Complete - {0} specifications in {2} of {1} assemblies scanned.", discoveredSpecCount, sourcesArray.Count(), sourcesWithSpecs));
+            logger.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Discovery Complete - {discoveredSpecCount} specifications in {sourcesWithSpecs} of {sourcesArray.Length} assemblies scanned.");
         }
     }
 }

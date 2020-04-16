@@ -6,6 +6,8 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter.Execution
 {
@@ -22,7 +24,7 @@ namespace Machine.VSTestAdapter.Execution
         }
 #endif
 
-        private DefaultRunner CreateRunner(Assembly assembly,ISpecificationRunListener specificationRunListener)
+        private DefaultRunner CreateRunner(Assembly assembly, ISpecificationRunListener specificationRunListener)
         {
             var listener = new AggregateRunListener(new[] {
                 specificationRunListener,
@@ -32,7 +34,7 @@ namespace Machine.VSTestAdapter.Execution
             return new DefaultRunner(listener, RunOptions.Default);
         }
 
-        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener)
+        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener, IFrameworkHandle frameworkHandle)
         {
             DefaultRunner mspecRunner = null;
             Assembly assemblyToRun = null;
@@ -66,8 +68,7 @@ namespace Machine.VSTestAdapter.Execution
                 }
                 catch (Exception exception)
                 {
-                    // TODO Logging
-                    Console.WriteLine(exception);
+                    frameworkHandle?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
                 }
             }
         }

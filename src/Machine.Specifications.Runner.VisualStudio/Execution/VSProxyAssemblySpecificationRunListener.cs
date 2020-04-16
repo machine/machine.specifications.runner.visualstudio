@@ -55,7 +55,7 @@ namespace Machine.VSTestAdapter.Execution
                 this.currentRunStats = null;
             }
 
-            this.frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception.ToString());
+            this.frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception);
         }
 
         public void OnSpecificationStart(SpecificationInfo specification)
@@ -122,13 +122,13 @@ namespace Machine.VSTestAdapter.Execution
                 DisplayName = testCase.DisplayName
             };
 
-            if (result.Exception != null) 
+            if (result.Exception != null)
             {
                 testResult.ErrorMessage = result.Exception.Message;
                 testResult.ErrorStackTrace = result.Exception.ToString();
             }
 
-            if (runStats != null) 
+            if (runStats != null)
             {
                 testResult.StartTime = runStats.Start;
                 testResult.EndTime = runStats.End;

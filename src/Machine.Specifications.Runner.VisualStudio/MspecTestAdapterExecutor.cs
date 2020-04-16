@@ -54,7 +54,7 @@ namespace Machine.VSTestAdapter
                         .Select(test => test.ToVisualStudioTestIdentifier())
                         .ToArray();
 
-                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing {testsToRun.Length} tests in '{currentAssembly}'");
+                    frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing {testsToRun.Length} tests in '{currentAssembly}'.");
 
                     executor.RunAssemblySpecifications(grouping.Key, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
                     executedSpecCount += testsToRun.Length;
@@ -62,9 +62,9 @@ namespace Machine.VSTestAdapter
 
                 frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Execution Complete - {executedSpecCount} of {totalSpecCount} specifications in {testCases.GroupBy(x => x.Source).Count()} assemblies.");
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly '{currentAssembly}' - {ex}");
+                frameworkHandle.SendMessage(TestMessageLevel.Error, $"Machine Specifications Visual Studio Test Adapter - Error while executing specifications in assembly '{currentAssembly}'." + Environment.NewLine + exception);
             }
         }
 
