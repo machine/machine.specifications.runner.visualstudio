@@ -13,7 +13,7 @@ namespace Machine.VSTestAdapter.Execution
 #if !NETSTANDARD
                                                             MarshalByRefObject,
 #endif
-                                                            ISpecificationRunListener
+        ISpecificationRunListener, IFrameworkLogger
     {
 #if !NETSTANDARD
         [System.Security.SecurityCritical]
@@ -30,7 +30,8 @@ namespace Machine.VSTestAdapter.Execution
         private RunStats currentRunStats;
         readonly Settings settings;
 
-        public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri, Settings settings)
+        public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle,
+            Uri executorUri, Settings settings)
         {
             if (settings == null)
                 throw new ArgumentNullException(nameof(settings));
@@ -55,7 +56,9 @@ namespace Machine.VSTestAdapter.Execution
                 this.currentRunStats = null;
             }
 
-            this.frameworkHandle.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." + Environment.NewLine + exception);
+            this.frameworkHandle.SendMessage(TestMessageLevel.Error,
+                "Machine Specifications Visual Studio Test Adapter - Fatal error while executing test." +
+                Environment.NewLine + exception);
         }
 
         public void OnSpecificationStart(SpecificationInfo specification)
@@ -87,13 +90,17 @@ namespace Machine.VSTestAdapter.Execution
         }
 
 
-#region Mapping
+        #region Mapping
+
         private TestCase ConvertSpecificationToTestCase(SpecificationInfo specification, Settings settings)
         {
             VisualStudioTestIdentifier vsTestId = specification.ToVisualStudioTestIdentifier(currentContext);
 
-            return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath) {
-                DisplayName = settings.DisableFullTestNameInOutput ? specification.Name : $"{this.currentContext?.TypeName}.{specification.FieldName}",
+            return new TestCase(vsTestId.FullyQualifiedName, this.executorUri, this.assemblyPath)
+            {
+                DisplayName = settings.DisableFullTestNameInOutput
+                    ? specification.Name
+                    : $"{this.currentContext?.TypeName}.{specification.FieldName}",
             };
         }
 
@@ -116,7 +123,8 @@ namespace Machine.VSTestAdapter.Execution
 
         private static TestResult ConverResultToTestResult(TestCase testCase, Result result, RunStats runStats)
         {
-            TestResult testResult = new TestResult(testCase) {
+            TestResult testResult = new TestResult(testCase)
+            {
                 ComputerName = Environment.MachineName,
                 Outcome = MapSpecificationResultToTestOutcome(result),
                 DisplayName = testCase.DisplayName
@@ -138,10 +146,11 @@ namespace Machine.VSTestAdapter.Execution
             return testResult;
         }
 
-#endregion
+        #endregion
 
 
-#region Stubs
+        #region Stubs
+
         public void OnAssemblyEnd(AssemblyInfo assembly)
         {
         }
@@ -157,6 +166,12 @@ namespace Machine.VSTestAdapter.Execution
         public void OnRunStart()
         {
         }
-#endregion
+
+        #endregion
+
+        public void SendMessage(TestMessageLevel level, string message)
+        {
+            frameworkHandle?.SendMessage(level, message);
+        }
     }
 }

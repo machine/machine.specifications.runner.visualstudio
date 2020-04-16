@@ -25,7 +25,7 @@ namespace Machine.VSTestAdapter.Execution
 #endif
                 VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, adapterUri, settings);
 
-                executor.RunTestsInAssembly(assemblyPath, specifications, listener, frameworkHandle);
+                executor.RunTestsInAssembly(assemblyPath, specifications, listener);
 #if !NETSTANDARD
             }
 #endif

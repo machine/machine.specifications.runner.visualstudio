@@ -34,7 +34,7 @@ namespace Machine.VSTestAdapter.Execution
             return new DefaultRunner(listener, RunOptions.Default);
         }
 
-        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener, IFrameworkHandle frameworkHandle)
+        public void RunTestsInAssembly(string pathToAssembly, IEnumerable<VisualStudioTestIdentifier> specsToRun, ISpecificationRunListener specificationRunListener)
         {
             DefaultRunner mspecRunner = null;
             Assembly assemblyToRun = null;
@@ -70,7 +70,8 @@ namespace Machine.VSTestAdapter.Execution
                 {
                     try
                     {
-                        frameworkHandle?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
+                        var frameworkLogger = specificationRunListener as IFrameworkLogger;
+                        frameworkLogger?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
                     }
                     catch
                     {
