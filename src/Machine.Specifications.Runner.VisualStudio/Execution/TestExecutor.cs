@@ -68,7 +68,14 @@ namespace Machine.VSTestAdapter.Execution
                 }
                 catch (Exception exception)
                 {
-                    frameworkHandle?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
+                    try
+                    {
+                        frameworkHandle?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
                 }
             }
         }
