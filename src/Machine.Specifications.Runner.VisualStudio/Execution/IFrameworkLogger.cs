@@ -4,6 +4,6 @@ namespace Machine.VSTestAdapter.Execution
 {
     public interface IFrameworkLogger
     {
-        void SendErrorMessage(string machineSpecificationsVisualStudioTestAdapterErrorEndingTestRun, Exception exception);
+        void SendErrorMessage(string message, Exception exception);
     }
 }
