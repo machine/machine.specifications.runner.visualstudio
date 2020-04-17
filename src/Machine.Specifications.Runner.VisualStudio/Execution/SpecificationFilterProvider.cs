@@ -34,7 +34,6 @@ namespace Machine.VSTestAdapter.Execution
                 .ToArray();
         }
 
-
         public IEnumerable<TestCase> FilteredTests(IEnumerable<TestCase> testCases, IRunContext runContext, IFrameworkHandle handle)
         {
             var filterExpression = runContext.GetTestCaseFilter(supportedProperties, propertyName =>
@@ -50,12 +49,12 @@ namespace Machine.VSTestAdapter.Execution
                 return null;
             });
 
+            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filter property set '{filterExpression?.TestCaseFilterValue}'");
+
             if (filterExpression == null)
             {
                 return testCases;
             }
-
-            handle?.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Filter property set '{filterExpression.TestCaseFilterValue}'");
 
             var filteredTests = testCases
                 .Where(testCase => filterExpression.MatchTestCase(testCase, propertyName =>
