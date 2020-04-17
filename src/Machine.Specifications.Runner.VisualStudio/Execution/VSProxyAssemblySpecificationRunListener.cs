@@ -169,9 +169,9 @@ namespace Machine.VSTestAdapter.Execution
 
         #endregion
 
-        public void SendMessage(TestMessageLevel level, string message)
+        public void SendErrorMessage(string message, Exception exception)
         {
-            frameworkHandle?.SendMessage(level, message);
+            frameworkHandle?.SendMessage(TestMessageLevel.Error, message + Environment.NewLine + exception);
         }
     }
 }
