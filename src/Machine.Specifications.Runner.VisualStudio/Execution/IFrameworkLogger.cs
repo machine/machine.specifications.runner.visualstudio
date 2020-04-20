@@ -1,9 +1,9 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+﻿using System;
 
 namespace Machine.VSTestAdapter.Execution
 {
     public interface IFrameworkLogger
     {
-        void SendMessage(TestMessageLevel level, string message);
+        void SendErrorMessage(string message, Exception exception);
     }
 }

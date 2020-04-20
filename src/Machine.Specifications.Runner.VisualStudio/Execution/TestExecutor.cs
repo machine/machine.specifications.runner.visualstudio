@@ -6,8 +6,6 @@ using System.Linq;
 using System.Reflection;
 using Machine.Specifications;
 using Machine.VSTestAdapter.Helpers;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.VSTestAdapter.Execution
 {
@@ -71,7 +69,7 @@ namespace Machine.VSTestAdapter.Execution
                     try
                     {
                         var frameworkLogger = specificationRunListener as IFrameworkLogger;
-                        frameworkLogger?.SendMessage(TestMessageLevel.Error, "Machine Specifications Visual Studio Test Adapter - Error Ending Test Run." + Environment.NewLine + exception);
+                        frameworkLogger?.SendErrorMessage("Machine Specifications Visual Studio Test Adapter - Error Ending Test Run.", exception);
                     }
                     catch
                     {
