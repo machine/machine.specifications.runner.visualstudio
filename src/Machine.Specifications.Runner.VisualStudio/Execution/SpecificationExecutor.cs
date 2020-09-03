@@ -1,9 +1,7 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using Machine.VSTestAdapter.Helpers;
 using Machine.VSTestAdapter.Configuration;
 
@@ -29,7 +27,7 @@ namespace Machine.VSTestAdapter.Execution
 
                 executor.RunTestsInAssembly(assemblyPath, specifications, listener);
 #if !NETSTANDARD
-           }
+            }
 #endif
         }
     }

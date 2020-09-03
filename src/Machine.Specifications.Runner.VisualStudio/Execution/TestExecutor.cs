@@ -14,15 +14,15 @@ namespace Machine.VSTestAdapter.Execution
         : MarshalByRefObject
 #endif
     {
-
 #if !NETSTANDARD
+        [System.Security.SecurityCritical]
         public override object InitializeLifetimeService()
         {
             return null;
         }
 #endif
 
-        private DefaultRunner CreateRunner(Assembly assembly,ISpecificationRunListener specificationRunListener)
+        private DefaultRunner CreateRunner(Assembly assembly, ISpecificationRunListener specificationRunListener)
         {
             var listener = new AggregateRunListener(new[] {
                 specificationRunListener,
@@ -59,8 +59,23 @@ namespace Machine.VSTestAdapter.Execution
             }
             finally
             {
-                if (mspecRunner != null && assemblyToRun != null)
-                    mspecRunner.EndRun(assemblyToRun);
+                try
+                {
+                    if (mspecRunner != null && assemblyToRun != null)
+                        mspecRunner.EndRun(assemblyToRun);
+                }
+                catch (Exception exception)
+                {
+                    try
+                    {
+                        var frameworkLogger = specificationRunListener as IFrameworkLogger;
+                        frameworkLogger?.SendErrorMessage("Machine Specifications Visual Studio Test Adapter - Error Ending Test Run.", exception);
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
             }
         }
     }
