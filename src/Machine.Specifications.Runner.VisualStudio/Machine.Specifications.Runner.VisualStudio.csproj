@@ -9,7 +9,7 @@
     <Authors>Machine Specifications</Authors>
     <PackageTags>mspec;unit;testing;context;specification;bdd;tdd;tfs;visualstudio;vsts;vso</PackageTags>
     <PackageReleaseNotes>https://github.com/machine/machine.specifications.runner.visualstudio/releases</PackageReleaseNotes>
-    <PackageIconUrl>http://github.com/machine/media/raw/master/Machine.VSTestAdapter-64x64.png</PackageIconUrl>
+    <PackageIcon>Machine.png</PackageIcon>
     <PackageProjectUrl>https://github.com/machine/machine.specifications.runner.visualstudio</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
@@ -30,6 +30,10 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net452'">
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Resources\Machine.png" Pack="true" PackagePath="\"/>
   </ItemGroup>
 
   <PropertyGroup>

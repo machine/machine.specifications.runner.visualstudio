@@ -5,9 +5,12 @@ VisualStudioVersion = 16.0.29209.62
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{405D88EB-F3ED-4B4C-B758-4EA98692F96F}"
 	ProjectSection(SolutionItems) = preProject
-		appveyor.yml = appveyor.yml
-		build.cake = build.cake
+		build.ps1 = build.ps1
+		build.sh = build.sh
+		.github\workflows\build.yml = .github\workflows\build.yml
 		CONTRIBUTING.md = CONTRIBUTING.md
+		.config\dotnet-tools.json = .config\dotnet-tools.json
+		.github\workflows\publish.yml = .github\workflows\publish.yml
 		README.md = README.md
 	EndProjectSection
 EndProject
