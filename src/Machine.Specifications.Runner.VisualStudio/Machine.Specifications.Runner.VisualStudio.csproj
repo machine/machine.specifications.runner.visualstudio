@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Version>0.1.0</Version>
-    <TargetFrameworks>netcoreapp2.1;net472;net5.0</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net452;net472</TargetFrameworks>
     <PackageId>Machine.Specifications.Runner.VisualStudio</PackageId>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
@@ -16,14 +16,20 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' != 'net472'">
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="[0.11,0.12)" />
+    <PackageReference Include="Mono.Cecil" Version="[0.11.3,0.12)" />
     <PackageReference Include="Machine.Specifications" Version="[1.0,2.0)" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[16.9.1,17.0.0)" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='net452'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[16.9.4,17.0.0)" PrivateAssets="All" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,14 +40,14 @@
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetCorePackageItems;NetFrameworkPackageItems</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' != 'net472'">
+  <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
       <TfmSpecificPackageFile Include="$(OutputPath)\*.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
-  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' == 'net472'">
+  <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' != 'netcoreapp2.1'">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
       <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.dll" PackagePath="build\$(TargetFramework)\" />
