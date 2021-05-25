@@ -16,7 +16,7 @@
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <PropertyGroup Condition="'$(TargetFramework)' != 'net472'">
     <DefineConstants>NETSTANDARD</DefineConstants>
   </PropertyGroup>
 
