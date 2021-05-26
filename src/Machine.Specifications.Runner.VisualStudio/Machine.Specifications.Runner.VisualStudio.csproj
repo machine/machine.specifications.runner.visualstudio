@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <Version>0.1.0</Version>
-    <TargetFrameworks>netcoreapp2.1;net452;net472</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
     <PackageId>Machine.Specifications.Runner.VisualStudio</PackageId>
     <AssemblyName>Machine.TestAdapter</AssemblyName>
     <Description>Machine.Specifications (MSpec) adapter for .NET Framework and .NET Core including dotnet cli (dotnet test), Visual Studio IDE, TFS, Visual Studio Online, Visual Studio Team Services.</Description>
@@ -23,13 +23,7 @@
   <ItemGroup>
     <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
     <PackageReference Include="Machine.Specifications" Version="1.*" PrivateAssets="All" />
-  </ItemGroup>
-
-  <ItemGroup Condition="'$(TargetFramework)'!='net452'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.*" PrivateAssets="All" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net452'">
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="11.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="[16.0, 17.0)" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
