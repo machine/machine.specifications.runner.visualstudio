@@ -42,16 +42,16 @@
 
   <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="*.props" PackagePath="lib\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="lib\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
   <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' != 'netcoreapp2.1'">
     <ItemGroup>
-      <TfmSpecificPackageFile Include="*.props" PackagePath="lib\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="lib\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Mono.*.dll" PackagePath="lib\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Mono.*.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
