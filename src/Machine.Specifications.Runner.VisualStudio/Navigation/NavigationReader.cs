@@ -89,51 +89,55 @@ namespace Machine.VSTestAdapter.Navigation
 
             foreach (var typeHandle in metadata.TypeDefinitions)
             {
-                var typeDefinition = metadata.GetTypeDefinition(typeHandle);
-                var typeName = $"{metadata.GetString(typeDefinition.Namespace)}.{metadata.GetString(typeDefinition.Name)}";
-
-                if (typeName == "SampleSpecs.Parent")
-                {
-                    const TypeAttributes NestedMask = (TypeAttributes) 0x00000006;
-
-                    foreach (var nestedType in typeDefinition.GetNestedTypes())
-                    {
-                        var nestedTypeDefinition = metadata.GetTypeDefinition(nestedType);
-                        var nestedTypeName = $"{metadata.GetString(nestedTypeDefinition.Namespace)}.{metadata.GetString(nestedTypeDefinition.Name)}";
-                    }
-
-                    if ((typeDefinition.Attributes & TypeAttributes.NestedPrivate) == TypeAttributes.NestedPrivate)
-                    {
-                        
-                    }
-
-                    var i = 1;
-                }
-
-                foreach (var methodHandle in typeDefinition.GetMethods())
-                {
-                    var methodDefinition = metadata.GetMethodDefinition(methodHandle);
-                    var parameters = methodDefinition.GetParameters();
-
-                    var methodName = metadata.GetString(methodDefinition.Name);
-
-                    if (IsConstructor(methodDefinition, methodName) && methodName.EndsWith(".ctor", StringComparison.Ordinal) && parameters.Count == 0)
-                    {
-                        var method = new NavigationMethod(typeName, methodName, methodHandle);
-
-                        var blob = reader
-                            .GetMethodBody(methodDefinition.RelativeVirtualAddress)
-                            .GetILReader();
-
-                        GetSequencePoints(method);
-                        GetInstructions(metadata, ref blob, method);
-
-                        methods.Add(method);
-                    }
-                }
+                ReadType(reader, metadata, typeHandle);
             }
 
             return reader;
+        }
+
+        private void ReadType(PEReader reader, MetadataReader metadata, TypeDefinitionHandle typeHandle, string namespaceName = null)
+        {
+            var typeDefinition = metadata.GetTypeDefinition(typeHandle);
+
+            var typeNamespace = string.IsNullOrEmpty(namespaceName)
+                ? metadata.GetString(typeDefinition.Namespace)
+                : namespaceName;
+
+            var typeName = string.IsNullOrEmpty(namespaceName)
+                ? $"{typeNamespace}.{metadata.GetString(typeDefinition.Name)}"
+                : $"{typeNamespace}+{metadata.GetString(typeDefinition.Name)}";
+
+            if (typeName.StartsWith("SampleSpecs.Parent"))
+            {
+                var i = 1;
+            }
+
+            foreach (var nestedTypeHandle in typeDefinition.GetNestedTypes())
+            {
+                ReadType(reader, metadata, nestedTypeHandle, typeName);
+            }
+
+            foreach (var methodHandle in typeDefinition.GetMethods())
+            {
+                var methodDefinition = metadata.GetMethodDefinition(methodHandle);
+                var parameters = methodDefinition.GetParameters();
+
+                var methodName = metadata.GetString(methodDefinition.Name);
+
+                if (IsConstructor(methodDefinition, methodName) && methodName.EndsWith(".ctor", StringComparison.Ordinal) && parameters.Count == 0)
+                {
+                    var method = new NavigationMethod(typeName, methodName, methodHandle);
+
+                    var blob = reader
+                        .GetMethodBody(methodDefinition.RelativeVirtualAddress)
+                        .GetILReader();
+
+                    GetSequencePoints(method);
+                    GetInstructions(metadata, ref blob, method);
+
+                    methods.Add(method);
+                }
+            }
         }
 
         private bool IsConstructor(MethodDefinition method, string name)

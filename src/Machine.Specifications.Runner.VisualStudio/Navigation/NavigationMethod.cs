@@ -32,5 +32,10 @@ namespace Machine.VSTestAdapter.Navigation
         {
             return sequencePoints.FirstOrDefault(x => x.Offset == instruction.Offset);
         }
+
+        public override string ToString()
+        {
+            return $"{Type}.{Method}";
+        }
     }
 }
