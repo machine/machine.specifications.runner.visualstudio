@@ -13,6 +13,7 @@
     <PackageProjectUrl>https://github.com/machine/machine.specifications.runner.visualstudio</PackageProjectUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
 
+    <NoWarn>NU5127,NU5128</NoWarn>
     <IncludeBuildOutput>false</IncludeBuildOutput>
   </PropertyGroup>
 
