@@ -5,6 +5,7 @@ using System.Reflection;
 using Machine.Specifications.Explorers;
 using Machine.Specifications.Model;
 using Machine.VSTestAdapter.Helpers;
+using Machine.VSTestAdapter.Navigation;
 
 namespace Machine.VSTestAdapter.Discovery.BuiltIn
 {
@@ -29,13 +30,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             Assembly assembly = AssemblyHelper.Load(assemblyPath);
             IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
 
-            using (SourceCodeLocationFinder locationFinder = new SourceCodeLocationFinder(assemblyPath))
+            using (var navigation = new NavigationReader(new NavigationSymbolReaderFactory(), assemblyPath))
             {
-                return contexts.SelectMany(context => CreateTestCase(context, locationFinder)).ToList();
+                return contexts.SelectMany(context => CreateTestCase(context, navigation)).ToList();
             }
         }
 
-        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, SourceCodeLocationFinder locationFinder)
+        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, NavigationReader locationFinder)
         {
             foreach (Specification spec in context.Specifications.ToList())
             {
@@ -54,10 +55,10 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 else
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.FullName;
 
-                SourceCodeLocationInfo locationInfo = locationFinder.GetFieldLocation(fieldDeclaringType, spec.FieldInfo.Name);
+                var locationInfo = locationFinder.GetNavigationData(fieldDeclaringType, spec.FieldInfo.Name);
                 if (locationInfo != null)
                 {
-                    testCase.CodeFilePath = locationInfo.CodeFilePath;
+                    testCase.CodeFilePath = locationInfo.CodeFile;
                     testCase.LineNumber = locationInfo.LineNumber;
                 }
 

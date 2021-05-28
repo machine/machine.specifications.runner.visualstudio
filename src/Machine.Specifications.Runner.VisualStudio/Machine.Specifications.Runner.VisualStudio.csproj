@@ -22,13 +22,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="[0.10-*, 0.11)" />
     <PackageReference Include="Machine.Specifications" Version="[0.11.0,2.0.0)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.10.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="Resources\Machine.png" Pack="true" PackagePath="\"/>
+    <None Include="Resources\Machine.png" Pack="true" PackagePath="\" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -52,7 +51,6 @@
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
       <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="build\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Mono.*.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
