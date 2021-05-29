@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Threading;
 
 namespace Machine.VSTestAdapter.Helpers
@@ -58,7 +59,11 @@ namespace Machine.VSTestAdapter.Helpers
             // 1. pre-.NET Standard (old) .csproj and Visual Studio IDE Test Explorer run
             // 2. vstest.console.exe run against .dll which is not in the build output folder (e.g. packaged build artifact)
             // 
-            CopyRequiredRuntimeDependencies(new[] {typeof(IsolatedAppDomainExecutionScope<>).Assembly}, Path.GetDirectoryName(assemblyPath));
+            CopyRequiredRuntimeDependencies(new[]
+            {
+                typeof(IsolatedAppDomainExecutionScope<>).Assembly,
+                typeof(MetadataReaderProvider).Assembly
+            }, Path.GetDirectoryName(assemblyPath));
 
             AppDomainSetup setup = new AppDomainSetup();
             setup.ApplicationName = appName;
