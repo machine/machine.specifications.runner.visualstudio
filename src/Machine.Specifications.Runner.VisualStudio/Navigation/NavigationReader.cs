@@ -12,10 +12,6 @@ namespace Machine.VSTestAdapter.Navigation
 {
     public class NavigationReader : IDisposable
     {
-        private static readonly OperandType[] OperandTypes;
-
-        private static readonly string[] OperandNames = new string[0x11f];
-
         private readonly INavigationSymbolReaderFactory symbolReaderFactory;
 
         private readonly string assemblyPath;
@@ -25,20 +21,6 @@ namespace Machine.VSTestAdapter.Navigation
         private readonly List<NavigationMethod> methods = new List<NavigationMethod>();
 
         private INavigationSymbolReader symbolReader;
-
-        static NavigationReader()
-        {
-            OperandTypes = Enumerable.Repeat((OperandType) 0xff, 0x11f).ToArray();
-
-            foreach (var field in typeof(OpCodes).GetFields())
-            {
-                var opCode = (OpCode) field.GetValue(null);
-                var index = (ushort) (((opCode.Value & 0x200) >> 1) | opCode.Value & 0xff);
-
-                OperandTypes[index] = opCode.OperandType;
-                OperandNames[index] = opCode.Name;
-            }
-        }
 
         public NavigationReader(INavigationSymbolReaderFactory symbolReaderFactory, string assemblyPath)
         {
@@ -107,11 +89,6 @@ namespace Machine.VSTestAdapter.Navigation
                 ? $"{typeNamespace}.{metadata.GetString(typeDefinition.Name)}"
                 : $"{typeNamespace}+{metadata.GetString(typeDefinition.Name)}";
 
-            if (typeName.StartsWith("SampleSpecs.Parent"))
-            {
-                var i = 1;
-            }
-
             foreach (var nestedTypeHandle in typeDefinition.GetNestedTypes())
             {
                 ReadType(reader, metadata, nestedTypeHandle, typeName);
@@ -169,8 +146,8 @@ namespace Machine.VSTestAdapter.Navigation
             {
                 var offset = blob.Offset;
 
-                var opCode = DecodeOpCode(ref blob);
-                var operandType = GetOperandType(opCode);
+                var opCode = blob.ReadOpCode();
+                var operandType = opCode.GetOperandType();
 
                 var instruction = new Instruction(opCode, operandType, offset, previous);
 
@@ -248,41 +225,6 @@ namespace Machine.VSTestAdapter.Navigation
             }
 
             return string.Empty;
-        }
-
-        private ILOpCode DecodeOpCode(ref BlobReader blob)
-        {
-            var opCodeByte = blob.ReadByte();
-
-            var value = opCodeByte == 0xfe
-                ? 0xfe00 + blob.ReadByte()
-                : opCodeByte;
-
-            return (ILOpCode) value;
-        }
-
-        private OperandType GetOperandType(ILOpCode opCode)
-        {
-            var index = (ushort) ((((int) opCode & 0x200) >> 1) | ((int) opCode & 0xff));
-
-            if (index >= OperandTypes.Length)
-            {
-                return (OperandType) 0xff;
-            }
-
-            return OperandTypes[index];
-        }
-
-        private string GetDisplayName(ILOpCode opCode)
-        {
-            var index = (ushort) ((((int) opCode & 0x200) >> 1) | ((int) opCode & 0xff));
-
-            if (index >= OperandNames.Length)
-            {
-                return string.Empty;
-            }
-
-            return OperandNames[index];
         }
     }
 }
