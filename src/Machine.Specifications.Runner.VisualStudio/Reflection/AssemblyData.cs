@@ -11,30 +11,27 @@ namespace Machine.VSTestAdapter.Reflection
     {
         private readonly PEReader reader;
 
-        private readonly string assembly;
-
         private readonly MetadataReader metadata;
+
+        private readonly SymbolReader symbolReader;
 
         private readonly object sync = new object();
 
         private ReadOnlyCollection<TypeData> types;
 
-        private AssemblyData(PEReader reader, string assembly)
+        private AssemblyData(string assembly)
         {
-            this.reader = reader;
-            this.assembly = assembly;
-
+            reader = new PEReader(File.OpenRead(assembly));
             metadata = reader.GetMetadataReader();
+            symbolReader = new SymbolReader(assembly);
         }
 
         public static AssemblyData Read(string assembly)
         {
-            var reader = new PEReader(File.OpenRead(assembly));
-
-            return new AssemblyData(reader, assembly);
+            return new AssemblyData(assembly);
         }
 
-        public ReadOnlyCollection<TypeData> Types
+        public IReadOnlyCollection<TypeData> Types
         {
             get
             {
@@ -81,7 +78,7 @@ namespace Machine.VSTestAdapter.Reflection
                 ? $"{typeNamespace}.{metadata.GetString(typeDefinition.Name)}"
                 : $"{typeNamespace}+{metadata.GetString(typeDefinition.Name)}";
 
-            values.Add(new TypeData(assembly, typeName, reader, metadata, typeDefinition, typeHandle));
+            values.Add(new TypeData(typeName, reader, metadata, symbolReader, typeDefinition));
 
             foreach (var nestedTypeHandle in typeDefinition.GetNestedTypes())
             {

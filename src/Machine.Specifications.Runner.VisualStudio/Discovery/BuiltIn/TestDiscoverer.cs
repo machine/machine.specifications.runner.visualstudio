@@ -30,13 +30,13 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
             Assembly assembly = AssemblyHelper.Load(assemblyPath);
             IEnumerable<Context> contexts = assemblyExplorer.FindContextsIn(assembly);
 
-            using (var navigation = new NavigationReader(new NavigationSymbolReaderFactory(), assemblyPath))
+            using (var session = new NavigationSession(assemblyPath))
             {
-                return contexts.SelectMany(context => CreateTestCase(context, navigation)).ToList();
+                return contexts.SelectMany(context => CreateTestCase(context, session)).ToList();
             }
         }
 
-        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, NavigationReader locationFinder)
+        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, NavigationSession session)
         {
             foreach (Specification spec in context.Specifications.ToList())
             {
@@ -55,7 +55,7 @@ namespace Machine.VSTestAdapter.Discovery.BuiltIn
                 else
                     fieldDeclaringType = spec.FieldInfo.DeclaringType.FullName;
 
-                var locationInfo = locationFinder.GetNavigationData(fieldDeclaringType, spec.FieldInfo.Name);
+                var locationInfo = session.GetNavigationData(fieldDeclaringType, spec.FieldInfo.Name);
                 if (locationInfo != null)
                 {
                     testCase.CodeFilePath = locationInfo.CodeFile;

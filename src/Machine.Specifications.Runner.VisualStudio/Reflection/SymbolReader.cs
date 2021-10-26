@@ -5,21 +5,29 @@ using System.Reflection.Metadata;
 
 namespace Machine.VSTestAdapter.Reflection
 {
-    public class PortableSymbolReader : ISymbolReader
+    public class SymbolReader
     {
         private readonly MetadataReader reader;
 
-        public PortableSymbolReader(string assembly)
+        public SymbolReader(string assembly)
         {
             var symbols = Path.ChangeExtension(assembly, "pdb");
 
-            reader = MetadataReaderProvider
-                .FromPortablePdbStream(File.OpenRead(symbols))
-                .GetMetadataReader();
+            if (File.Exists(symbols))
+            {
+                reader = MetadataReaderProvider
+                    .FromPortablePdbStream(File.OpenRead(symbols))
+                    .GetMetadataReader();
+            }
         }
 
         public IEnumerable<SequencePointData> ReadSequencePoints(MethodDefinitionHandle method)
         {
+            if (reader == null)
+            {
+                return Enumerable.Empty<SequencePointData>();
+            }
+
             return reader
                 .GetMethodDebugInformation(method)
                 .GetSequencePoints()

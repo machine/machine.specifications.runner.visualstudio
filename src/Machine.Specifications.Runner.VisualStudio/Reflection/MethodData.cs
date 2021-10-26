@@ -12,34 +12,32 @@ namespace Machine.VSTestAdapter.Reflection
 
         private readonly MetadataReader metadata;
 
+        private readonly SymbolReader symbolReader;
+
+        private readonly MethodDefinition definition;
+
+        private readonly MethodDefinitionHandle handle;
+
         private readonly object sync = new object();
 
         private ReadOnlyCollection<InstructionData> instructions;
 
         private List<SequencePointData> sequencePoints;
 
-        public MethodData(string assembly, string typeName, string name, PEReader reader, MetadataReader metadata, MethodDefinitionHandle handle)
+        public MethodData(string name, PEReader reader, MetadataReader metadata, SymbolReader symbolReader, MethodDefinition definition, MethodDefinitionHandle handle)
         {
             this.reader = reader;
             this.metadata = metadata;
+            this.symbolReader = symbolReader;
+            this.definition = definition;
+            this.handle = handle;
 
-            Assembly = assembly;
-            TypeName = typeName;
             Name = name;
-            Handle = handle;
         }
-
-        public string Assembly { get; }
-
-        public string TypeName { get; }
 
         public string Name { get; }
 
-        public MethodDefinition Definition { get; }
-
-        public MethodDefinitionHandle Handle { get; }
-
-        public ReadOnlyCollection<InstructionData> Instructions
+        public IReadOnlyCollection<InstructionData> Instructions
         {
             get
             {
@@ -70,10 +68,15 @@ namespace Machine.VSTestAdapter.Reflection
             return sequencePoints.FirstOrDefault(x => x.Offset == instruction.Offset);
         }
 
+        public override string ToString()
+        {
+            return Name;
+        }
+
         private List<InstructionData> GetInstructions()
         {
             var blob = reader
-                .GetMethodBody(Definition.RelativeVirtualAddress)
+                .GetMethodBody(definition.RelativeVirtualAddress)
                 .GetILReader();
 
             var codeReader = new CodeReader();
@@ -83,9 +86,7 @@ namespace Machine.VSTestAdapter.Reflection
 
         private IEnumerable<SequencePointData> GetSequencePoints()
         {
-            var symbolReader = new PortableSymbolReader(Assembly);
-
-            return symbolReader.ReadSequencePoints(Handle);
+            return symbolReader.ReadSequencePoints(handle);
         }
     }
 }

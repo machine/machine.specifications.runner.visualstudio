@@ -35,13 +35,14 @@ namespace Machine.VSTestAdapter.Reflection
                 var offset = blob.Offset;
 
                 var opCode = ReadOpCode(ref blob);
+                var opCodeName = GetDisplayName(opCode);
                 var operandType = GetOperandType(opCode);
 
                 var name = operandType != OperandType.InlineNone
                     ? ReadOperand(reader, ref blob, operandType)
                     : null;
 
-                previous = new InstructionData(opCode, operandType, offset, previous, name);
+                previous = new InstructionData(opCode, opCodeName, operandType, offset, previous, name);
 
                 instructions.Add(previous);
             }
@@ -74,7 +75,8 @@ namespace Machine.VSTestAdapter.Reflection
                 case OperandType.InlineMethod:
                     var handle = MetadataTokens.EntityHandle(blob.ReadInt32());
 
-                    return LookupToken(reader, handle);
+                    name = LookupToken(reader, handle);
+                    break;
 
                 case OperandType.InlineSwitch:
                     var length = blob.ReadInt32();

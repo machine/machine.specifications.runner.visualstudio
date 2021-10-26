@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -13,30 +12,27 @@ namespace Machine.VSTestAdapter.Reflection
 
         private readonly MetadataReader metadata;
 
+        private readonly SymbolReader symbolReader;
+
+        private readonly TypeDefinition definition;
+
         private readonly object sync = new object();
 
         private ReadOnlyCollection<MethodData> methods;
 
-        public TypeData(string assembly, string typeName, PEReader reader, MetadataReader metadata, TypeDefinition definition, TypeDefinitionHandle handle)
+        public TypeData(string typeName, PEReader reader, MetadataReader metadata, SymbolReader symbolReader, TypeDefinition definition)
         {
             this.reader = reader;
             this.metadata = metadata;
+            this.symbolReader = symbolReader;
+            this.definition = definition;
 
-            Assembly = assembly;
             TypeName = typeName;
-            Definition = definition;
-            Handle = handle;
         }
-
-        public string Assembly { get; }
 
         public string TypeName { get; }
 
-        public TypeDefinition Definition { get; }
-
-        public TypeDefinitionHandle Handle { get; }
-
-        public ReadOnlyCollection<MethodData> Methods
+        public IReadOnlyCollection<MethodData> Constructors
         {
             get
             {
@@ -47,27 +43,32 @@ namespace Machine.VSTestAdapter.Reflection
 
                 lock (sync)
                 {
-                    methods = GetMethods().AsReadOnly();
+                    methods = GetConstructors().AsReadOnly();
                 }
 
                 return methods;
             }
         }
 
-        private List<MethodData> GetMethods()
+        public override string ToString()
+        {
+            return TypeName;
+        }
+
+        private List<MethodData> GetConstructors()
         {
             var values = new List<MethodData>();
 
-            foreach (var methodHandle in Definition.GetMethods())
+            foreach (var methodHandle in definition.GetMethods())
             {
                 var methodDefinition = metadata.GetMethodDefinition(methodHandle);
                 var parameters = methodDefinition.GetParameters();
 
                 var methodName = metadata.GetString(methodDefinition.Name);
 
-                if (IsConstructor(methodDefinition, methodName) && methodName.EndsWith(".ctor", StringComparison.Ordinal) && parameters.Count == 0)
+                if (IsConstructor(methodDefinition, methodName) && parameters.Count == 0)
                 {
-                    values.Add(new MethodData(Assembly, TypeName, methodName, reader, metadata, methodHandle));
+                    values.Add(new MethodData(methodName, reader, metadata, symbolReader, methodDefinition, methodHandle));
                 }
             }
 
@@ -78,7 +79,7 @@ namespace Machine.VSTestAdapter.Reflection
         {
             return method.Attributes.HasFlag(MethodAttributes.RTSpecialName) &&
                    method.Attributes.HasFlag(MethodAttributes.SpecialName) &&
-                   (name == ".cctor" || name == ".ctor");
+                   name == ".ctor";
         }
     }
 }

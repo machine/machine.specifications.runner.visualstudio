@@ -2,7 +2,7 @@
 {
     public class NavigationData
     {
-        public static NavigationData Unknown = new NavigationData(null, int.MinValue);
+        public static NavigationData Unknown { get; } = new NavigationData(null, 0);
 
         public NavigationData(string codeFile, int lineNumber)
         {
