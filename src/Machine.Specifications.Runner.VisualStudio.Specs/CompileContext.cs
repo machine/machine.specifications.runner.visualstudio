@@ -4,6 +4,7 @@ using System.Linq;
 using Machine.Specifications;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Emit;
 
 namespace Machine.VSTestAdapter.Specs
 {
@@ -14,6 +15,14 @@ namespace Machine.VSTestAdapter.Specs
         public string Compile(string code)
         {
             var filename = Path.Combine(_directory, Guid.NewGuid() + ".dll");
+            var symbolsFilename = Path.ChangeExtension(filename, "pdb");
+
+            var emitOptions = new EmitOptions(
+                debugInformationFormat: DebugInformationFormat.PortablePdb,
+                pdbFilePath: symbolsFilename);
+
+            var fileStream = File.Open(filename, FileMode.Create);
+            var symbolsStream = File.Open(symbolsFilename, FileMode.Create);
 
             var result = CSharpCompilation.Create(Path.GetFileNameWithoutExtension(filename))
                 .WithOptions(
@@ -26,7 +35,13 @@ namespace Machine.VSTestAdapter.Specs
                     MetadataReference.CreateFromFile(typeof(Establish).Assembly.Location),
                     MetadataReference.CreateFromFile(typeof(ShouldExtensionMethods).Assembly.Location))
                 .AddSyntaxTrees(CSharpSyntaxTree.ParseText(code))
-                .Emit(filename, Path.ChangeExtension(filename, "pdb"));
+                .Emit(fileStream, symbolsStream, options: emitOptions);
+
+            fileStream.Flush();
+            symbolsStream.Flush();
+
+            fileStream.Close();
+            symbolsStream.Close();
 
             if (!result.Success)
                 throw new InvalidOperationException();
