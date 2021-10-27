@@ -1,48 +1,62 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Metadata;
 using System.Threading;
 
-namespace Machine.VSTestAdapter.Helpers
+namespace Machine.Specifications.Runner.VisualStudio.Helpers
 {
-
-#if !NETSTANDARD
-
-    public class IsolatedAppDomainExecutionScope<T> : IDisposable where T : MarshalByRefObject, new()
+#if NETFRAMEWORK
+    public class IsolatedAppDomainExecutionScope<T> : IDisposable
+        where T : MarshalByRefObject, new()
     {
-        private AppDomain appDomain;
-        private string appName = typeof(IsolatedAppDomainExecutionScope<>).Assembly.GetName().Name;
         private readonly string assemblyPath;
+
+        private readonly string appName = typeof(IsolatedAppDomainExecutionScope<>).Assembly.GetName().Name;
+
+        private AppDomain appDomain;
 
         public IsolatedAppDomainExecutionScope(string assemblyPath)
         {
             if (string.IsNullOrEmpty(assemblyPath))
+            {
                 throw new ArgumentException($"{nameof(assemblyPath)} is null or empty.", nameof(assemblyPath));
+            }
 
             this.assemblyPath = assemblyPath;
         }
 
         public T CreateInstance()
         {
-            if (appDomain == null) {
+            if (appDomain == null)
+            {
                 // Because we need to copy files around - we create a global cross-process mutex here to avoid multi-process race conditions
                 // in the case where both of those are true:
                 //  1. VSTest is told to run tests in parallel, so it spawns multiple processes
                 //  2. There are multiple test assemblies in the same directory
-                using (Mutex mutex = new Mutex(false, String.Format("{0}_{1}", this.appName, Path.GetDirectoryName(this.assemblyPath).Replace(Path.DirectorySeparatorChar, '_')))) {
-                    try {
+                using (var mutex = new Mutex(false, $"{appName}_{Path.GetDirectoryName(assemblyPath).Replace(Path.DirectorySeparatorChar, '_')}"))
+                {
+                    try
+                    {
                         mutex.WaitOne(TimeSpan.FromMinutes(1));
-                    } catch (AbandonedMutexException) { }
+                    }
+                    catch (AbandonedMutexException)
+                    {
+                    }
 
-                    try {
-                        appDomain = CreateAppDomain(assemblyPath, this.appName);
-                    } finally {
-                        try {
+                    try
+                    {
+                        appDomain = CreateAppDomain(assemblyPath, appName);
+                    }
+                    finally
+                    {
+                        try
+                        {
                             mutex.ReleaseMutex();
-                        } catch {
+                        }
+                        catch
+                        {
                         }
                     }
                 }
@@ -65,7 +79,7 @@ namespace Machine.VSTestAdapter.Helpers
                 typeof(MetadataReaderProvider).Assembly
             }, Path.GetDirectoryName(assemblyPath));
 
-            AppDomainSetup setup = new AppDomainSetup();
+            var setup = new AppDomainSetup();
             setup.ApplicationName = appName;
             setup.ShadowCopyFiles = "true";
             setup.ApplicationBase = setup.PrivateBinPath = Path.GetDirectoryName(assemblyPath);
@@ -77,26 +91,31 @@ namespace Machine.VSTestAdapter.Helpers
 
         private static void CopyRequiredRuntimeDependencies(IEnumerable<Assembly> assemblies, string destination)
         {
-            foreach (Assembly assembly in assemblies) {
-                string sourceAssemblyFile = assembly.Location;
-                string destinationAssemblyFile = Path.Combine(destination, Path.GetFileName(sourceAssemblyFile));
+            foreach (Assembly assembly in assemblies)
+            {
+                var sourceAssemblyFile = assembly.Location;
+                var destinationAssemblyFile = Path.Combine(destination, Path.GetFileName(sourceAssemblyFile));
 
                 // file doesn't exist or is older
                 if (!File.Exists(destinationAssemblyFile) || File.GetLastWriteTimeUtc(sourceAssemblyFile) > File.GetLastWriteTimeUtc(destinationAssemblyFile))
+                {
                     CopyWithoutLockingSourceFile(sourceAssemblyFile, destinationAssemblyFile);
+                }
             }
         }
 
         private static void CopyWithoutLockingSourceFile(string sourceFile, string destinationFile)
         {
-            const int BUFFER_SIZE = 10 * 1024;
+            const int bufferSize = 10 * 1024;
 
-            using (FileStream inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, BUFFER_SIZE))
-            using (FileStream outputFile = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, BUFFER_SIZE)) {
-                byte[] buffer = new byte[BUFFER_SIZE];
+            using (var inputFile = new FileStream(sourceFile, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize))
+            using (var outputFile = new FileStream(destinationFile, FileMode.Create, FileAccess.ReadWrite, FileShare.None, bufferSize))
+            {
+                var buffer = new byte[bufferSize];
                 int bytes;
 
-                while ((bytes = inputFile.Read(buffer, 0, buffer.Length)) > 0) {
+                while ((bytes = inputFile.Read(buffer, 0, buffer.Length)) > 0)
+                {
                     outputFile.Write(buffer, 0, bytes);
                 }
             }
@@ -106,15 +125,20 @@ namespace Machine.VSTestAdapter.Helpers
         {
             if (appDomain != null)
             {
-                try {
-                    string cacheDirectory = appDomain.SetupInformation.CachePath;
+                try
+                {
+                    var cacheDirectory = appDomain.SetupInformation.CachePath;
 
                     AppDomain.Unload(appDomain);
                     appDomain = null;
 
                     if (Directory.Exists(cacheDirectory))
+                    {
                         Directory.Delete(cacheDirectory, true);
-                } catch {
+                    }
+                }
+                catch
+                {
                     // TODO: Logging here
                 }
             }

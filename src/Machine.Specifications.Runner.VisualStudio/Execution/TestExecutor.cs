@@ -1,20 +1,18 @@
-﻿using Machine.Specifications.Runner;
-using Machine.Specifications.Runner.Impl;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.Impl;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class TestExecutor
-#if !NETSTANDARD
+#if NETFRAMEWORK
         : MarshalByRefObject
 #endif
     {
-#if !NETSTANDARD
+#if NETFRAMEWORK
         [System.Security.SecurityCritical]
         public override object InitializeLifetimeService()
         {
@@ -62,13 +60,16 @@ namespace Machine.VSTestAdapter.Execution
                 try
                 {
                     if (mspecRunner != null && assemblyToRun != null)
+                    {
                         mspecRunner.EndRun(assemblyToRun);
+                    }
                 }
                 catch (Exception exception)
                 {
                     try
                     {
                         var frameworkLogger = specificationRunListener as IFrameworkLogger;
+
                         frameworkLogger?.SendErrorMessage("Machine Specifications Visual Studio Test Adapter - Error Ending Test Run.", exception);
                     }
                     catch

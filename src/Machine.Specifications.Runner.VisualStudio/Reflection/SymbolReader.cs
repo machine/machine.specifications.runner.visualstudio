@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
 
-namespace Machine.VSTestAdapter.Reflection
+namespace Machine.Specifications.Runner.VisualStudio.Reflection
 {
     public class SymbolReader
     {

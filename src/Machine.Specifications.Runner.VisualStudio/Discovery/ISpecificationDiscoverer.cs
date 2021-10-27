@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Machine.VSTestAdapter.Discovery
+namespace Machine.Specifications.Runner.VisualStudio.Discovery
 {
     public interface ISpecificationDiscoverer
     {

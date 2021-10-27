@@ -1,9 +1,7 @@
 ﻿using System;
-using Machine.Specifications;
-using Machine.Specifications.Runner;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     /// <summary>
     /// The purpose of this class is to ignore everything, but a single specification's notifications.
@@ -13,20 +11,16 @@ namespace Machine.VSTestAdapter.Execution
     public class SingleBehaviorTestRunListenerWrapper : ISpecificationRunListener
     {
         private readonly ISpecificationRunListener runListener;
+
         private readonly VisualStudioTestIdentifier listenFor;
+
         private ContextInfo currentContext;
 
         public SingleBehaviorTestRunListenerWrapper(ISpecificationRunListener runListener, VisualStudioTestIdentifier listenFor)
         {
-            if (listenFor == null)
-                throw new ArgumentNullException(nameof(listenFor));
-            if (runListener == null)
-                throw new ArgumentNullException(nameof(runListener));
-
-            this.runListener = runListener;
-            this.listenFor = listenFor;
+            this.runListener = runListener ?? throw new ArgumentNullException(nameof(runListener));
+            this.listenFor = listenFor ?? throw new ArgumentNullException(nameof(listenFor));
         }
-
 
         public void OnContextEnd(ContextInfo context)
         {
@@ -43,7 +37,9 @@ namespace Machine.VSTestAdapter.Execution
         public void OnSpecificationEnd(SpecificationInfo specification, Result result)
         {
             if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier(currentContext)))
+            {
                 return;
+            }
 
             runListener.OnSpecificationEnd(specification, result);
         }
@@ -51,7 +47,9 @@ namespace Machine.VSTestAdapter.Execution
         public void OnSpecificationStart(SpecificationInfo specification)
         {
             if (listenFor != null && !listenFor.Equals(specification.ToVisualStudioTestIdentifier(currentContext)))
+            {
                 return;
+            }
 
             runListener.OnSpecificationStart(specification);
         }

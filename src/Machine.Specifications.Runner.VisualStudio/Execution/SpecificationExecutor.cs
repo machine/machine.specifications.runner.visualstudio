@@ -1,11 +1,11 @@
-﻿using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Machine.VSTestAdapter.Helpers;
-using Machine.VSTestAdapter.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class SpecificationExecutor : ISpecificationExecutor
     {
@@ -17,16 +17,17 @@ namespace Machine.VSTestAdapter.Execution
         {
             assemblyPath = Path.GetFullPath(assemblyPath);
 
-#if !NETSTANDARD
-            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(assemblyPath)) {
-                TestExecutor executor = scope.CreateInstance();
+#if NETFRAMEWORK
+            using (var scope = new IsolatedAppDomainExecutionScope<TestExecutor>(assemblyPath))
+            {
+                var executor = scope.CreateInstance();
 #else
-                TestExecutor executor = new TestExecutor();
+                var executor = new TestExecutor();
 #endif
-                VSProxyAssemblySpecificationRunListener listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, adapterUri, settings);
+                var listener = new VSProxyAssemblySpecificationRunListener(assemblyPath, frameworkHandle, adapterUri, settings);
 
                 executor.RunTestsInAssembly(assemblyPath, specifications, listener);
-#if !NETSTANDARD
+#if NETFRAMEWORK
             }
 #endif
         }

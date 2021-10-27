@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Machine.VSTestAdapter.Navigation
+namespace Machine.Specifications.Runner.VisualStudio.Navigation
 {
     public interface INavigationSession : IDisposable
     {

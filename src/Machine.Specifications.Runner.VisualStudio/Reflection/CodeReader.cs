@@ -4,7 +4,7 @@ using System.Reflection.Emit;
 using System.Reflection.Metadata;
 using System.Reflection.Metadata.Ecma335;
 
-namespace Machine.VSTestAdapter.Reflection
+namespace Machine.Specifications.Runner.VisualStudio.Reflection
 {
     public class CodeReader
     {
