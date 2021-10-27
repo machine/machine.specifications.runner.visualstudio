@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Globalization;
 
-namespace Machine.VSTestAdapter.Helpers
+namespace Machine.Specifications.Runner.VisualStudio.Helpers
 {
-#if !NETSTANDARD
+#if NETFRAMEWORK
     [Serializable]
 #endif
     public class VisualStudioTestIdentifier
@@ -12,9 +12,8 @@ namespace Machine.VSTestAdapter.Helpers
         {
         }
 
-
         public VisualStudioTestIdentifier(string containerTypeFullName, string fieldName)
-            : this(String.Format(CultureInfo.InvariantCulture, "{0}::{1}", containerTypeFullName, fieldName))
+            : this(string.Format(CultureInfo.InvariantCulture, "{0}::{1}", containerTypeFullName, fieldName))
         {
         }
 
@@ -25,31 +24,35 @@ namespace Machine.VSTestAdapter.Helpers
 
         public string FullyQualifiedName { get; private set; }
 
-        public string FieldName {
-            get {
-                return FullyQualifiedName.Split(new string[] { "::" }, StringSplitOptions.RemoveEmptyEntries)[1];
+        public string FieldName
+        {
+            get
+            {
+                return FullyQualifiedName.Split(new[] { "::" }, StringSplitOptions.RemoveEmptyEntries)[1];
             }
         }
 
-        public string ContainerTypeFullName {
-            get {
-                return FullyQualifiedName.Split(new string[] { "::" }, StringSplitOptions.RemoveEmptyEntries)[0];
+        public string ContainerTypeFullName
+        {
+            get
+            {
+                return FullyQualifiedName.Split(new[] { "::" }, StringSplitOptions.RemoveEmptyEntries)[0];
             }
         }
 
         public override bool Equals(object obj)
         {
-            VisualStudioTestIdentifier test = obj as VisualStudioTestIdentifier;
-            if (test != null)
+            if (obj is VisualStudioTestIdentifier test)
+            {
                 return FullyQualifiedName.Equals(test.FullyQualifiedName, StringComparison.Ordinal);
-            else
-                return base.Equals(obj);
+            }
+
+            return base.Equals(obj);
         }
 
         public override int GetHashCode()
         {
             return FullyQualifiedName.GetHashCode();
         }
-
     }
 }

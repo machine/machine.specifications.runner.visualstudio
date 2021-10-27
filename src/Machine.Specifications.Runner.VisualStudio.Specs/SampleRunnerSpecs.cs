@@ -1,24 +1,14 @@
 ﻿using System.Reflection;
-using Machine.Specifications;
-using Machine.VSTestAdapter.Specs.Fixtures;
+using SampleSpecs;
 
-namespace Machine.VSTestAdapter.Specs
+namespace Machine.Specifications.Runner.VisualStudio.Specs
 {
     public abstract class SampleRunnerSpecs
     {
-        static CompileContext compiler;
         static Assembly assembly;
 
         Establish context = () =>
-        {
-            compiler = new CompileContext();
-
-            var assemblyPath = compiler.Compile(SampleFixture.Code);
-            assembly = Assembly.LoadFile(assemblyPath);
-        };
-
-        Cleanup after = () =>
-            compiler.Dispose();
+            assembly = typeof(StandardSpec).Assembly;
 
         protected static Assembly GetAssembly()
         {

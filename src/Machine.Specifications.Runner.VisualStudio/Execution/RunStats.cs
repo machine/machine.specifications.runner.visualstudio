@@ -1,37 +1,28 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class RunStats
     {
         private readonly Stopwatch stopwatch = new Stopwatch();
 
-        public DateTimeOffset Start { get; private set; }
+        public RunStats()
+        {
+            stopwatch.Start();
+            Start = DateTime.Now;
+        }
+
+        public DateTimeOffset Start { get; }
 
         public DateTimeOffset End { get; private set; }
 
-        public TimeSpan Duration
-        {
-            get
-            {
-                return this.stopwatch.Elapsed;
-            }
-        }
-
-        public RunStats()
-        {
-            this.stopwatch.Start();
-            this.Start = DateTime.Now;
-        }
+        public TimeSpan Duration => stopwatch.Elapsed;
 
         public void Stop()
         {
-            this.stopwatch.Stop();
+            stopwatch.Stop();
+
             End = Start + stopwatch.Elapsed;
         }
     }

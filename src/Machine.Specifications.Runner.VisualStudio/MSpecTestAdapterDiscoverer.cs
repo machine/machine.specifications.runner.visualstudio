@@ -1,27 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-#if !NETSTANDARD
-using System.IO;
-#endif
 using System.Linq;
-using Machine.VSTestAdapter.Configuration;
-using Machine.VSTestAdapter.Discovery;
-using Machine.VSTestAdapter.Discovery.BuiltIn;
-using Machine.VSTestAdapter.Helpers;
+using Machine.Specifications.Runner.VisualStudio.Configuration;
+using Machine.Specifications.Runner.VisualStudio.Discovery;
+using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+using System.IO;
 
-namespace Machine.VSTestAdapter
+namespace Machine.Specifications.Runner.VisualStudio
 {
     public class MSpecTestAdapterDiscoverer
     {
-        readonly ISpecificationDiscoverer discoverer;
-
-        public MSpecTestAdapterDiscoverer()
-            : this(new BuiltInSpecificationDiscoverer())
-        {
-        }
+        private readonly ISpecificationDiscoverer discoverer;
 
         public MSpecTestAdapterDiscoverer(ISpecificationDiscoverer discoverer)
         {
@@ -30,22 +22,25 @@ namespace Machine.VSTestAdapter
 
         public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
-            Settings settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
+            var settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
+
             DiscoverTests(sources, settings, logger, discoverySink.SendTestCase);
         }
 
         public void DiscoverTests(IEnumerable<string> sources, Settings settings, IMessageLogger logger, Action<TestCase> discoverySinkAction)
         {
             logger.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Discovering Specifications.");
+
             var discoveredSpecCount = 0;
             var sourcesWithSpecs = 0;
 
             var sourcesArray = sources.Distinct().ToArray();
+
             foreach (var assemblyPath in sourcesArray)
             {
                 try
                 {
-#if !NETSTANDARD
+#if NETFRAMEWORK
                     if (!File.Exists(Path.Combine(Path.GetDirectoryName(Path.GetFullPath(assemblyPath)), "Machine.Specifications.dll")))
                         continue;
 #endif

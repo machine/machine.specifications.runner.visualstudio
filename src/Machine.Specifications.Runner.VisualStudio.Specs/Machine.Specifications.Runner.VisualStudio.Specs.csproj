@@ -8,12 +8,12 @@
   <ItemGroup>
     <PackageReference Include="Machine.Fakes.Moq" Version="2.11.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="1.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.7.0" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.11.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Machine.Specifications.Runner.VisualStudio.Fixtures\Machine.Specifications.Runner.VisualStudio.Fixtures.csproj" />
     <ProjectReference Include="..\Machine.Specifications.Runner.VisualStudio\Machine.Specifications.Runner.VisualStudio.csproj" />
   </ItemGroup>
 

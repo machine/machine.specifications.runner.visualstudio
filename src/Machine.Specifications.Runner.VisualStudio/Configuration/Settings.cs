@@ -1,26 +1,24 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml.Linq;
 using System.Xml.XPath;
 
-namespace Machine.VSTestAdapter.Configuration
+namespace Machine.Specifications.Runner.VisualStudio.Configuration
 {
     public class Settings
     {
         public bool DisableFullTestNameInIDE { get; set; }
+
         public bool DisableFullTestNameInOutput { get; set; }
 
         public static Settings Parse(string xml)
         {
-            Settings config = new Settings();
+            var config = new Settings();
 
             XElement mspecConfig = null;
+
             try
             {
-                if(!string.IsNullOrEmpty(xml))
+                if (!string.IsNullOrEmpty(xml))
                 {
                     mspecConfig = XDocument.Parse(xml).XPathSelectElement("RunSettings/MSpec");
                 }

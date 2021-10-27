@@ -2,7 +2,7 @@
 using System.Reflection.Metadata;
 using System.Text;
 
-namespace Machine.VSTestAdapter.Reflection
+namespace Machine.Specifications.Runner.VisualStudio.Reflection
 {
     public class InstructionData
     {

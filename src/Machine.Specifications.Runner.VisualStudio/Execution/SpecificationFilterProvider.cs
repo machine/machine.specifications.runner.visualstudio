@@ -6,26 +6,29 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public class SpecificationFilterProvider : ISpecificationFilterProvider
     {
-        static readonly TestProperty TagProperty = TestProperty.Register(nameof(Tag), nameof(Tag), typeof(string), typeof(TestCase));
-        static readonly TestProperty SubjectProperty = TestProperty.Register(nameof(Subject), nameof(Subject), typeof(string), typeof(TestCase));
+        private static readonly TestProperty TagProperty =
+            TestProperty.Register(nameof(Tag), nameof(Tag), typeof(string), typeof(TestCase));
 
-        readonly Dictionary<string, TestProperty> testCaseProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
+        private static readonly TestProperty SubjectProperty =
+            TestProperty.Register(nameof(Subject), nameof(Subject), typeof(string), typeof(TestCase));
+
+        private readonly Dictionary<string, TestProperty> testCaseProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
         {
             [TestCaseProperties.FullyQualifiedName.Id] = TestCaseProperties.FullyQualifiedName,
             [TestCaseProperties.DisplayName.Id] = TestCaseProperties.DisplayName
         };
 
-        readonly Dictionary<string, TestProperty> traitProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
+        private readonly Dictionary<string, TestProperty> traitProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
         {
             [TagProperty.Id] = TagProperty,
             [SubjectProperty.Id] = SubjectProperty
         };
 
-        readonly string[] supportedProperties;
+        private readonly string[] supportedProperties;
 
         public SpecificationFilterProvider()
         {
@@ -57,16 +60,12 @@ namespace Machine.VSTestAdapter.Execution
             }
 
             var filteredTests = testCases
-                .Where(testCase => filterExpression.MatchTestCase(testCase, propertyName =>
-                    {
-                        var value = GetPropertyValue(propertyName, testCase);
-                        return value;
-                    }));
+                .Where(x => filterExpression.MatchTestCase(x, propertyName => GetPropertyValue(propertyName, x)));
 
             return filteredTests;
         }
 
-        object GetPropertyValue(string propertyName, TestObject testCase)
+        private object GetPropertyValue(string propertyName, TestObject testCase)
         {
             if (testCaseProperties.TryGetValue(propertyName, out var testProperty))
             {
@@ -94,7 +93,7 @@ namespace Machine.VSTestAdapter.Execution
             return null;
         }
 
-        static string[] TraitContains(TestObject testCase, string traitName)
+        private static string[] TraitContains(TestObject testCase, string traitName)
         {
             return testCase?.Traits?
                 .Where(x => x.Name == traitName)

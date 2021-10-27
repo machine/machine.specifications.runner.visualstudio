@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Machine.VSTestAdapter.Execution
+namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
     public interface IFrameworkLogger
     {

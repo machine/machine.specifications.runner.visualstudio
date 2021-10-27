@@ -1,8 +1,8 @@
 ﻿using System.Linq;
 using System.Reflection.Emit;
-using Machine.VSTestAdapter.Reflection;
+using Machine.Specifications.Runner.VisualStudio.Reflection;
 
-namespace Machine.VSTestAdapter.Navigation
+namespace Machine.Specifications.Runner.VisualStudio.Navigation
 {
     public class NavigationSession : INavigationSession
     {
@@ -16,13 +16,7 @@ namespace Machine.VSTestAdapter.Navigation
         public NavigationData GetNavigationData(string typeName, string fieldName)
         {
             var type = assembly.Types.FirstOrDefault(x => x.TypeName == typeName);
-
-            if (type == null)
-            {
-                return NavigationData.Unknown;
-            }
-
-            var method = type.Constructors.FirstOrDefault();
+            var method = type?.Constructors.FirstOrDefault();
 
             if (method == null)
             {

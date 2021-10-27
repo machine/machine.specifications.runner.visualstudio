@@ -1,21 +1,18 @@
 ﻿using System;
-using System.Linq;
-using Machine.Specifications;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 
-namespace Machine.VSTestAdapter.Specs.Execution.RunListener
+namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution.RunListener
 {
     [Behaviors]
-    public class TestCaseMapperBehavior
+    class TestCaseMapperBehavior
     {
-#pragma warning disable CS0169
-        protected static TestCase TestCase;
-#pragma warning restore CS0169
+        protected static TestCase test_case;
 
-        It should_provide_correct_details_to_visual_studio = () => {
-            TestCase.FullyQualifiedName.ShouldEqual("ContainingType::field_name");
-            TestCase.ExecutorUri.ShouldEqual(new Uri("bla://executorUri"));
-            TestCase.Source.ShouldEqual("assemblyPath");
+        It should_provide_correct_details_to_visual_studio = () =>
+        {
+            test_case.FullyQualifiedName.ShouldEqual("ContainingType::field_name");
+            test_case.ExecutorUri.ShouldEqual(new Uri("bla://executorUri"));
+            test_case.Source.ShouldEqual("assemblyPath");
         };
     }
 }

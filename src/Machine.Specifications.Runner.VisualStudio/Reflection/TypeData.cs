@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Reflection.PortableExecutable;
 
-namespace Machine.VSTestAdapter.Reflection
+namespace Machine.Specifications.Runner.VisualStudio.Reflection
 {
     public class TypeData
     {

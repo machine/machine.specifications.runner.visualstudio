@@ -1,4 +1,4 @@
-﻿namespace Machine.VSTestAdapter.Reflection
+﻿namespace Machine.Specifications.Runner.VisualStudio.Reflection
 {
     public class SequencePointData
     {

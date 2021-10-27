@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine.Specifications.Runn
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine.Specifications.Runner.VisualStudio.Specs", "src\Machine.Specifications.Runner.VisualStudio.Specs\Machine.Specifications.Runner.VisualStudio.Specs.csproj", "{28A8C30C-7C6C-402B-86E2-D54A20748564}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Machine.Specifications.Runner.VisualStudio.Fixtures", "src\Machine.Specifications.Runner.VisualStudio.Fixtures\Machine.Specifications.Runner.VisualStudio.Fixtures.csproj", "{A4E3F048-36D5-4677-9D5D-F4BF0A523D75}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -32,6 +34,10 @@ Global
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{28A8C30C-7C6C-402B-86E2-D54A20748564}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4E3F048-36D5-4677-9D5D-F4BF0A523D75}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4E3F048-36D5-4677-9D5D-F4BF0A523D75}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4E3F048-36D5-4677-9D5D-F4BF0A523D75}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4E3F048-36D5-4677-9D5D-F4BF0A523D75}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
