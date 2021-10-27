@@ -3,9 +3,9 @@ using System.Reflection;
 using Machine.Fakes;
 using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Execution;
-using Machine.Specifications.Runner.VisualStudio.Fixtures;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+using SampleSpecs;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
 {

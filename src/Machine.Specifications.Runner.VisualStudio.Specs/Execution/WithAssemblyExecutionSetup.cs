@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Machine.Fakes;
-using Machine.Specifications.Runner.VisualStudio.Fixtures;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
+using SampleSpecs;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
 {

@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Machine.Specifications.Runner.VisualStudio.Fixtures;
+using SampleSpecs;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs
 {

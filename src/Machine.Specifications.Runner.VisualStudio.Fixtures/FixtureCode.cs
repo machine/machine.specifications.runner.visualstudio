@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using Machine.Specifications;
 
-namespace Machine.Specifications.Runner.VisualStudio.Fixtures
+namespace SampleSpecs
 {
     [Behaviors]
     public class SampleBehavior

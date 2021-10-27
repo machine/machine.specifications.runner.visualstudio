@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Reflection;
 using Machine.Fakes;
-using Machine.Specifications.Runner.VisualStudio.Fixtures;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
+using SampleSpecs;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery
 {

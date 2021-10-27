@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
 using Machine.Specifications.Runner.VisualStudio.Discovery;
-using Machine.Specifications.Runner.VisualStudio.Fixtures;
+using SampleSpecs;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery
 {
