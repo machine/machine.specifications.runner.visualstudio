@@ -30,17 +30,17 @@
     <TargetsForTfmSpecificContentInPackage>$(TargetsForTfmSpecificContentInPackage);NetCorePackageItems;NetFrameworkPackageItems</TargetsForTfmSpecificContentInPackage>
   </PropertyGroup>
 
-  <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp2.1'">
+  <Target Name="NetCorePackageItems" Condition="'$(TargetFramework)' == 'netcoreapp3.1'">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.Runner.VisualStudio.TestAdapter.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
   <Target Name="NetFrameworkPackageItems" Condition="'$(TargetFramework)' == 'net452'">
     <ItemGroup>
       <TfmSpecificPackageFile Include="*.props" PackagePath="build\$(TargetFramework)" />
-      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.*.dll" PackagePath="build\$(TargetFramework)" />
+      <TfmSpecificPackageFile Include="$(OutputPath)\Machine.Specifications.Runner.VisualStudio.TestAdapter.dll" PackagePath="build\$(TargetFramework)" />
     </ItemGroup>
   </Target>
 
