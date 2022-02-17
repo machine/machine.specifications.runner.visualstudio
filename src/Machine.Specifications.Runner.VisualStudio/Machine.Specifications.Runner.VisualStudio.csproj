@@ -19,7 +19,7 @@
 
   <ItemGroup>
     <PackageReference Include="Machine.Specifications" Version="1.0.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.0.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.1.0" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
