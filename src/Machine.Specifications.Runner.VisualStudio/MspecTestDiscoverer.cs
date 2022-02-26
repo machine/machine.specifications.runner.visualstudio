@@ -1,33 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Discovery;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
-using System.IO;
 
 namespace Machine.Specifications.Runner.VisualStudio
 {
-    public class MSpecTestAdapterDiscoverer
+    public class MspecTestDiscoverer
     {
         private readonly ISpecificationDiscoverer discoverer;
 
-        public MSpecTestAdapterDiscoverer(ISpecificationDiscoverer discoverer)
+        public MspecTestDiscoverer(ISpecificationDiscoverer discoverer)
         {
             this.discoverer = discoverer;
         }
 
-        public void DiscoverTests(IEnumerable<string> sources, IDiscoveryContext discoveryContext, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
+        public void DiscoverTests(IEnumerable<string> sources, IMessageLogger logger, ITestCaseDiscoverySink discoverySink)
         {
-            var settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
-
-            DiscoverTests(sources, settings, logger, discoverySink.SendTestCase);
+            DiscoverTests(sources, logger, discoverySink.SendTestCase);
         }
 
-        public void DiscoverTests(IEnumerable<string> sources, Settings settings, IMessageLogger logger, Action<TestCase> discoverySinkAction)
+        public void DiscoverTests(IEnumerable<string> sources, IMessageLogger logger, Action<TestCase> discoverySinkAction)
         {
             logger.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Discovering Specifications.");
 
@@ -50,7 +47,7 @@ namespace Machine.Specifications.Runner.VisualStudio
                     logger.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Discovering...looking in {assemblyPath}");
 
                     var specs = discoverer.DiscoverSpecs(assemblyPath)
-                        .Select(spec => SpecTestHelper.GetVSTestCaseFromMSpecTestCase(assemblyPath, spec, settings.DisableFullTestNameInIDE, MSpecTestAdapter.Uri))
+                        .Select(spec => SpecTestHelper.GetTestCaseFromMspecTestCase(assemblyPath, spec, MspecTestRunner.Uri))
                         .ToList();
 
                     foreach (var discoveredTest in specs)

@@ -9,7 +9,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs
 {
     class DiscoveryUnhandledErrorSpecs : WithFakes
     {
-        static MSpecTestAdapter adapter;
+        static MspecTestRunner runner;
 
         Establish context = () =>
         {
@@ -17,11 +17,11 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs
                 .WhenToldTo(d => d.DiscoverSpecs(Param<string>.IsAnything))
                 .Return(() => throw new InvalidOperationException());
 
-            adapter = new MSpecTestAdapter(The<ISpecificationDiscoverer>(), An<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
+            runner = new MspecTestRunner(The<ISpecificationDiscoverer>(), An<ISpecificationExecutor>(), An<ISpecificationFilterProvider>());
         };
 
         Because of = () =>
-            adapter.DiscoverTests(new[] { "bla" }, An<IDiscoveryContext>(), The<IMessageLogger>(), An<ITestCaseDiscoverySink>());
+            runner.DiscoverTests(new[] { "bla" }, An<IDiscoveryContext>(), The<IMessageLogger>(), An<ITestCaseDiscoverySink>());
 
         It should_send_an_error_notification_to_visual_studio = () =>
             The<IMessageLogger>()

@@ -7,13 +7,13 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
 {
     public abstract class WithAssemblyExecutionSetup : WithFakes
     {
-        static MSpecTestAdapter executor;
+        static MspecTestRunner executor;
 
         static Assembly assembly;
 
         Establish context = () =>
         {
-            executor = new MSpecTestAdapter();
+            executor = new MspecTestRunner();
 
             assembly = typeof(StandardSpec).Assembly;
         };

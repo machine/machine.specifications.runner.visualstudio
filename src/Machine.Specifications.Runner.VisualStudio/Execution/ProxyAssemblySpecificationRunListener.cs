@@ -1,5 +1,4 @@
 ﻿using System;
-using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -7,7 +6,7 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.Specifications.Runner.VisualStudio.Execution
 {
-    public class VSProxyAssemblySpecificationRunListener :
+    public class ProxyAssemblySpecificationRunListener :
 #if NETFRAMEWORK
                                                             MarshalByRefObject,
 #endif
@@ -23,14 +22,11 @@ namespace Machine.Specifications.Runner.VisualStudio.Execution
 
         private RunStats currentRunStats;
 
-        private readonly Settings settings;
-
-        public VSProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri, Settings settings)
+        public ProxyAssemblySpecificationRunListener(string assemblyPath, IFrameworkHandle frameworkHandle, Uri executorUri)
         {
             this.frameworkHandle = frameworkHandle ?? throw new ArgumentNullException(nameof(frameworkHandle));
             this.assemblyPath = assemblyPath ?? throw new ArgumentNullException(nameof(assemblyPath));
             this.executorUri = executorUri ?? throw new ArgumentNullException(nameof(executorUri));
-            this.settings = settings ?? throw new ArgumentNullException(nameof(settings));
         }
 
 #if NETFRAMEWORK
@@ -90,9 +86,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Execution
 
             return new TestCase(vsTestId.FullyQualifiedName, executorUri, assemblyPath)
             {
-                DisplayName = settings.DisableFullTestNameInOutput
-                    ? specification.Name
-                    : $"{currentContext?.TypeName}.{specification.FieldName}",
+                DisplayName = $"{currentContext?.TypeName}.{specification.FieldName}",
             };
         }
 

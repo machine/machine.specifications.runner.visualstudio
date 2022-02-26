@@ -5,7 +5,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
 #if NETFRAMEWORK
     [Serializable]
 #endif
-    public class MSpecTestCase
+    public class SpecTestCase
     {
         public string Subject { get; set; }
 

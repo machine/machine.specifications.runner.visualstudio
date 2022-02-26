@@ -1,19 +1,18 @@
 ﻿using System;
 using Machine.Fakes;
-using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Execution;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution.RunListener
 {
-    [Subject(typeof(VSProxyAssemblySpecificationRunListener))]
+    [Subject(typeof(ProxyAssemblySpecificationRunListener))]
     class WhenThereIsAnErrorReported : WithFakes
     {
-        static VSProxyAssemblySpecificationRunListener run_listener;
+        static ProxyAssemblySpecificationRunListener run_listener;
 
         Establish context = () => 
-            run_listener = new VSProxyAssemblySpecificationRunListener("assemblyPath", The<IFrameworkHandle>(), new Uri("bla://executorUri"), An<Settings>());
+            run_listener = new ProxyAssemblySpecificationRunListener("assemblyPath", The<IFrameworkHandle>(), new Uri("bla://executorUri"));
 
         Because of = () => 
             run_listener.OnFatalError(new ExceptionResult(new InvalidOperationException()));
