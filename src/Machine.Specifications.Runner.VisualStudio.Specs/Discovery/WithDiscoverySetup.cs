@@ -12,7 +12,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery
 
         static Assembly assembly;
 
-        protected static IEnumerable<MSpecTestCase> results;
+        protected static IEnumerable<SpecTestCase> results;
 
         Establish context = () =>
         {

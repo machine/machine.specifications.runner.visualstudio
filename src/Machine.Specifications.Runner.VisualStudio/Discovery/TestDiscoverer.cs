@@ -23,7 +23,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
 #endif
         private readonly PropertyInfo behaviorProperty = typeof(BehaviorSpecification).GetProperty("BehaviorFieldInfo");
 
-        public IEnumerable<MSpecTestCase> DiscoverTests(string assemblyPath)
+        public IEnumerable<SpecTestCase> DiscoverTests(string assemblyPath)
         {
             var assemblyExplorer = new AssemblyExplorer();
 
@@ -36,18 +36,18 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
             }
         }
 
-        private IEnumerable<MSpecTestCase> CreateTestCase(Context context, NavigationSession session)
+        private IEnumerable<SpecTestCase> CreateTestCase(Context context, NavigationSession session)
         {
             foreach (var spec in context.Specifications.ToList())
             {
-                var testCase = new MSpecTestCase();
-
-                testCase.ClassName = context.Type.Name;
-                testCase.ContextFullType = context.Type.FullName;
-                testCase.ContextDisplayName = GetContextDisplayName(context.Type);
-
-                testCase.SpecificationName = spec.FieldInfo.Name;
-                testCase.SpecificationDisplayName = spec.Name;
+                var testCase = new SpecTestCase
+                {
+                    ClassName = context.Type.Name,
+                    ContextFullType = context.Type.FullName,
+                    ContextDisplayName = GetContextDisplayName(context.Type),
+                    SpecificationName = spec.FieldInfo.Name,
+                    SpecificationDisplayName = spec.Name
+                };
 
                 string fieldDeclaringType;
 
@@ -77,7 +77,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
             }
         }
 
-        private void PopulateBehaviorField(MSpecTestCase testCase, BehaviorSpecification specification)
+        private void PopulateBehaviorField(SpecTestCase testCase, BehaviorSpecification specification)
         {
             if (behaviorProperty?.GetValue(specification) is FieldInfo field)
             {

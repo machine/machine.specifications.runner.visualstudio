@@ -16,7 +16,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Discovery
             assembly = typeof(StandardSpec).Assembly;
 
         Because of = () =>
-            The<MSpecTestAdapter>()
+            The<MspecTestRunner>()
                 .DiscoverTests(new[] {assembly.GetType("SampleSpecs.When_something").GetTypeInfo().Assembly.Location},
                     An<IDiscoveryContext>(),
                     An<IMessageLogger>(),

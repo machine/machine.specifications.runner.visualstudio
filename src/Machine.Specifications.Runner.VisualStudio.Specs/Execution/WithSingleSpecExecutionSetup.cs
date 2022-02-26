@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using Machine.Fakes;
-using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Execution;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Adapter;
@@ -25,6 +24,6 @@ namespace Machine.Specifications.Runner.VisualStudio.Specs.Execution
         };
 
         Because of = () =>
-            executor.RunAssemblySpecifications(assembly.Location, new[] { specification_to_run }, The<Settings>(), new Uri("bla://executor"), The<IFrameworkHandle>());
+            executor.RunAssemblySpecifications(assembly.Location, new[] { specification_to_run }, new Uri("bla://executor"), The<IFrameworkHandle>());
     }
 }

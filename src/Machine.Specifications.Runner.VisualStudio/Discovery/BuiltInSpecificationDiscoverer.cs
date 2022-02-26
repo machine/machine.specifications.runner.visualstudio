@@ -6,14 +6,14 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
 {
     public class BuiltInSpecificationDiscoverer : ISpecificationDiscoverer
     {
-        public IEnumerable<MSpecTestCase> DiscoverSpecs(string assemblyFilePath)
+        public IEnumerable<SpecTestCase> DiscoverSpecs(string assemblyFilePath)
         {
 #if NETFRAMEWORK
-            using (IsolatedAppDomainExecutionScope<TestDiscoverer> scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath))
+            using (var scope = new IsolatedAppDomainExecutionScope<TestDiscoverer>(assemblyFilePath))
             {
-                TestDiscoverer discoverer = scope.CreateInstance();
+                var discoverer = scope.CreateInstance();
 #else
-                TestDiscoverer discoverer = new TestDiscoverer();
+                var discoverer = new TestDiscoverer();
 #endif
                 return discoverer.DiscoverTests(assemblyFilePath).ToList();
 #if NETFRAMEWORK

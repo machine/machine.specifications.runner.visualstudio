@@ -4,6 +4,6 @@ namespace Machine.Specifications.Runner.VisualStudio.Discovery
 {
     public interface ISpecificationDiscoverer
     {
-        IEnumerable<MSpecTestCase> DiscoverSpecs(string assemblyPath);
+        IEnumerable<SpecTestCase> DiscoverSpecs(string assemblyPath);
     }
 }

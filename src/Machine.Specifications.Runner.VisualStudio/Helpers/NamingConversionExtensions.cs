@@ -12,7 +12,7 @@ namespace Machine.Specifications.Runner.VisualStudio.Helpers
             return new VisualStudioTestIdentifier(string.Format(CultureInfo.InvariantCulture, "{0}::{1}", context?.TypeName ?? specification.ContainingType, specification.FieldName));
         }
 
-        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this MSpecTestCase specification)
+        public static VisualStudioTestIdentifier ToVisualStudioTestIdentifier(this SpecTestCase specification)
         {
             return new VisualStudioTestIdentifier(string.Format(CultureInfo.InvariantCulture, "{0}::{1}", specification.ContextFullType, specification.SpecificationName));
         }

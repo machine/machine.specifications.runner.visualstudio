@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Machine.Specifications.Runner.VisualStudio.Configuration;
 using Machine.Specifications.Runner.VisualStudio.Execution;
 using Machine.Specifications.Runner.VisualStudio.Helpers;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel;
@@ -10,15 +9,15 @@ using Microsoft.VisualStudio.TestPlatform.ObjectModel.Logging;
 
 namespace Machine.Specifications.Runner.VisualStudio
 {
-    public class MSpecTestAdapterExecutor
+    public class MspecTestExecutor
     {
         private readonly ISpecificationExecutor executor;
 
-        private readonly MSpecTestAdapterDiscoverer discover;
+        private readonly MspecTestDiscoverer discover;
 
         private readonly ISpecificationFilterProvider specificationFilterProvider;
 
-        public MSpecTestAdapterExecutor(ISpecificationExecutor executor, MSpecTestAdapterDiscoverer discover, ISpecificationFilterProvider specificationFilterProvider)
+        public MspecTestExecutor(ISpecificationExecutor executor, MspecTestDiscoverer discover, ISpecificationFilterProvider specificationFilterProvider)
         {
             this.executor = executor;
             this.discover = discover;
@@ -31,7 +30,7 @@ namespace Machine.Specifications.Runner.VisualStudio
 
             var testsToRun = new List<TestCase>();
 
-            DiscoverTests(sources, runContext, frameworkHandle, testsToRun);
+            DiscoverTests(sources, frameworkHandle, testsToRun);
             RunTests(testsToRun, runContext, frameworkHandle);
 
             frameworkHandle.SendMessage(TestMessageLevel.Informational, "Machine Specifications Visual Studio Test Adapter - Executing Source Specifications Complete.");
@@ -43,7 +42,6 @@ namespace Machine.Specifications.Runner.VisualStudio
 
             var totalSpecCount = 0;
             var executedSpecCount = 0;
-            var settings = Settings.Parse(runContext.RunSettings?.SettingsXml);
             var currentAssembly = string.Empty;
 
             try
@@ -63,7 +61,7 @@ namespace Machine.Specifications.Runner.VisualStudio
 
                     frameworkHandle.SendMessage(TestMessageLevel.Informational, $"Machine Specifications Visual Studio Test Adapter - Executing {testsToRun.Length} tests in '{currentAssembly}'.");
 
-                    executor.RunAssemblySpecifications(grouping.Key, testsToRun, settings, MSpecTestAdapter.Uri, frameworkHandle);
+                    executor.RunAssemblySpecifications(grouping.Key, testsToRun, MspecTestRunner.Uri, frameworkHandle);
 
                     executedSpecCount += testsToRun.Length;
                 }
@@ -76,11 +74,9 @@ namespace Machine.Specifications.Runner.VisualStudio
             }
         }
 
-        private void DiscoverTests(IEnumerable<string> sources, IRunContext discoveryContext, IMessageLogger logger, List<TestCase> testsToRun)
+        private void DiscoverTests(IEnumerable<string> sources, IMessageLogger logger, List<TestCase> testsToRun)
         {
-            var settings = Settings.Parse(discoveryContext.RunSettings?.SettingsXml);
-
-            discover.DiscoverTests(sources, settings, logger, testsToRun.Add);
+            discover.DiscoverTests(sources, logger, testsToRun.Add);
         }
     }
 }
