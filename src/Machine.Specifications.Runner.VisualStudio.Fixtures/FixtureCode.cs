@@ -43,11 +43,9 @@ namespace SampleSpecs
     class CustomActAssertDelegateSpec
     {
         static string a;
-
         static string b;
 
         static int resultA;
-
         static int resultB;
 
         Establish context = () =>
