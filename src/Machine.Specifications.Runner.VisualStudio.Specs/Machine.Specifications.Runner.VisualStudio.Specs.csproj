@@ -8,7 +8,7 @@
   <ItemGroup>
     <PackageReference Include="Machine.Fakes.Moq" Version="2.11.0" />
     <PackageReference Include="Machine.Specifications.Should" Version="1.0.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.0" />
   </ItemGroup>
 
