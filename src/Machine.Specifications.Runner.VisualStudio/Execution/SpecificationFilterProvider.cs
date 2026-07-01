@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Machine.Specifications.Model;
@@ -15,8 +15,8 @@ namespace Machine.VSTestAdapter.Execution
 
         readonly Dictionary<string, TestProperty> testCaseProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
         {
-            [TestCaseProperties.FullyQualifiedName.Id] = TestCaseProperties.FullyQualifiedName,
-            [TestCaseProperties.DisplayName.Id] = TestCaseProperties.DisplayName
+            [TestCaseProperties.FullyQualifiedName.Label] = TestCaseProperties.FullyQualifiedName,
+            [TestCaseProperties.DisplayName.Label] = TestCaseProperties.DisplayName
         };
 
         readonly Dictionary<string, TestProperty> traitProperties = new Dictionary<string, TestProperty>(StringComparer.OrdinalIgnoreCase)
