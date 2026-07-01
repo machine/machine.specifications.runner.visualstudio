@@ -30,6 +30,11 @@ jobs:
         with:
           dotnet-version: '3.1.x'
 
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v4
+        with:
+          versionSpec: '6.x'
+
       - name: NuGet login
         uses: NuGet/login@v1
         id: login
