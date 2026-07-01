@@ -36,5 +36,5 @@ jobs:
         with:
           user: ${{ secrets.NUGET_USER }}
 
-      - name: Build
-        run: ./build.ps1
+      # - name: Build
+      #   run: ./build.ps1
