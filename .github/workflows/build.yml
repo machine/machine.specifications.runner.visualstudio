@@ -25,6 +25,12 @@ jobs:
         with:
           fetch-depth: 0
 
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
@@ -33,13 +39,10 @@ jobs:
       - name: Install GitVersion
         uses: gittools/actions/gitversion/setup@v4
         with:
-          versionSpec: '6.x'
+          versionSpec: 6.x
 
-      - name: NuGet login
-        uses: NuGet/login@v1
-        id: login
-        with:
-          user: ${{ secrets.NUGET_USER }}
+      - name: Calculate version
+        uses: gittools/actions/gitversion/execute@v4
 
       # - name: Build
       #   run: ./build.ps1
