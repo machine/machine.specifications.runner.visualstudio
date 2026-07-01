@@ -1,31 +1,35 @@
-name: build
+name: Build
 
 on:
+  pull_request:
   push:
     branches:
       - master
-  pull_request:
 
 env:
   DOTNET_NOLOGO: true
 
 jobs:
   build:
-    name: build
+    name: Build
     runs-on: windows-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - name: Fetch all tags and branches
-        run: git fetch --prune --unshallow
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
       - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v5
         with:
           dotnet-version: '3.1.x'
+
+      - name: NuGet login
+        uses: NuGet/login@v1
+        id: login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Build
         run: ./build.ps1
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          path: artifacts/*.nupkg
