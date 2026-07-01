@@ -7,9 +7,7 @@ on:
       - master
 
 permissions:
-  contents: write
-  pull-requests: write
-  id-token: write
+  contents: read
 
 env:
   DOTNET_NOLOGO: true
@@ -25,12 +23,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: NuGet login
-        uses: NuGet/login@v1
-        id: login
-        with:
-          user: ${{ secrets.NUGET_USER }}
-
       - name: Setup .NET
         uses: actions/setup-dotnet@v5
         with:
@@ -45,6 +37,4 @@ jobs:
         uses: gittools/actions/gitversion/execute@v4
 
       - name: Build
-        env:
-          NUGET_API_KEY: ${{ steps.login.outputs.NUGET_API_KEY }}
         run: ./build.ps1
