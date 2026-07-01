@@ -1,4 +1,4 @@
-name: publish
+name: Publish
 
 on:
   release:
@@ -9,7 +9,7 @@ env:
 
 jobs:
   publish:
-    name: publish
+    name: Publish
     runs-on: windows-latest
 
     steps:

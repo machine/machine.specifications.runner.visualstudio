@@ -6,6 +6,11 @@ on:
     branches:
       - master
 
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
+
 env:
   DOTNET_NOLOGO: true
 
